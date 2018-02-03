@@ -7,9 +7,24 @@ const init = require("./init/init");
 init().then(function(){
 	const serverConfig = require("./config/server.json");
 	const app = express();
+	const mAuth = require("./middlewares/auth");
 
 	app.use(cors());
 	app.use(bodyParser.json());
+
+	app.use("/auth", require("./routes/auth"));
+
+	app.use(function(err, req,res,next){
+		console.error(err.message);
+		console.error(err.stack);
+		res.status(err.status || 500).json({message: err.message});
+	});
+
+	app.use("/", express.static("public"));
+	app.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
+	app.all("/", function(req,res){
+		res.sendFile("./public/index.html");
+	});
 
 	const server = http.createServer(app);
 	server.listen(serverConfig.port, serverConfig.host, function(err){

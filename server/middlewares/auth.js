@@ -1,0 +1,18 @@
+const JWT = require("jsonwebtoken");
+const User = require("../models/user");
+
+module.exports = {
+	authenticate: async function(req,res,next){
+		try{
+			req.user = await User.findOne({tokens:{$elemMatch: {token: req.headers.authorization}}});
+			if (!req.user){
+				throw new Error("Invalid token");
+			}
+			next();
+		}catch(err){
+			console.log(err);
+			err.status = 401;
+			next(err);
+		}
+	}
+}
