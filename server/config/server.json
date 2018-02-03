@@ -1,0 +1,11 @@
+{
+  "host": "0.0.0.0",
+  "port": 3000,
+  "fileDir": "D:\\Documents\\Projects\\javascript\\madmin\\server\\files",
+  "db": {
+    "host": "mongodb://localhost:27017",
+    "database": "webchest",
+    "username": "NOT YET IMPLEMENTED",
+    "password": "NOT YET IMPLEMENTED"
+  }
+}
