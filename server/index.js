@@ -13,6 +13,8 @@ init().then(function(){
 	app.use(bodyParser.json());
 
 	app.use("/auth", require("./routes/auth"));
+	app.use("/proxy", require("./routes/proxy"));
+	app.use(require("./routes/handlers"))
 
 	app.use(function(err, req,res,next){
 		console.error(err.message);
@@ -21,7 +23,6 @@ init().then(function(){
 	});
 
 	app.use("/", express.static("public"));
-	app.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
 	app.all("/", function(req,res){
 		res.sendFile("./public/index.html");
 	});

@@ -25,7 +25,9 @@
     "express-subdomain": "^1.0.5",
     "jsonwebtoken": "^8.1.1",
     "mongoose-bcrypt": "^1.5.0",
-    "mongoose-id-validator": "^0.4.3"
+    "mongoose-events": "^0.3.9",
+    "mongoose-id-validator": "^0.4.3",
+    "mongoose-plugin-events": "^1.2.3"
   },
   "devDependencies": {
     "mongoose": "^5.0.3"
