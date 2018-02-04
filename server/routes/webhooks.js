@@ -31,7 +31,7 @@ router.post("/", async function(req,res,next){
 
 router.put("/:id", async function(req,res,next){
 	try{
-		let hook = Webhook.findById(req.params.id);
+		let hook = await Webhook.findById(req.params.id);
 		hook.set(req.body);
 		await hook.save();
 		res.json(hook);
@@ -42,7 +42,7 @@ router.put("/:id", async function(req,res,next){
 
 router.delete("/:id", async function(req,res,next){
 	try{
-		let hook = Webhook.findById(req.params.id);
+		let hook = await Webhook.findById(req.params.id);
 		await hook.remove();
 		res.json({});
 	}catch(err){

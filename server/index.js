@@ -15,7 +15,7 @@ init().then(function(){
 
 	app.all("/*", function(req,res,next){
 		if (req.subdomains.length == 0 || (req.subdomains.length == 1 && req.subdomains[0] == "localhost")){
-			res.redirect(`${req.protocol}://admin.${req.get("host")}${req.originalUrl}`);
+			res.redirect(`${req.protocol}://madmin.${req.get("host")}${req.originalUrl}`);
 		}
 		else{
 			next();
@@ -40,8 +40,8 @@ init().then(function(){
 	});
 
 	
-	app.use(subdomain("admin", router));
-	app.use(subdomain("admin.localhost", router));
+	app.use(subdomain("madmin", router));
+	app.use(subdomain("madmin.localhost", router));
 	app.use(require("./routes/subdomain"));
 	
 	const server = http.createServer(app);
