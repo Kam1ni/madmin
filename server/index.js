@@ -1,4 +1,5 @@
 const express = require("express");
+const subdomain = require("express-subdomain");
 const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -12,22 +13,37 @@ init().then(function(){
 	app.use(cors());
 	app.use(bodyParser.json());
 
-	app.use("/auth", require("./routes/auth"));
-	app.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
-	app.use("/webhook", mAuth.authenticate, require("./routes/webhooks"));
-	app.use(require("./routes/handlers"))
+	app.all("/*", function(req,res,next){
+		if (req.subdomains.length == 0 || (req.subdomains.length == 1 && req.subdomains[0] == "localhost")){
+			res.redirect(`${req.protocol}://admin.${req.get("host")}${req.originalUrl}`);
+		}
+		else{
+			next();
+		}
+	});
 
-	app.use(function(err, req,res,next){
+	const router = express.Router();
+	router.use("/auth", require("./routes/auth"));
+	router.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
+	router.use("/webhook", mAuth.authenticate, require("./routes/webhooks"));
+	router.use("/hook", require("./routes/hook-handler"));
+	
+	router.use(function(err, req,res,next){
 		console.error(err.message);
 		console.error(err.stack);
 		res.status(err.status || 500).json({message: err.message});
 	});
-
-	app.use("/", express.static("public"));
-	app.all("/", function(req,res){
+	
+	router.use("/", express.static("public"));
+	router.all("/*", function(req,res){
 		res.sendFile("./public/index.html");
 	});
 
+	
+	app.use(subdomain("admin", router));
+	app.use(subdomain("admin.localhost", router));
+	app.use(require("./routes/subdomain"));
+	
 	const server = http.createServer(app);
 	server.listen(serverConfig.port, serverConfig.host, function(err){
 		if(err){

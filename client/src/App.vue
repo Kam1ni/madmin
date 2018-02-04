@@ -8,6 +8,11 @@
 							Proxies
 						</v-list-tile-content>
 					</v-list-tile>
+					<v-list-tile to="/webhooks" active-class="primary white--text">
+						<v-list-tile-content>
+							Webhooks
+						</v-list-tile-content>
+					</v-list-tile>
 					<v-list-tile @click="logout" active-class="primary white--text">
 						<v-list-tile-content>
 							Logout
