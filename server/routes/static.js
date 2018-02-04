@@ -1,7 +1,7 @@
 const express = require("express");
 const Static = require("../models/static");
 
-const router = express.Rotuer();
+const router = express.Router();
 
 router.get("/", async function(req,res,next){
 	try{

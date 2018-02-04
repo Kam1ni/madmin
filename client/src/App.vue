@@ -3,7 +3,7 @@
 		<template v-if="loggedIn">
 			<v-navigation-drawer app clipped fixed v-model="drawer">
 				<v-list>
-					<v-list-tile to="/" active-class="primary white--text">
+					<v-list-tile to="/" exact active-class="primary white--text">
 						<v-list-tile-content>
 							Home
 						</v-list-tile-content>
@@ -11,6 +11,11 @@
 					<v-list-tile to="/proxies" active-class="primary white--text">
 						<v-list-tile-content>
 							Proxies
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile to="/statics" active-class="primary white--text">
+						<v-list-tile-content>
+							Statics
 						</v-list-tile-content>
 					</v-list-tile>
 					<v-list-tile to="/webhooks" active-class="primary white--text">

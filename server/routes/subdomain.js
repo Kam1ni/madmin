@@ -23,10 +23,12 @@ updateProxies();
 Proxy.on(mongooseEvents.ON_AFTER_CREATE, updateProxies);
 Proxy.on(mongooseEvents.ON_AFTER_REMOVE, updateProxies);
 Proxy.on(mongooseEvents.ON_AFTER_EDIT, updateProxies);
+Proxy.on(mongooseEvents.ON_AFTER_UPDATE, updateProxies);
 
 let statics = [];
 const updateStatics = async function(){
 	try{
+		console.log("updating statics");
 		statics = await Static.find({});
 	}catch(err){
 		console.error("FAILED TO FETCH PROXIES");
@@ -38,6 +40,27 @@ updateStatics();
 Static.on(mongooseEvents.ON_AFTER_CREATE, updateStatics);
 Static.on(mongooseEvents.ON_AFTER_REMOVE, updateStatics);
 Static.on(mongooseEvents.ON_AFTER_EDIT, updateStatics);
+Static.on(mongooseEvents.ON_AFTER_UPDATE, updateStatics);
+
+
+const staticRouter = express.Router();
+router.use(subdomain("*", async function(req,res,next){
+	for (let static of statics){
+		if (static.subdomain == req.subdomains[0]){
+			if (req.path == "/"){
+				return res.sendFile(path.join(static.path, "index.html"));
+			}
+			return res.sendFile(path.join(static.path, req.path));
+		}
+		if (req.subdomains.length >= 2 && static.subdomain == req.subdomains[1]){
+			if (req.path == "/"){
+				return res.sendFile(path.join(static.path, "index.html"));
+			}
+			return res.sendFile(path.join(static.path, req.path));
+		}
+	}
+	next();
+}));
 
 const getHost = function(req){
 	for (let proxy of proxies){
@@ -50,25 +73,6 @@ const getHost = function(req){
 	}
 	throw Error("No such proxy");
 }
-
-const staticRouter = express.Router();
-router.use(subdomain("*", async function(req,res,next){
-	for (let static of statics){
-		if (static.subdomain == req.subdomains[0]){
-			if (req.path == "/"){
-				return res.sendFile(path.resolve(static.path, "index.html"));
-			}
-			return res.sendFile(path.resolve(static.path, req.path));
-		}
-		if (req.subdomains.length >= 2 && static.subdomain == req.subdomains[1]){
-			if (req.path == "/"){
-				return res.sendFile(path.resolve(static.path, "index.html"));
-			}
-			return res.sendFile(path.resolve(static.path, req.path));
-		}
-	}
-	next();
-}));
 
 router.use(subdomain("*", expressProxy(getHost, {memorizeHost:false})));
 

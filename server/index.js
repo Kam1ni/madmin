@@ -26,6 +26,7 @@ init().then(function(){
 	const router = express.Router();
 	router.use("/auth", require("./routes/auth"));
 	router.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
+	router.use("/static", mAuth.authenticate, require("./routes/static"));
 	router.use("/webhook", mAuth.authenticate, require("./routes/webhooks"));
 	router.use("/hook", require("./routes/hook-handler"));
 	
