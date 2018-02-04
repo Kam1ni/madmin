@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="show">
+	<v-dialog v-model="show" :max-width="maxWidth">
 		<slot name="activator" slot="activator"></slot>
 		<v-card>
 			<v-card-title class="headline">{{title || "Confirm"}}</v-card-title>
@@ -36,7 +36,7 @@
 				this.$emit("no", this.noParam);
 			}
 		},
-		props:["title", "yes-text", "no-text", "value", "yes-param", "no-param"]
+		props:["title", "yes-text", "no-text", "value", "yes-param", "no-param", "max-width"]
 
 	}
 </script>

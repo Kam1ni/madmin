@@ -43,7 +43,7 @@ router.put("/:id", async function(req,res,next){
 router.delete("/:id", async function(req,res,next){
 	try{
 		let proxy = await Proxy.findById(req.params.id);
-		await proxy.delete();
+		await proxy.remove();
 		res.json({});
 	}catch(err){
 		next(err);
