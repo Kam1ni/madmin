@@ -4,6 +4,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const init = require("./init/init");
+const path = require("path");
 
 init().then(function(){
 	const serverConfig = require("./config/server.json");
@@ -36,7 +37,7 @@ init().then(function(){
 	
 	router.use("/", express.static("public"));
 	router.all("/*", function(req,res){
-		res.sendFile("./public/index.html");
+		res.sendFile(path.resolve(__dirname, "./public/index.html"));
 	});
 
 	
