@@ -103,7 +103,7 @@ export default {
 		}
 	},
 	async created(){
-		this.staticRes = this.$resource("static{/id}");
+		this.staticRes = this.$resource("static-host{/id}");
 		await this.fetchStatics();
 	}
 }
