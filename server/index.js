@@ -14,6 +14,7 @@ init().then(function(){
 
 	app.use("/auth", require("./routes/auth"));
 	app.use("/proxy", mAuth.authenticate, require("./routes/proxy"));
+	app.use("/webhook", mAuth.authenticate, require("./routes/webhooks"));
 	app.use(require("./routes/handlers"))
 
 	app.use(function(err, req,res,next){

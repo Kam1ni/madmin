@@ -4,6 +4,7 @@ const expressProxy = require("express-http-proxy");
 const mongooseEvents = require("mongoose-events").EventNames;
 
 const Proxy = require("../models/proxy");
+const Webhook = require("../models/webhook");
 
 const router = express.Router();
 
@@ -37,21 +38,19 @@ const getHost = function(req){
 	throw Error("No such proxy");
 }
 
-/*
-router.use(subdomain("*", async function(req,res,next){
+router.use(subdomain("*", expressProxy(getHost, {memorizeHost:false})));
+
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
+router.all("/hook/:hook", async function(req,res,next){
+	res.json({});
 	try{
-		console.log(req.subdomains);
-		let proxy = await Proxy.findOne({subdomain:req.subdomains[0]});
-		if (!proxy){
-			throw Error("No such proxy");
-		}
-		console.log(proxy);
-		res.json(proxy);
+		let webhook = await Webhook.findOne({path:req.params.hook});
+		let handler = new AsyncFunction('body', webhook.handler);
+		handler(req.body);
 	}catch(err){
 		next(err);
 	}
-}));*/
-
-router.use(subdomain("*", expressProxy(getHost, {memorizeHost:false})));
+});
 
 module.exports = router;
