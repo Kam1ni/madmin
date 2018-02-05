@@ -62,6 +62,7 @@ router.use(subdomain("*", async function(req,res,next){
 	next();
 }));
 
+
 const getHost = function(req){
 	for (let proxy of proxies){
 		if (proxy.subdomain == req.subdomains[0]){
@@ -74,7 +75,25 @@ const getHost = function(req){
 	throw Error("No such proxy");
 }
 
-router.use(subdomain("*", expressProxy(getHost, {memorizeHost:false})));
+const proxyMiddleware = function () {
+	return function (req, res, next) {
+		let reqAsBuffer = false;
+		let reqBodyEncoding = true;
+		let contentTypeHeader = req.headers['content-type'];
+		let isMultipartRequest =  contentTypeHeader && contentTypeHeader.indexOf('multipart') > -1;
+		if (isMultipartRequest) {
+			reqAsBuffer = true;
+			reqBodyEncoding = null;
+		}
+		return expressProxy(getHost, {
+			reqAsBuffer,
+			reqBodyEncoding,
+			memorizeHost: false
+			})(req, res, next);
+	};
+};
+
+router.use(subdomain("*", proxyMiddleware()));
 
 
 router.use(function(err, req,res,next){

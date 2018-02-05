@@ -11,8 +11,19 @@ init().then(function(){
 	const app = express();
 	const mAuth = require("./middlewares/auth");
 
+	const bodyParserJsonMiddleware = function () {
+		return function (req, res, next) {
+			let contentTypeHeader = req.headers['content-type'];
+			let isMultipartRequest = contentTypeHeader && contentTypeHeader.indexOf('multipart') > -1;
+			if (isMultipartRequest) {
+				return next();
+			}
+			return bodyParser.json()(req, res, next);
+		};
+	};
+
 	app.use(cors());
-	app.use(bodyParser.json());
+	app.use(bodyParserJsonMiddleware());
 
 	app.all("/*", function(req,res,next){
 		if (req.subdomains.length == 0 || (req.subdomains.length == 1 && req.subdomains[0] == "localhost")){
