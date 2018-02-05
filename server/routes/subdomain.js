@@ -79,16 +79,19 @@ const proxyMiddleware = function () {
 	return function (req, res, next) {
 		let reqAsBuffer = false;
 		let reqBodyEncoding = true;
+		let parseReqBody = true;
 		let contentTypeHeader = req.headers['content-type'];
 		let isMultipartRequest =  contentTypeHeader && contentTypeHeader.indexOf('multipart') > -1;
 		if (isMultipartRequest) {
 			reqAsBuffer = true;
 			reqBodyEncoding = null;
+			parseReqBody = false;
 		}
 		return expressProxy(getHost, {
 			reqAsBuffer,
 			reqBodyEncoding,
-			memorizeHost: false
+			parseReqBody,
+			memorizeHost: false,
 			})(req, res, next);
 	};
 };
