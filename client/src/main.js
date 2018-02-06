@@ -10,7 +10,7 @@ import ConfirmDialog from './components/common/ConfirmDialog.vue';
 
 Vue.use(VueResource);
 if (process.env.NODE_ENV == "development"){
-	Vue.http.options.root = "http://madmin.localhost.kami-dev.eu:3000/";
+	Vue.http.options.root = "http://localhost:8080";
 }else{
 	Vue.http.options.root = "/";
 }
