@@ -3,6 +3,7 @@ const subdomain = require("express-subdomain");
 const expressProxy = require("express-http-proxy");
 const mongooseEvents = require("mongoose-events").EventNames;
 const path = require("path")
+const fs = require("fs");
 
 const Proxy = require("../models/proxy");
 const Static = require("../models/static");
@@ -42,21 +43,26 @@ Static.on(mongooseEvents.ON_AFTER_REMOVE, updateStatics);
 Static.on(mongooseEvents.ON_AFTER_EDIT, updateStatics);
 Static.on(mongooseEvents.ON_AFTER_UPDATE, updateStatics);
 
+function sendStaticFile(req, res, static){
+	if (req.path == "/"){
+		return res.sendFile(path.join(static.path, "index.html"));
+	}
+	return fs.access(path.join(static.path,req.path), fs.constants.R_OK, function(err){
+		if (err){
+			return res.sendFile(path.join(static.path, "index.html"));
+		}
+		return res.sendFile(path.join(static.path, req.path));
+	});
+}
 
 const staticRouter = express.Router();
 router.use(subdomain("*", async function(req,res,next){
 	for (let static of statics){
 		if (static.subdomain == req.subdomains[0]){
-			if (req.path == "/"){
-				return res.sendFile(path.join(static.path, "index.html"));
-			}
-			return res.sendFile(path.join(static.path, req.path));
+			return sendStaticFile(req,res,static);
 		}
 		if (req.subdomains.length >= 2 && static.subdomain == req.subdomains[1]){
-			if (req.path == "/"){
-				return res.sendFile(path.join(static.path, "index.html"));
-			}
-			return res.sendFile(path.join(static.path, req.path));
+			return sendStaticFile(req,res,static);
 		}
 	}
 	next();
