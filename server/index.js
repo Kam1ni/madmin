@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const init = require("./init/init");
 const path = require("path");
+const Setting = require("./routes/setting");
 
 init().then(function(){
 	const serverConfig = require("./config/server.json");
@@ -25,9 +26,10 @@ init().then(function(){
 	app.use(cors());
 	app.use(bodyParserJsonMiddleware());
 
-	app.all("/*", function(req,res,next){
+	app.all("/*", async function(req,res,next){
 		if (req.subdomains.length == 0 || (req.subdomains.length == 1 && req.subdomains[0] == "localhost")){
-			res.redirect(`${req.protocol}://madmin.${req.get("host")}${req.originalUrl}`);
+			let redirect = await Setting.findByName("defaultSubDomain");
+			res.redirect(`${req.protocol}://${redirect.value}.${req.get("host")}${req.originalUrl}`);
 		}
 		else{
 			next();
@@ -40,6 +42,7 @@ init().then(function(){
 	router.use("/static-host", mAuth.authenticate, require("./routes/static-host"));
 	router.use("/webhook", mAuth.authenticate, require("./routes/webhooks"));
 	router.use("/hook", require("./routes/hook-handler"));
+	router.use("/settings", mAuth.authenticate, require("./routes/setting"));
 	
 	router.use(function(err, req,res,next){
 		console.error(err.message);
