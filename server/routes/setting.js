@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", async function(req,res,next){
 	try{
-		res.json(await settings.find());
+		res.json(await Setting.find());
 	}catch(err){
 		next(err);
 	}
@@ -13,7 +13,7 @@ router.get("/", async function(req,res,next){
 
 router.get("/:setting", async function(req,res,next){
 	try{
-		res.json(await settings.findByName(req.params.setting))
+		res.json(await Setting.findByName(req.params.setting))
 	}catch(err){
 		next(err);
 	}
@@ -21,7 +21,7 @@ router.get("/:setting", async function(req,res,next){
 
 router.put("/:setting", async function(req,res,next){
 	try{
-		let setting = await setting.findByName(req.params.setting);
+		let setting = await Setting.findByName(req.params.setting);
 		setting.value = req.body.value;
 		await setting.save();
 		res.json(setting);

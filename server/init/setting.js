@@ -20,6 +20,9 @@ async function createSettings(settings){
 
 module.exports = async function(){
 	await createSettings(
-		[{name:"defaultSubDomain", value:"www"}]
+		[
+			{name:"defaultSubDomain", friendlyName:"Default subdomain", 
+			description:"Default subdomain to redirect to when no subdomain is specified.", value:"www"}
+		]
 	);
 }

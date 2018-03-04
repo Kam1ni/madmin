@@ -28,6 +28,11 @@
 							Profile
 						</v-list-tile-content>
 					</v-list-tile>
+					<v-list-tile to="/settings" active-class="primary white--text">
+						<v-list-tile-content>
+							Settings
+						</v-list-tile-content>
+					</v-list-tile>
 					<v-list-tile @click="logout" active-class="primary white--text">
 						<v-list-tile-content>
 							Logout

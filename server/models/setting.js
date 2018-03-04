@@ -6,6 +6,15 @@ const schema = new mongoose.Schema({
 		required: true,
 		unique: true
 	},
+	friendlyName:{
+		type: String,
+		required: true,
+		unique: true
+	},
+	description:{
+		type:String,
+		required: false
+	},
 	value: {
 		type: mongoose.Schema.Types.Mixed,
 		required: true

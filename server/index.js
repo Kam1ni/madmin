@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const init = require("./init/init");
 const path = require("path");
-const Setting = require("./routes/setting");
+const Setting = require("./models/setting");
 
 init().then(function(){
 	const serverConfig = require("./config/server.json");
@@ -28,6 +28,9 @@ init().then(function(){
 
 	app.all("/*", async function(req,res,next){
 		if (req.subdomains.length == 0 || (req.subdomains.length == 1 && req.subdomains[0] == "localhost")){
+			console.log(req.hostname);
+			console.log(req.subdomains.length);
+			console.log("redirecting");
 			let redirect = await Setting.findByName("defaultSubDomain");
 			res.redirect(`${req.protocol}://${redirect.value}.${req.get("host")}${req.originalUrl}`);
 		}
