@@ -4,9 +4,9 @@
   "description": "Server for madmin server management platform",
   "main": "index.js",
   "scripts": {
-    "start":"node dist/index.js",
-    "build":"tsc",
-    "dev":"nodemon"
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "tsc-watch --onSuccess \"npm run start\""
   },
   "author": "",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "@types/express": "^4.16.0",
     "@types/mongoose": "^5.0.18",
     "@types/node": "^10.3.5",
-    "nodemon": "^1.17.5",
+    "tsc-watch": "^1.0.22",
     "typescript": "^2.9.2"
   }
 }
