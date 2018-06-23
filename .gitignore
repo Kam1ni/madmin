@@ -60,3 +60,6 @@ typings/
 package-lock.json
 
 /server/config/
+
+/server-old/
+/client-old/
