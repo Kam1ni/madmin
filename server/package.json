@@ -11,15 +11,18 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "mongoose": "^4.13.10",
-    "mongoose-bcrypt": "^1.5.1"
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^4.13.10"
   },
   "devDependencies": {
+    "@types/bcrypt": "^2.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/express": "^4.16.0",
+    "@types/jsonwebtoken": "^7.2.7",
     "@types/mongoose": "^5.0.18",
     "@types/node": "^10.3.5",
     "tsc-watch": "^1.0.22",

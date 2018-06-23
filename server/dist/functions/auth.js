@@ -8,26 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const http = require("http");
-const init_1 = require("./init");
-const config_1 = require("./config");
-const main_1 = require("./routes/main");
-function main() {
+const jwt = require("jsonwebtoken");
+const user_1 = require("../models/user");
+const config_1 = require("../config");
+const HttpError_1 = require("../classes/HttpError");
+function authenticate(token) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield init_1.init();
-        const config = config_1.getConfig();
-        const app = express();
-        app.use(cors());
-        app.use(bodyParser.json());
-        app.use(main_1.mainRouter);
-        const server = http.createServer(app);
-        server.listen(config.port, config.host, function () {
-            console.log(`server started at ${config.host}:${config.port}`);
+        let data = jwt.verify(token, config_1.getConfig().tokenSecret);
+        let user = yield user_1.User.findOne({ _id: data.userId });
+        if (!user)
+            throw new HttpError_1.HttpError("Invalid token", 400);
+        let foundToken = user.tokens.find(t => {
+            return t.token == token;
         });
+        if (!foundToken)
+            throw new HttpError_1.HttpError("Invalid token", 400);
+        return user;
     });
 }
-main();
-//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/index.js.map
+exports.authenticate = authenticate;
+//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/functions/auth.js.map

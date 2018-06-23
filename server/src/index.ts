@@ -5,6 +5,7 @@ import * as http from "http";
 
 import {init} from "./init";
 import {getConfig} from "./config";
+import {mainRouter} from "./routes/main";
 
 async function main(){
 	await init();
@@ -13,6 +14,8 @@ async function main(){
 	const app = express();
 	app.use(cors());
 	app.use(bodyParser.json());
+
+	app.use(mainRouter);
 	
 	const server = http.createServer(app);
 	server.listen(config.port, config.host, function(){

@@ -5,16 +5,14 @@ export interface IDatabaseConfig{
 	password?:string;
 }
 
-export interface ISecurityConfig{
-	bcryptSecret:string,
-}
-
 export interface IConfig {
 	database:IDatabaseConfig;
 	port:number;
 	host:string;
-	security:ISecurityConfig,
-	baseUrl:string
+	baseUrl:string;
+	saltRounds:number;
+	tokenSecret:string;
+	clientDomain:string;
 }
 
 export function getConfig():IConfig{

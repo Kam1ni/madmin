@@ -7,14 +7,14 @@ const defaultConfig:IConfig = {
 	host: "0.0.0.0",
 	port: 3000,
 	baseUrl:"localhost.kami-dev.eu",
+	saltRounds: 10,
+	tokenSecret: "secret",
+	clientDomain: "madmin",
 	database: {
 		host: "mongodb://localhost:27017",
 		database: "madmin",
 		username: null,
 		password: null
-	},
-	security:{
-		bcryptSecret:"secret"
 	}
 }
 
