@@ -40,5 +40,20 @@ authRouter.post("/logout", async (req,res,next)=>{
 	let tokenIndex = user.tokens.findIndex((t)=>{return t.token == req.headers.authorization});
 	user.tokens.splice(tokenIndex, 1);
 	await user.save();
-	res.json({message:"Success."});
+	res.json({message:"Success"});
+});
+
+authRouter.post("/change-password", async (req,res,next)=>{
+	let user:IUser = res.locals.user;
+	if (!await user.comparePassword(req.body.oldPassword)){
+		return next(new HttpError("Old password does not match", 500));
+	}
+
+	if (!req.body.newPassword){
+		return next(new HttpError("New password may not be empty", 500));
+	}
+
+	await user.setPassword(req.body.newPassword);
+	await user.save();
+	res.json({message:"Success"});
 });
