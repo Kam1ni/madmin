@@ -13,6 +13,7 @@ const express = require("express");
 const config_1 = require("../config");
 const auth_1 = require("./auth");
 const auth_2 = require("../functions/auth");
+const app_1 = require("./app");
 exports.mainRouter = express_1.Router();
 exports.mainRouter.all("/", (req, res, next) => {
     let config = config_1.getConfig();
@@ -23,6 +24,7 @@ exports.mainRouter.all("/", (req, res, next) => {
 });
 exports.mainRouter.use("/*", express.static("../public"));
 exports.mainRouter.use("/auth", auth_1.authRouter);
+exports.mainRouter.use("/app", app_1.appRouter);
 exports.mainRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         res.locals.user = yield auth_2.authenticate(req.headers.authorization);

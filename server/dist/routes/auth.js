@@ -45,6 +45,18 @@ exports.authRouter.post("/logout", (req, res, next) => __awaiter(this, void 0, v
     let tokenIndex = user.tokens.findIndex((t) => { return t.token == req.headers.authorization; });
     user.tokens.splice(tokenIndex, 1);
     yield user.save();
-    res.json({ message: "Success." });
+    res.json({ message: "Success" });
+}));
+exports.authRouter.post("/change-password", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let user = res.locals.user;
+    if (!(yield user.comparePassword(req.body.oldPassword))) {
+        return next(new HttpError_1.HttpError("Old password does not match", 500));
+    }
+    if (!req.body.newPassword) {
+        return next(new HttpError_1.HttpError("New password may not be empty", 500));
+    }
+    yield user.setPassword(req.body.newPassword);
+    yield user.save();
+    res.json({ message: "Success" });
 }));
 //# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/routes/auth.js.map

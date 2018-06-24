@@ -3,6 +3,7 @@ import * as express from "express";
 import { getConfig } from "../config";
 import { authRouter } from "./auth";
 import { authenticate } from "../functions/auth";
+import { appRouter } from "./app";
 
 export const mainRouter = Router();
 
@@ -18,6 +19,7 @@ mainRouter.all("/", (req,res,next)=>{
 mainRouter.use("/*", express.static("../public"));
 
 mainRouter.use("/auth", authRouter);
+mainRouter.use("/app", appRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
