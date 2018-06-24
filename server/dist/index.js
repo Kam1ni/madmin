@@ -22,6 +22,7 @@ function main() {
         const app = express();
         app.use(cors());
         app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({ extended: true }));
         app.use(main_1.mainRouter);
         const server = http.createServer(app);
         server.listen(config.port, config.host, function () {
