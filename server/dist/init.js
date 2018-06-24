@@ -12,6 +12,8 @@ const config_1 = require("./config");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
+const user_1 = require("./models/user");
+const readline = require("readline");
 const defaultConfig = {
     host: "0.0.0.0",
     port: 3000,
@@ -26,6 +28,47 @@ const defaultConfig = {
         password: null
     }
 };
+function createFirstUser() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let promise = new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+            const rl = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            console.log("There are no users in the database");
+            console.log("Create a new admin user now");
+            rl.question("username: ", (username) => __awaiter(this, void 0, void 0, function* () {
+                let user = new user_1.User();
+                user.username = username;
+                let passwordsMatch = false;
+                let createPassword = new Promise((resolve, reject) => {
+                    rl.question("password: ", (password) => {
+                        rl.question("repeat password: ", (repeatPassword) => {
+                            resolve({ password, repeatPassword });
+                        });
+                    });
+                });
+                while (!passwordsMatch) {
+                    let result = yield createPassword;
+                    if (result.password != result.repeatPassword) {
+                        console.log("Passwords dont match");
+                        console.log("Retry");
+                    }
+                    else {
+                        passwordsMatch = true;
+                        user.setPassword(result.password);
+                    }
+                }
+                user.isAdmin = true;
+                yield user.save();
+                console.log("User created");
+                rl.close();
+                resolve();
+            }));
+        }));
+        yield promise;
+    });
+}
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -53,6 +96,10 @@ function init() {
             console.error("Failed connecting to the database.");
             console.log("Closing Server.");
             process.exit(0);
+        }
+        let users = yield user_1.User.find();
+        if (users.length == 0) {
+            yield createFirstUser();
         }
     });
 }

@@ -2,6 +2,9 @@ import { IConfig, getConfig } from "./config";
 import * as fs from "fs";
 import * as path from "path";
 import * as mongoose from "mongoose";
+import { UV_UDP_REUSEADDR } from "constants";
+import { User } from "./models/user";
+import * as readline from "readline";
 
 const defaultConfig:IConfig = {
 	host: "0.0.0.0",
@@ -16,6 +19,47 @@ const defaultConfig:IConfig = {
 		username: null,
 		password: null
 	}
+}
+
+async function createFirstUser(){
+	let promise = new Promise(async (resolve)=>{
+		const rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout
+		});
+		console.log("There are no users in the database");
+		console.log("Create a new admin user now")
+
+		rl.question("username: ", async (username:string)=>{
+			let user = new User();
+			user.username = username;
+			let passwordsMatch = false;
+			let createPassword = new Promise((resolve, reject)=>{
+				rl.question("password: ", (password:string)=>{
+					rl.question("repeat password: ", (repeatPassword:string)=>{
+						resolve({password, repeatPassword});
+					});
+				});
+			});
+			while(!passwordsMatch){
+				let result:any = await createPassword;
+				if (result.password != result.repeatPassword){
+					console.log("Passwords dont match");
+					console.log("Retry");
+				}
+				else{
+					passwordsMatch = true;
+					user.setPassword(result.password);
+				}
+			}
+			user.isAdmin = true;
+			await user.save();
+			console.log("User created");
+			rl.close();
+			resolve();
+		});
+	});
+	await promise;
 }
 
 export async function init(){
@@ -45,5 +89,10 @@ export async function init(){
 		console.error("Failed connecting to the database.");
 		console.log("Closing Server.");
 		process.exit(0);
+	}
+
+	let users = await User.find();
+	if (users.length == 0){
+		await createFirstUser();
 	}
 }
