@@ -14,14 +14,29 @@ const config_1 = require("../config");
 const auth_1 = require("./auth");
 const auth_2 = require("../functions/auth");
 const app_1 = require("./app");
+const app_2 = require("../models/app");
+const HttpError_1 = require("../classes/HttpError");
+const server_1 = require("../functions/server");
 exports.mainRouter = express_1.Router();
-exports.mainRouter.all("/", (req, res, next) => {
+exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let config = config_1.getConfig();
     if (req.hostname == `${config.clientDomain}.${config.baseUrl}`) {
         return next();
     }
-    res.json({ error: "Subdomains not implemented yet." });
-});
+    else {
+        let domains = req.hostname.split("." + config.baseUrl);
+        domains.splice(domains.length - 1, 1);
+        let subdomain = domains.join("." + req.baseUrl);
+        let app = yield app_2.App.findOne({ subdomain });
+        if (!app) {
+            return next(new HttpError_1.HttpError("Subdomain does not exist", 500));
+        }
+        if (app.type == "static") {
+            return server_1.server(app, req, res);
+        }
+    }
+    res.status(400).json({ error: "Something not yet implemented" });
+}));
 exports.mainRouter.use("/*", express.static("../public"));
 exports.mainRouter.use("/auth", auth_1.authRouter);
 exports.mainRouter.use("/app", app_1.appRouter);
