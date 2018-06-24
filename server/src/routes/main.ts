@@ -55,6 +55,10 @@ mainRouter.use("/handler/*", async function(req,res,next){
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
 		res.locals.user = await authenticate(req.headers.authorization);
+		if (!res.locals.user.hasPassword()){
+			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+		}
+		next();
 	}catch(err){
 		next(err);
 	}
