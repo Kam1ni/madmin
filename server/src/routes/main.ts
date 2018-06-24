@@ -17,7 +17,11 @@ mainRouter.all("/", async (req,res,next)=>{
 	let config = getConfig();
 	if (req.hostname == `${config.clientDomain}.${config.baseUrl}`){
 		return next();
-	}else{
+	}
+	else if(req.hostname == config.baseUrl){
+		return res.redirect("http://madmin." + req.hostname);
+	}
+	else {
 		let domains = req.hostname.split("."+config.baseUrl);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);

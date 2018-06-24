@@ -20,11 +20,10 @@ exports.authRouter.post("/login", (req, res, next) => __awaiter(this, void 0, vo
     if (!foundUser) {
         return next(new HttpError_1.HttpError("Invalid login", 400));
     }
-    if (!foundUser.hasPassword()) {
-        yield foundUser.setPassword(req.body.password);
-    }
-    else if (!(yield foundUser.comparePassword(req.body.password))) {
-        return next(new HttpError_1.HttpError("Invalid login", 400));
+    if (foundUser.hasPassword()) {
+        if (!(yield foundUser.comparePassword(req.body.password))) {
+            return next(new HttpError_1.HttpError("Invalid login", 400));
+        }
     }
     let token = jwt.sign({ userId: foundUser._id, date: new Date().toJSON() }, config_1.getConfig().tokenSecret);
     foundUser.addToken(token);
@@ -32,9 +31,27 @@ exports.authRouter.post("/login", (req, res, next) => __awaiter(this, void 0, vo
     let user = foundUser.getPrivateJson();
     res.json(user);
 }));
+exports.authRouter.post("/set-new-password", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        let user = yield auth_1.authenticate(req.headers.authorization);
+        if (user.hasPassword()) {
+            return next(new HttpError_1.HttpError("You already have a password", 500));
+        }
+        user.setPassword(req.body.password);
+        yield user.save();
+        return res.json({ message: "New password set" });
+    }
+    catch (err) {
+        next(err);
+    }
+}));
 exports.authRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         res.locals.user = yield auth_1.authenticate(req.headers.authorization);
+        if (!res.locals.user.hasPassword()) {
+            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+        }
+        next();
     }
     catch (err) {
         next(err);
