@@ -36,6 +36,10 @@ HandlerSchema.methods.execute = function (req, res) {
 };
 HandlerSchema.pre("validate", (next) => {
     this.path = this.path.toLowerCase();
+    if (this.path[0] != "/") {
+        this.path = "/" + this.path;
+    }
+    next();
 });
 exports.Handler = mongoose_1.model("Handler", HandlerSchema);
 //# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/models/handler.js.map

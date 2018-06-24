@@ -9,6 +9,7 @@ import { HttpError } from "../classes/HttpError";
 import { server } from "../functions/server";
 import { proxy } from "../functions/proxy";
 import { handlerRouter } from "./handler";
+import { Handler } from "../models/handler";
 
 export const mainRouter = Router();
 
@@ -35,11 +36,17 @@ mainRouter.all("/", async (req,res,next)=>{
 	res.status(400).json({error:"Something not yet implemented"})
 });
 
-mainRouter.use("/*", express.static("../public"));
-
+mainRouter.use("/*", express.static("../../client"));
 mainRouter.use("/auth", authRouter);
-mainRouter.use("/app", appRouter);
-mainRouter.use("/handler", handlerRouter);
+
+mainRouter.use("/handler/*", async function(req,res,next){
+	let path = req.path.split("/handler").join("");
+	let handler = await Handler.findOne({path:path});
+	if (!handler){
+		return next(new HttpError(`No handler found at path "${path}"`, 404));
+	}
+	await handler.execute(req,res);
+});
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
@@ -48,3 +55,6 @@ mainRouter.use("/*", async (req,res,next)=>{
 		next(err);
 	}
 });
+
+mainRouter.use("/app", appRouter);
+mainRouter.use("/handler", handlerRouter);

@@ -35,6 +35,10 @@ HandlerSchema.methods.execute = async function(req:Request, res:Response){
 
 HandlerSchema.pre("validate", (next)=>{
 	this.path = (<string>this.path).toLowerCase();
+	if (this.path[0] != "/"){
+		this.path = "/" + this.path;
+	}
+	next();
 });
 
 export const Handler = model<IHandler>("Handler", HandlerSchema);
