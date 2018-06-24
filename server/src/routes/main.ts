@@ -7,6 +7,8 @@ import { appRouter } from "./app";
 import { App } from "../models/app";
 import { HttpError } from "../classes/HttpError";
 import { server } from "../functions/server";
+import { proxy } from "../functions/proxy";
+import { handlerRouter } from "./handler";
 
 export const mainRouter = Router();
 
@@ -25,6 +27,9 @@ mainRouter.all("/", async (req,res,next)=>{
 		if (app.type == "static"){
 			return server(app, req, res);
 		}
+		else if (app.type == "proxy"){
+			return proxy(app, req, res);
+		}
 	}
 
 	res.status(400).json({error:"Something not yet implemented"})
@@ -34,6 +39,7 @@ mainRouter.use("/*", express.static("../public"));
 
 mainRouter.use("/auth", authRouter);
 mainRouter.use("/app", appRouter);
+mainRouter.use("/handler", handlerRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
