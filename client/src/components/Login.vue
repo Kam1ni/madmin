@@ -6,18 +6,16 @@
 					<v-flex xs12 text-xs-center class="login-title">
 						Madmin
 					</v-flex>
+					<v-flex xs12 text-xs-center class="primary--text sub-title">
+						Your platform for server management
+					</v-flex>
 				</v-layout>
 				<v-layout row wrap justify-center class="mb-5">
 					<v-flex xs12 md5>
-						<v-card row wrap>
-							<v-card-text>
-							<v-card-text>
-								<v-text-field label="Username"></v-text-field>
-								<v-text-field label="Password" type="password"></v-text-field>
-								<v-btn color="primary" block depressed @click="login()">LOGIN</v-btn>
-							</v-card-text>
-							</v-card-text>
-						</v-card>
+						<transition name="slide-x-transition">
+							<main-login v-if="loginState == 0"></main-login>
+							<set-password v-if="loginState == 1"></set-password>
+						</transition>
 					</v-flex>
 				</v-layout>
 				<v-layout row wrap>
@@ -32,20 +30,41 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'vue-class-component';
-import { authService } from '@/services/auth-service';
+import { authService, LoginState } from '@/services/auth-service';
+import MainLogin from '@/components/login/MainLogin.vue';
+import SetPassword from '@/components/login/SetPassword.vue';
 
 export default Vue.extend({
-	methods:{
-		login(){
-			console.log("login");
-			authService.login();
+	data(){
+		return {
+			loginState:LoginState.default,
+			subscriptions:<any[]>[]
 		}
-	}
+	},
+	mounted(){
+		this.subscriptions = [
+			authService.loginState.subscribe(state=>{
+				this.loginState = state;
+			})
+		];
+	},
+	beforeDestroy(){
+		this.subscriptions.forEach((sub)=>{
+			sub.unsubscribe();
+		});
+	},
+	components:{
+		MainLogin,SetPassword
+	},
 });
 </script>
 
 <style scoped>
+.sub-title{
+	font-weight: 300;
+	font-size: 1.5rem;
+}
+
 .login-title{
 	font-size: 2.5rem;
 	font-weight: 300;
@@ -53,6 +72,10 @@ export default Vue.extend({
 
 .container {
 	height: 100%;
+}
+
+.invisible{
+	visibility: hidden;
 }
 </style>
 

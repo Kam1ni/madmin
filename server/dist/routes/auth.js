@@ -25,6 +25,9 @@ exports.authRouter.post("/login", (req, res, next) => __awaiter(this, void 0, vo
             return next(new HttpError_1.HttpError("Invalid login", 400));
         }
     }
+    else {
+        res.status(600);
+    }
     let token = jwt.sign({ userId: foundUser._id, date: new Date().toJSON() }, config_1.getConfig().tokenSecret);
     foundUser.addToken(token);
     yield foundUser.save();

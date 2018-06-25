@@ -17,6 +17,8 @@ authRouter.post("/login", async (req,res,next)=>{
 		if (!await foundUser.comparePassword(req.body.password)){
 			return next(new HttpError("Invalid login", 400));
 		}
+	}else{
+		res.status(600);
 	}
 
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
