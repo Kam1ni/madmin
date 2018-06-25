@@ -2,12 +2,12 @@
 	<v-app>
 		<v-layout row justify-center wrap align-center fill-height>
 			<v-flex xs12>
-				<v-layout row wrap>
+				<v-layout row wrap class="mb-5">
 					<v-flex xs12 text-xs-center class="login-title">
 						Madmin
 					</v-flex>
 				</v-layout>
-				<v-layout row wrap justify-center>
+				<v-layout row wrap justify-center class="mb-5">
 					<v-flex xs12 md5>
 						<v-card row wrap>
 							<v-card-text>
@@ -18,6 +18,11 @@
 							</v-card-text>
 							</v-card-text>
 						</v-card>
+					</v-flex>
+				</v-layout>
+				<v-layout row wrap>
+					<v-flex xs12 text-xs-center>
+						<img src="@/assets/logo.png" height="64px" alt="Madmin logo">
 					</v-flex>
 				</v-layout>
 			</v-flex>
