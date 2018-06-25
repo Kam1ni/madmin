@@ -11,10 +11,10 @@
 					</v-flex>
 				</v-layout>
 				<v-layout row wrap justify-center class="mb-5">
-					<v-flex xs12 md5>
-						<transition name="slide-x-transition">
-							<main-login v-if="loginState == 0"></main-login>
-							<set-password v-if="loginState == 1"></set-password>
+					<v-flex xs11 md5 xl3>
+						<transition name="slide-x-transition" :after-leave="transitionItemLeft()">
+							<main-login v-if="currentPage == 'main-login'"></main-login>
+							<set-password v-if="currentPage == 'set-password'"></set-password>
 						</transition>
 					</v-flex>
 				</v-layout>
@@ -33,18 +33,22 @@ import Vue from 'vue'
 import { authService, LoginState } from '@/services/auth-service';
 import MainLogin from '@/components/login/MainLogin.vue';
 import SetPassword from '@/components/login/SetPassword.vue';
+import { setTimeout } from 'timers';
 
 export default Vue.extend({
 	data(){
 		return {
 			loginState:LoginState.default,
-			subscriptions:<any[]>[]
+			subscriptions:<any[]>[],
+			currentPage:<string|null>null
 		}
 	},
 	mounted(){
+		this.currentPage = "main-login";
 		this.subscriptions = [
 			authService.loginState.subscribe(state=>{
 				this.loginState = state;
+				this.currentPage = null;
 			})
 		];
 	},
@@ -52,6 +56,12 @@ export default Vue.extend({
 		this.subscriptions.forEach((sub)=>{
 			sub.unsubscribe();
 		});
+	},
+	methods:{
+		async transitionItemLeft(){
+			await Vue.nextTick();
+			this.currentPage = this.loginState == LoginState.default ? "main-login" : "set-password";
+		}
 	},
 	components:{
 		MainLogin,SetPassword

@@ -25,7 +25,6 @@ export default Vue.extend({
 	},
 	computed:{
 		passwordsMatch():boolean{
-			console.log("Passwords match");
 			return this.password == this.retypedPassword;
 		},
 		passwordValid():boolean{
