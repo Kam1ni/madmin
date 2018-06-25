@@ -61,6 +61,10 @@ exports.mainRouter.use("/handler/*", function (req, res, next) {
 exports.mainRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         res.locals.user = yield auth_2.authenticate(req.headers.authorization);
+        if (!res.locals.user.hasPassword()) {
+            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+        }
+        next();
     }
     catch (err) {
         next(err);

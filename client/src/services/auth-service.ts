@@ -1,7 +1,12 @@
 import Vue from 'vue';
+import {BehaviorSubject} from "rxjs";
 
-class AuthService extends Vue {
-	isLoggedIn:boolean = false;
+export class AuthService {
+	isLoggedIn:BehaviorSubject<boolean> = new BehaviorSubject(false);
+	
+	login(){
+		this.isLoggedIn.next(true);
+	}
 }
 
 export const authService = new AuthService();
