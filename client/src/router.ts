@@ -6,7 +6,7 @@ import Handlers from '@/components/handlers/Handlers.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
 	routes: [
 		{
 			path: '/',
@@ -32,4 +32,20 @@ export default new Router({
 			component: Handlers
 		}
 	]
-})
+});
+
+function setTitle(title:string){
+	let element = document.querySelector<HTMLTitleElement>("head title");
+	element.innerText = title == null ? "Madmin" : "Madmin - " + title;
+}
+
+router.beforeEach((to,from,next)=>{
+	if (to.name){
+		setTitle(to.name);
+	}else{
+		setTitle(null);
+	}
+	next();
+});
+
+export default router;
