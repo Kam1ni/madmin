@@ -38,7 +38,6 @@ exports.authRouter.post("/login", (req, res, next) => __awaiter(this, void 0, vo
 }));
 exports.authRouter.post("/set-new-password", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        console.log(req.headers.authorization);
         let user = yield auth_1.authenticate(req.headers.authorization);
         if (user.hasPassword()) {
             return next(new HttpError_1.HttpError("You already have a password", 500));

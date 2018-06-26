@@ -33,7 +33,6 @@ authRouter.post("/login", async (req,res,next)=>{
 
 authRouter.post("/set-new-password", async (req,res,next)=>{
 	try{
-		console.log(req.headers.authorization);
 		let user = await authenticate(req.headers.authorization);
 		if (user.hasPassword()){
 			return next(new HttpError("You already have a password", 500));
