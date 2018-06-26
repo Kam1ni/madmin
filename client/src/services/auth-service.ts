@@ -44,9 +44,7 @@ export class AuthService {
 		Axios.interceptors.response.use((response)=>{
 			return response;
 		}, (error:AxiosResponse)=>{
-			console.log("Checking error");
 			if (error.status == 400 && error.data.data == "NO PASSWORD"){
-				console.log("NO PASSWORD");
 				this.isLoggedIn.next(false);
 				this.loginState.next(LoginState.newPassword);
 			}
@@ -80,6 +78,9 @@ export class AuthService {
 				this.user.next(new User(ex.data));
 				this.isLoggedIn.next(false);
 			}
+			else{
+				throw err;
+			}
 		}
 	}
 
@@ -89,11 +90,13 @@ export class AuthService {
 		this.isLoggedIn.next(true);
 	}
 
-	cancelLogin(){
+	async logout(){
+		await Axios.post(AuthService.API_URL + "/logout", null, {headers:HeaderBuilder.getDefaultHeaders()});
 		this.user.next(null);
 		this.loginState.next(LoginState.default);
 		this._token = null;
 	}
+
 }
 
 export const authService = new AuthService();

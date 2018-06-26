@@ -18,6 +18,11 @@
 						<v-list-tile-title v-text="item.title"></v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
+				<v-list-tile @click="logout()">
+					<v-list-tile-content>
+						<v-list-tile-title v-text="'logout'"></v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
 			</v-list>
 		</v-navigation-drawer>
 		<v-toolbar
@@ -56,6 +61,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import HelloWorld from "./components/HelloWorld.vue";
+import { authService } from '@/services/auth-service';
 
 export default Vue.extend({
 	data(){
@@ -80,6 +86,11 @@ export default Vue.extend({
 	},
 	components:{
 		HelloWorld
+	},
+	methods:{
+		async logout(){
+			await authService.logout();
+		}
 	}
 });
 </script>

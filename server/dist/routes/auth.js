@@ -45,13 +45,20 @@ exports.authRouter.post("/set-new-password", (req, res, next) => __awaiter(this,
         if (req.body.password == null) {
             return next(new HttpError_1.HttpError("Password cannot be \"null\"", 400));
         }
-        user.setPassword(req.body.password);
+        yield user.setPassword(req.body.password);
         yield user.save();
         return res.json({ message: "New password set" });
     }
     catch (err) {
         next(err);
     }
+}));
+exports.authRouter.post("/logout", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let user = yield auth_1.authenticate(req.headers.authorization);
+    let tokenIndex = user.tokens.findIndex((t) => { return t.token == req.headers.authorization; });
+    user.tokens.splice(tokenIndex, 1);
+    yield user.save();
+    res.json({ message: "Success" });
 }));
 exports.authRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
@@ -67,13 +74,6 @@ exports.authRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0,
 }));
 exports.authRouter.get("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     res.json(res.locals.user.getPrivateJson());
-}));
-exports.authRouter.post("/logout", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    let user = res.locals.user;
-    let tokenIndex = user.tokens.findIndex((t) => { return t.token == req.headers.authorization; });
-    user.tokens.splice(tokenIndex, 1);
-    yield user.save();
-    res.json({ message: "Success" });
 }));
 exports.authRouter.post("/change-password", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let user = res.locals.user;

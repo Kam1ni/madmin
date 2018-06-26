@@ -40,13 +40,21 @@ authRouter.post("/set-new-password", async (req,res,next)=>{
 		if (req.body.password == null){
 			return next(new HttpError("Password cannot be \"null\"", 400));
 		}
-		user.setPassword(req.body.password);
+		await user.setPassword(req.body.password);
 		await user.save();
 		return res.json({message:"New password set"});
 	}catch(err){
 		next(err);
 	}
-})
+});
+
+authRouter.post("/logout", async (req,res,next)=>{
+	let user = await authenticate(req.headers.authorization);
+	let tokenIndex = user.tokens.findIndex((t)=>{return t.token == req.headers.authorization});
+	user.tokens.splice(tokenIndex, 1);
+	await user.save();
+	res.json({message:"Success"});
+});
 
 authRouter.use("/*", async (req,res,next)=>{
 	try{
@@ -62,14 +70,6 @@ authRouter.use("/*", async (req,res,next)=>{
 
 authRouter.get("/", async (req,res,next)=>{
 	res.json((<IUser>res.locals.user).getPrivateJson());
-});
-
-authRouter.post("/logout", async (req,res,next)=>{
-	let user:IUser = res.locals.user;
-	let tokenIndex = user.tokens.findIndex((t)=>{return t.token == req.headers.authorization});
-	user.tokens.splice(tokenIndex, 1);
-	await user.save();
-	res.json({message:"Success"});
 });
 
 authRouter.post("/change-password", async (req,res,next)=>{
