@@ -1,8 +1,9 @@
-import { authService } from '@/services/auth-service';
-
 export class HeaderBuilder{
 	headers:any = {};
 	hasAuthorization:boolean = true;
+	private get token():string{
+		return localStorage.getItem("auth_token");
+	}
 
 	static getDefaultHeaders():any{
 		return new HeaderBuilder().build();
@@ -25,7 +26,7 @@ export class HeaderBuilder{
 
 	build():any{
 		if (this.hasAuthorization){
-			this.headers.Authorization = authService.token;
+			this.headers.Authorization = this.token;
 		}
 		return this.headers;
 	}
