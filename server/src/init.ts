@@ -49,7 +49,7 @@ async function createFirstUser(){
 				}
 				else{
 					passwordsMatch = true;
-					user.setPassword(result.password);
+					await user.setPassword(result.password);
 				}
 			}
 			user.isAdmin = true;

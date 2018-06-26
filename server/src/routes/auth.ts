@@ -17,22 +17,29 @@ authRouter.post("/login", async (req,res,next)=>{
 		if (!await foundUser.comparePassword(req.body.password)){
 			return next(new HttpError("Invalid login", 400));
 		}
-	}else{
-		res.status(600);
 	}
 
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
 	foundUser.addToken(token);
 	await foundUser.save();
 	let user:any = foundUser.getPrivateJson();
+	user.token = token;
+	if (!foundUser.hasPassword()){
+		res.status(400);
+		user.data = "NO PASSWORD";
+	}
 	res.json(user);
 });
 
 authRouter.post("/set-new-password", async (req,res,next)=>{
 	try{
+		console.log(req.headers.authorization);
 		let user = await authenticate(req.headers.authorization);
 		if (user.hasPassword()){
 			return next(new HttpError("You already have a password", 500));
+		}
+		if (req.body.password == null){
+			return next(new HttpError("Password cannot be \"null\"", 400));
 		}
 		user.setPassword(req.body.password);
 		await user.save();
@@ -46,12 +53,16 @@ authRouter.use("/*", async (req,res,next)=>{
 	try{
 		res.locals.user = await authenticate(req.headers.authorization);
 		if (!res.locals.user.hasPassword()){
-			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 400, "NO PASSWORD"));
 		}
 		next();
 	}catch(err){
 		next(err);
 	}
+});
+
+authRouter.get("/", async (req,res,next)=>{
+	res.json((<IUser>res.locals.user).getPrivateJson());
 });
 
 authRouter.post("/logout", async (req,res,next)=>{

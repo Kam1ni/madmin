@@ -29,7 +29,7 @@ export interface IUser extends IPrivateUser, Document {
 
 const UserSchema = new Schema({
 	username:{type:String, required:true},
-	password:{type:String, requried:true},
+	password:{type:String, requried:false},
 	isAdmin:{type:Boolean, required:false},
 	tokens:[
 		{
@@ -45,7 +45,7 @@ UserSchema.methods.hasPassword = function():boolean{
 
 UserSchema.methods.setPassword = async function(newPassword:string):Promise<void>{
 	if (newPassword == null){
-		this.password = null;
+		return this.password = null;
 	}
 	
 	let hash = await bcrypt.hash(newPassword, getConfig().saltRounds);
@@ -74,7 +74,7 @@ UserSchema.methods.addToken = function(token:string, name:string = null){
 		name = new Date().toUTCString();
 	}
 
-	this.tokens.push({token:token, name});
+	this.tokens.push({token:token, deviceName:name});
 }
 
 export const User = model<IUser>("User", UserSchema);

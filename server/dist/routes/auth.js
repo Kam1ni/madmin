@@ -25,20 +25,26 @@ exports.authRouter.post("/login", (req, res, next) => __awaiter(this, void 0, vo
             return next(new HttpError_1.HttpError("Invalid login", 400));
         }
     }
-    else {
-        res.status(600);
-    }
     let token = jwt.sign({ userId: foundUser._id, date: new Date().toJSON() }, config_1.getConfig().tokenSecret);
     foundUser.addToken(token);
     yield foundUser.save();
     let user = foundUser.getPrivateJson();
+    user.token = token;
+    if (!foundUser.hasPassword()) {
+        res.status(400);
+        user.data = "NO PASSWORD";
+    }
     res.json(user);
 }));
 exports.authRouter.post("/set-new-password", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
+        console.log(req.headers.authorization);
         let user = yield auth_1.authenticate(req.headers.authorization);
         if (user.hasPassword()) {
             return next(new HttpError_1.HttpError("You already have a password", 500));
+        }
+        if (req.body.password == null) {
+            return next(new HttpError_1.HttpError("Password cannot be \"null\"", 400));
         }
         user.setPassword(req.body.password);
         yield user.save();
@@ -52,13 +58,16 @@ exports.authRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0,
     try {
         res.locals.user = yield auth_1.authenticate(req.headers.authorization);
         if (!res.locals.user.hasPassword()) {
-            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 400, "NO PASSWORD"));
         }
         next();
     }
     catch (err) {
         next(err);
     }
+}));
+exports.authRouter.get("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    res.json(res.locals.user.getPrivateJson());
 }));
 exports.authRouter.post("/logout", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let user = res.locals.user;

@@ -62,7 +62,7 @@ exports.mainRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0,
     try {
         res.locals.user = yield auth_2.authenticate(req.headers.authorization);
         if (!res.locals.user.hasPassword()) {
-            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+            return next(new HttpError_1.HttpError("User has no password. Please use route \"/auth/set-new-password\"", 400, "NO-PASSWORD"));
         }
         next();
     }
@@ -72,4 +72,9 @@ exports.mainRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0,
 }));
 exports.mainRouter.use("/app", app_1.appRouter);
 exports.mainRouter.use("/handler", handler_1.handlerRouter);
+exports.mainRouter.use("/*", (err, req, res, next) => {
+    let error = err;
+    let response = res;
+    response.status(error.code || 500).json({ message: error.message, data: error.data });
+});
 //# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/routes/main.js.map

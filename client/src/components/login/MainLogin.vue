@@ -17,6 +17,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import { authService } from '@/services/auth-service';
+import { AxiosResponse } from 'axios';
 
 export default Vue.extend({
 	data(){
@@ -33,11 +34,12 @@ export default Vue.extend({
 			this.logingIn = true;
 			console.log("login");
 			try{
+				this.errorMessage = null;
 				await authService.login(this.username, this.password);
 			}catch(err){
-
+				let ex:AxiosResponse = err;
+				this.errorMessage = ex.data.message;
 			}
-			this.errorMessage = "This is an error message"
 			this.logingIn = false;
 		}
 	}

@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class HttpError extends Error {
-    constructor(message, code = 500) {
+    constructor(message, code = 500, data = undefined) {
         super(message);
         this.code = code;
+        this.data = data;
+        if (code == null) {
+            this.code = 500;
+        }
     }
 }
 exports.HttpError = HttpError;

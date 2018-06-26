@@ -13,7 +13,7 @@ const bcrypt = require("bcrypt");
 const config_1 = require("../config");
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, required: true },
-    password: { type: String, requried: true },
+    password: { type: String, requried: false },
     isAdmin: { type: Boolean, required: false },
     tokens: [
         {
@@ -28,7 +28,7 @@ UserSchema.methods.hasPassword = function () {
 UserSchema.methods.setPassword = function (newPassword) {
     return __awaiter(this, void 0, void 0, function* () {
         if (newPassword == null) {
-            this.password = null;
+            return this.password = null;
         }
         let hash = yield bcrypt.hash(newPassword, config_1.getConfig().saltRounds);
         this.password = hash;
@@ -54,7 +54,7 @@ UserSchema.methods.addToken = function (token, name = null) {
     if (name == null) {
         name = new Date().toUTCString();
     }
-    this.tokens.push({ token: token, name });
+    this.tokens.push({ token: token, deviceName: name });
 };
 exports.User = mongoose_1.model("User", UserSchema);
 //# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/models/user.js.map

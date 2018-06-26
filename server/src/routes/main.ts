@@ -56,7 +56,7 @@ mainRouter.use("/*", async (req,res,next)=>{
 	try{
 		res.locals.user = await authenticate(req.headers.authorization);
 		if (!res.locals.user.hasPassword()){
-			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 600));
+			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 400, "NO-PASSWORD"));
 		}
 		next();
 	}catch(err){
@@ -66,3 +66,9 @@ mainRouter.use("/*", async (req,res,next)=>{
 
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
+
+mainRouter.use("/*", (err, req, res, next)=>{
+	let error = <HttpError> err;
+	let response = <express.Response>res;
+	response.status(error.code || 500).json({message:error.message, data: error.data});
+});

@@ -56,7 +56,7 @@ function createFirstUser() {
                     }
                     else {
                         passwordsMatch = true;
-                        user.setPassword(result.password);
+                        yield user.setPassword(result.password);
                     }
                 }
                 user.isAdmin = true;

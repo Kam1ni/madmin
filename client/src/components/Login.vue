@@ -12,9 +12,9 @@
 				</v-layout>
 				<v-layout row wrap justify-center class="mb-5">
 					<v-flex xs11 md5 xl3>
-						<transition name="slide-x-transition" :after-leave="transitionItemLeft()">
-							<main-login v-if="currentPage == 'main-login'"></main-login>
-							<set-password v-if="currentPage == 'set-password'"></set-password>
+						<transition name="login-slide-transition" mode="out-in">
+							<main-login v-if="loginState == 0"></main-login>
+							<set-password v-if="loginState == 1"></set-password>
 						</transition>
 					</v-flex>
 				</v-layout>
@@ -40,15 +40,12 @@ export default Vue.extend({
 		return {
 			loginState:LoginState.default,
 			subscriptions:<any[]>[],
-			currentPage:<string|null>null
 		}
 	},
 	mounted(){
-		this.currentPage = "main-login";
 		this.subscriptions = [
 			authService.loginState.subscribe(state=>{
 				this.loginState = state;
-				this.currentPage = null;
 			})
 		];
 	},
@@ -56,12 +53,6 @@ export default Vue.extend({
 		this.subscriptions.forEach((sub)=>{
 			sub.unsubscribe();
 		});
-	},
-	methods:{
-		async transitionItemLeft(){
-			await Vue.nextTick();
-			this.currentPage = this.loginState == LoginState.default ? "main-login" : "set-password";
-		}
 	},
 	components:{
 		MainLogin,SetPassword
@@ -87,6 +78,22 @@ export default Vue.extend({
 .invisible{
 	visibility: hidden;
 }
+
+.login-slide-transition-enter-active{
+	transition: all .5s ease-in;
+}
+
+.login-slide-transition-enter{
+	transform: translate(100%, 0);
+	opacity: 0;
+}
+
+.login-slide-transition-leave-active{
+	transition: all .5s ease-out;
+	transform: translate(-100%, 0);
+	opacity: 0;
+}
+
 </style>
 
 
