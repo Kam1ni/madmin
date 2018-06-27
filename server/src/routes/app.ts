@@ -12,6 +12,7 @@ appRouter.post("/", async (req,res,next)=>{
 	let app = new App();
 	app.subdomain = req.body.subdomain;
 	app.type = req.body.type;
+	app.enabled = true;
 	if (app.type == "static"){
 		app.config = {
 			path: req.body.path,
@@ -27,6 +28,34 @@ appRouter.post("/", async (req,res,next)=>{
 
 	await app.save();
 	res.json(app);
+});
+
+appRouter.put("/:id/enable", async (req,res,next)=>{
+	let app = await App.findById(req.params.id);
+	if (!app){
+		return next(new HttpError("There is no app with id " + req.params.id, 500));
+	}
+
+	if (app.enabled){
+		return next(new HttpError("App is already enabled", 400));
+	}
+	app.enabled = true;
+	await app.save();
+	return res.json(app);
+});
+
+appRouter.put("/:id/disable", async (req,res,next)=>{
+	let app = await App.findById(req.params.id);
+	if (!app){
+		return next(new HttpError("There is no app with id " + req.params.id, 500));
+	}
+
+	if (!app.enabled){
+		return next(new HttpError("App is already disabled", 400));
+	}
+	app.enabled = false;
+	await app.save();
+	return res.json(app);
 });
 
 appRouter.put("/:id", async (req,res,next)=>{

@@ -19,6 +19,7 @@ exports.appRouter.post("/", (req, res, next) => __awaiter(this, void 0, void 0, 
     let app = new app_1.App();
     app.subdomain = req.body.subdomain;
     app.type = req.body.type;
+    app.enabled = true;
     if (app.type == "static") {
         app.config = {
             path: req.body.path,
@@ -35,6 +36,30 @@ exports.appRouter.post("/", (req, res, next) => __awaiter(this, void 0, void 0, 
     }
     yield app.save();
     res.json(app);
+}));
+exports.appRouter.put("/:id/enable", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let app = yield app_1.App.findById(req.params.id);
+    if (!app) {
+        return next(new HttpError_1.HttpError("There is no app with id " + req.params.id, 500));
+    }
+    if (app.enabled) {
+        return next(new HttpError_1.HttpError("App is already enabled", 400));
+    }
+    app.enabled = true;
+    yield app.save();
+    return res.json(app);
+}));
+exports.appRouter.put("/:id/disable", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let app = yield app_1.App.findById(req.params.id);
+    if (!app) {
+        return next(new HttpError_1.HttpError("There is no app with id " + req.params.id, 500));
+    }
+    if (!app.enabled) {
+        return next(new HttpError_1.HttpError("App is already disabled", 400));
+    }
+    app.enabled = false;
+    yield app.save();
+    return res.json(app);
 }));
 exports.appRouter.put("/:id", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let app = yield app_1.App.findById(req.params.id);

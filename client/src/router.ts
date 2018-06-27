@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/home/Home.vue';
 import Apps from '@/components/apps/Apps.vue';
 import Handlers from '@/components/handlers/Handlers.vue'
+import AppEdit from '@/components/apps/Edit.vue';
+import AppNew from '@/components/apps/New.vue';
 
 Vue.use(Router)
 
@@ -17,14 +19,14 @@ const router = new Router({
 			path: '/apps',
 			name: 'Apps',
 			component: Apps,
-			children:[
-				{
-					path:"/new",
-				},
-				{
-					path:"edit/:id"
-				}
-			]
+		},
+		{
+			path:"/apps/new",
+			component:AppNew
+		},
+		{
+			path:"/apps/edit/:id",
+			component:AppEdit
 		},
 		{
 			path: '/handlers',
