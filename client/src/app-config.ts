@@ -8,6 +8,7 @@ Axios.interceptors.response.use((response)=>{
 interface Config {
 	devMode:boolean
 	apiUrl:string
+	baseUrl:string
 }
 
 let apiUrl = process.env.VUE_APP_API_URL;
@@ -20,7 +21,15 @@ if (apiUrl.endsWith("/")){
 	apiUrl = apiUrl.slice(0,-1);
 }
 
+let baseUrl = apiUrl;
+if (process.env.NODE_ENV == "production"){
+	let array = apiUrl.split(".");
+	array.shift();
+	baseUrl = array.join(".");
+}
+
 export const applicationConfig:Config = {
 	devMode: process.env.NODE_ENV == "development",
-	apiUrl: apiUrl
+	apiUrl: apiUrl,
+	baseUrl
 }

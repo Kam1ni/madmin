@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid>
-		<h4>New App</h4>
-		<Editor save-button="Create" @save-clicked="onSave"></Editor>	
+		<v-subheader>New App</v-subheader>
+		<Editor save-button="Create" @save-clicked="onSave" :app="app"></Editor>	
 	</v-container>
 </template>
 
@@ -13,6 +13,11 @@ import {App} from '@/classes/app';
 export default Vue.extend({
 	components:{
 		Editor
+	},
+	data(){
+		return {
+			app:new App()
+		}
 	},
 	methods:{
 		onSave($event:App){

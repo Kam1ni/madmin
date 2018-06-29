@@ -27,7 +27,7 @@ exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, 
         return next();
     }
     else if (req.hostname == config.baseUrl) {
-        return res.redirect("http://madmin." + req.hostname);
+        return res.redirect("http://" + config.clientDomain + "." + req.hostname);
     }
     else {
         let domains = req.hostname.split("." + config.baseUrl);

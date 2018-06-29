@@ -19,7 +19,7 @@ mainRouter.all("/", async (req,res,next)=>{
 		return next();
 	}
 	else if(req.hostname == config.baseUrl){
-		return res.redirect("http://madmin." + req.hostname);
+		return res.redirect("http://" + config.clientDomain + "." + req.hostname);
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);

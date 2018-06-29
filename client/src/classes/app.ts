@@ -19,7 +19,7 @@ export class App {
 	config:IProxyAppConfig|IStaticAppConfig;
 	private _created:boolean = false;
 
-	constructor(data:any){
+	constructor(data:any = null){
 		if (!data) return;
 		this._created = true;
 		this.subdomain = data.subdomain;
