@@ -6,7 +6,6 @@ import VueResource from 'vue-resource';
 import AuthService from './services/auth-service';
 import AppError from './components/common/Error.vue';
 import ConfirmDialog from './components/common/ConfirmDialog.vue';
-import "vuetify/dist/vuetify.min.css";
 
 
 Vue.use(VueResource);

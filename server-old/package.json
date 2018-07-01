@@ -1,0 +1,36 @@
+{
+  "name": "madmin-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kam1ni/madmin.git"
+  },
+  "author": "Kamil Krzysztof Kulach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kam1ni/madmin/issues"
+  },
+  "homepage": "https://github.com/Kam1ni/madmin#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "express-http-proxy": "^1.1.0",
+    "express-subdomain": "^1.0.5",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^4.13.10",
+    "mongoose-bcrypt": "^1.5.0",
+    "mongoose-events": "^0.3.9",
+    "mongoose-id-validator": "^0.4.3",
+    "mongoose-plugin-events": "^1.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
+  }
+}

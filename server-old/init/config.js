@@ -1,0 +1,36 @@
+const fs = require("fs");
+const path = require("path");
+const mongoose = require("mongoose");
+
+const defaultServerFile = {
+	host: "0.0.0.0",
+	port: 3000,
+	db:{
+		host: "mongodb://localhost:27017",
+		database: "madmin",
+		username: "NOT YET IMPLEMENTED",
+		password: "NOT YET IMPLEMENTED"
+	}
+}
+
+const defaultAuthFile = {
+	users: [
+		{username: "admin", password: "admin", isAdmin: true, _id: mongoose.Types.ObjectId()}
+	],
+	secret:"secret"
+}
+
+function createFileIfNotExist(filename, config){
+	if (!fs.existsSync(path.resolve(__dirname, "../config/", filename + ".json"))){
+		fs.writeFileSync(path.resolve(__dirname, "../config/", filename + ".json"), JSON.stringify(config, null, 2));
+		console.log("Created config file "+ filename);
+	}
+}
+
+module.exports = function(){
+	if (!fs.existsSync(path.resolve(__dirname, "../config"))){
+		fs.mkdirSync(path.resolve(__dirname, "../config"));
+	}
+	createFileIfNotExist("server", defaultServerFile);
+	createFileIfNotExist("auth", defaultAuthFile);
+}

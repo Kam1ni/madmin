@@ -67,7 +67,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				loader: 'style-loader'
+				loader: 'css-loader'
 			}
 		]
 	},
