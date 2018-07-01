@@ -8,10 +8,10 @@ import AppError from './components/common/Error.vue';
 import ConfirmDialog from './components/common/ConfirmDialog.vue';
 import "vuetify/dist/vuetify.min.css";
 
-
 Vue.use(VueResource);
 if (process.env.NODE_ENV == "development"){
-	Vue.http.options.root = "http://localhost:8080";
+	Vue.http.options.root = "http://madmin.localhost.kami-dev.eu:3000";
+	console.log(Vue.http.options.root);
 }else{
 	Vue.http.options.root = "/";
 }

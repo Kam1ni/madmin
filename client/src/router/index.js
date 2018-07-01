@@ -5,6 +5,7 @@ import Proxies from '../components/Proxies.vue';
 import Webhooks from '../components/Webhooks.vue';
 import Profile from '../components/Profile.vue';
 import Statics from '../components/Statics.vue';
+import Settings from '../components/Settings.vue';
 
 Vue.use(Router)
 
@@ -30,6 +31,10 @@ export default new Router({
 		{
 			path: "/profile",
 			component: Profile
+		},
+		{
+			path: "/settings",
+			component: Settings
 		}
 	]
 })
