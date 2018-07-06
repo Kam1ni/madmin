@@ -19,8 +19,10 @@ export default Vue.extend({
 		Editor
 	},
 	data(){
+		let app = new App();
+		app.config = {url:""};
 		return {
-			app:new App()
+			app
 		}
 	},
 	methods:{
