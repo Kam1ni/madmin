@@ -16,6 +16,7 @@
 					</v-flex>
 				</v-layout>
 				<Static :app="app" v-if="app.type == 'static'"></Static>
+				<Proxy :app="app" v-else-if="app.type == 'proxy'"></Proxy>
 			</v-card-text>
 			<v-card-actions>
 				<v-flex class="text-xs-right">
@@ -32,6 +33,7 @@ import Vue from 'vue'
 import { applicationConfig } from '@/app-config';
 import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '@/functions/string';
 import Static from './Static.vue';
+import Proxy from './Proxy.vue';
 
 export default Vue.extend({
 	data(){
@@ -75,7 +77,8 @@ export default Vue.extend({
 		}
 	},
 	components:{
-		Static
+		Static,
+		Proxy
 	}
 })
 </script>
