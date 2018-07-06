@@ -3,7 +3,7 @@
 		<v-layout row wrap justify-center>
 			<v-flex xs12 md10 lg6>
 				<v-subheader>New App</v-subheader>
-				<Editor save-button="Create" @save-clicked="onSave" :app="app"></Editor>	
+				<Editor save-button="Create" @submit="onSave($event)" :app="app"></Editor>	
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -24,8 +24,10 @@ export default Vue.extend({
 		}
 	},
 	methods:{
-		onSave($event:App){
-			
+		async onSave($event:App){
+			console.log("Save");
+			await $event.save();
+			this.$router.go(-1);
 		}
 	}
 })

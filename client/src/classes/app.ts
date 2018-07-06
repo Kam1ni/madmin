@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import { AppService, appService } from '@/services/app-service';
 import { HeaderBuilder } from '@/classes/header-builder';
+import { applicationConfig } from '@/app-config';
 
 export interface IStaticAppConfig{
 	path:string;
@@ -12,26 +13,36 @@ export interface IProxyAppConfig{
 }
 
 export class App {
-	_id:string;
+	private _id:string;
 	subdomain:string;
 	enabled:boolean;
 	type:"static"|"proxy";
 	config:IProxyAppConfig|IStaticAppConfig;
 	private _created:boolean = false;
 
+	get id():string{
+		return this._id;
+	}
+
 	constructor(data:any = null){
 		if (!data) return;
 		this._created = true;
+		this._id = data._id;
 		this.subdomain = data.subdomain;
 		this.enabled = data.enabled;
 		this.type = data.type;
 		this.config = data.config;
 	}
 
+	get fullUrl():string{
+		let url = applicationConfig.baseUrl.split("//");
+		return url[0] + "//" + this.subdomain + "." + url[1];
+	}
+
 	async save(){
 		if (!this._created){
-			await Axios.post(AppService.API_URL, this, {headers:HeaderBuilder.getDefaultHeaders()});
-			appService.apps.value.push(this);
+			let result = await Axios.post(AppService.API_URL, this, {headers:HeaderBuilder.getDefaultHeaders()});
+			appService.apps.value.push(new App(result.data));
 			this._created = true;
 		}else{
 			await Axios.put(AppService.API_URL + "/" + this._id, this, {headers:HeaderBuilder.getDefaultHeaders()});
@@ -51,6 +62,9 @@ export class App {
 	async remove(){
 		await Axios.delete(AppService.API_URL + "/" + this._id, {headers:HeaderBuilder.getDefaultHeaders()});
 		this._created = false;
-		appService.apps.value.splice(appService.apps.value.indexOf(this), 1);
+		let index = appService.apps.value.findIndex((item)=>{return item.id == this.id});
+		if (index != -1){
+			appService.apps.value.splice(index, 1);
+		}
 	}
 }

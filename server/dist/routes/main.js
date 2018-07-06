@@ -77,4 +77,4 @@ exports.mainRouter.use("/*", (err, req, res, next) => {
     let response = res;
     response.status(error.code || 500).json({ message: error.message, data: error.data });
 });
-//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/routes/main.js.map
+//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/routes/main.js.map

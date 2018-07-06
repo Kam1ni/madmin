@@ -40,4 +40,4 @@ function server(app, req, res) {
     });
 }
 exports.server = server;
-//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/functions/server.js.map
+//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/functions/server.js.map

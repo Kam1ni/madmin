@@ -22,4 +22,14 @@ const AppSchema = new Schema({
 	config:{type:Schema.Types.Mixed, required:true}
 });
 
+AppSchema.path("subdomain").validate(function(value){
+	return !/\s/.test(value);
+}, "Subdomain may not have spaces");
+
+AppSchema.pre("validate", function(next){
+	let obj = <IApp>this;
+	obj.subdomain = obj.subdomain.toLowerCase();
+	next();
+});
+
 export const App = model<IApp>("App", AppSchema);

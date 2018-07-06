@@ -21,7 +21,7 @@
 			<v-card-actions>
 				<v-flex class="text-xs-right">
 					<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
-					<v-btn flat color="primary" :disabled="!valid">Submit</v-btn>
+					<v-btn flat color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
 				</v-flex>
 			</v-card-actions>
 		</v-form>
@@ -32,8 +32,10 @@
 import Vue from 'vue'
 import { applicationConfig } from '@/app-config';
 import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '@/functions/string';
+import { appService } from '@/services/app-service';
 import Static from './Static.vue';
 import Proxy from './Proxy.vue';
+import { App } from '@/classes/app';
 
 export default Vue.extend({
 	data(){
@@ -41,7 +43,8 @@ export default Vue.extend({
 			valid:false,
 			subdomainRules:[
 				(v:string) => !isStringNullOrWhiteSpace(v) || "Subdomain may not be empty",
-				(v:string) => !stringHasWhiteSpace(v) || "Subdomain may not have spaces"
+				(v:string) => !stringHasWhiteSpace(v) || "Subdomain may not have spaces",
+				(v:string) => !appService.domainInUse(v) || "Subdomain must be unique"
 			],
 			typeRules:[
 				(v:string) => v != null || "You must select a type"
@@ -57,8 +60,7 @@ export default Vue.extend({
 			if (isStringNullOrWhiteSpace(this.app.subdomain)){
 				return "Invalid url";
 			}
-			let url = applicationConfig.baseUrl.split("//");
-			return url[0] + "//" + this.app.subdomain + "." + url[1];
+			return (<App>this.app).fullUrl;
 		}
 	},
 	watch:{
@@ -71,9 +73,7 @@ export default Vue.extend({
 	props:["app"],
 	methods:{
 		submit(){
-			if ((<HTMLFormElement>this.$refs.form).validate()){
-				this.$emit("submit", this.app);
-			}
+			this.$emit("submit", this.app);
 		},
 		cancel(){
 			this.$router.go(-1);

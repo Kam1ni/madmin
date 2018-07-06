@@ -16,8 +16,7 @@ export default Vue.extend({
 	data(){
 		return {
 			pathRules:[
-				(v:string) => !isStringNullOrWhiteSpace(v) || "Path may not be empty",
-				(v:string) => v == null || v[0] == "/" || "Path must be absolute and thus start with an \"/\""
+				(v:string) => !isStringNullOrWhiteSpace(v) || "Path may not be empty"
 			]
 		}
 	},
