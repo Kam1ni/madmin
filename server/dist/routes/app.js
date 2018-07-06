@@ -15,6 +15,13 @@ exports.appRouter = express_1.Router();
 exports.appRouter.get("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     res.json(yield app_1.App.find());
 }));
+exports.appRouter.get("/:id", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let app = yield app_1.App.findById(req.params.id);
+    if (!app) {
+        return next(new HttpError_1.HttpError("App does not exist!", 404));
+    }
+    res.json(app);
+}));
 exports.appRouter.post("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let app = new app_1.App();
     app.subdomain = req.body.subdomain;
@@ -22,13 +29,13 @@ exports.appRouter.post("/", (req, res, next) => __awaiter(this, void 0, void 0, 
     app.enabled = true;
     if (app.type == "static") {
         app.config = {
-            path: req.body.path,
-            listFiles: req.body.listFiles
+            path: req.body.config.path,
+            listFiles: req.body.config.listFiles
         };
     }
     else if (app.type == "proxy") {
         app.config = {
-            url: req.body.url
+            url: req.body.config.url
         };
     }
     else {
@@ -70,13 +77,13 @@ exports.appRouter.put("/:id", (req, res, next) => __awaiter(this, void 0, void 0
     app.type = req.body.type;
     if (app.type == "static") {
         app.config = {
-            path: req.body.path,
-            listFiles: req.body.listFiles
+            path: req.body.config.path,
+            listFiles: req.body.config.listFiles
         };
     }
     else if (app.type == "proxy") {
         app.config = {
-            url: req.body.url
+            url: req.body.config.url
         };
     }
     else {

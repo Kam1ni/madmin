@@ -18,6 +18,9 @@
 									<v-list-tile-sub-title v-html="item.type"></v-list-tile-sub-title>
 								</v-list-tile-content>
 								<v-list-tile-action>
+									<v-switch label="enabled" v-model="item.enabledWeb"></v-switch>
+								</v-list-tile-action>
+								<v-list-tile-action>
 									<v-btn icon :to="'/apps/edit/' + item._id"><v-icon>edit</v-icon></v-btn>
 								</v-list-tile-action>
 								<v-list-tile-action>

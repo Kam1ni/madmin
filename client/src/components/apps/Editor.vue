@@ -44,7 +44,7 @@ export default Vue.extend({
 			subdomainRules:[
 				(v:string) => !isStringNullOrWhiteSpace(v) || "Subdomain may not be empty",
 				(v:string) => !stringHasWhiteSpace(v) || "Subdomain may not have spaces",
-				(v:string) => !appService.domainInUse(v) || "Subdomain must be unique"
+				(v:string) => !appService.domainInUse(v, this.app.id) || "Subdomain must be unique"
 			],
 			typeRules:[
 				(v:string) => v != null || "You must select a type"
@@ -61,13 +61,6 @@ export default Vue.extend({
 				return "Invalid url";
 			}
 			return (<App>this.app).fullUrl;
-		}
-	},
-	watch:{
-		"app.type"(newType, oldType){
-			if (newType != oldType){
-				this.app.config = {};
-			}
 		}
 	},
 	props:["app"],

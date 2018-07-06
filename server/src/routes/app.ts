@@ -8,6 +8,14 @@ appRouter.get("/", async (req,res,next)=>{
 	res.json(await App.find());
 });
 
+appRouter.get("/:id", async(req,res,next)=>{
+	let app = await App.findById(req.params.id);
+	if (!app){
+		return next(new HttpError("App does not exist!", 404));
+	}
+	res.json(app);
+})
+
 appRouter.post("/", async (req,res,next)=>{
 	let app = new App();
 	app.subdomain = req.body.subdomain;
@@ -15,12 +23,12 @@ appRouter.post("/", async (req,res,next)=>{
 	app.enabled = true;
 	if (app.type == "static"){
 		app.config = {
-			path: req.body.path,
-			listFiles: req.body.listFiles
+			path: req.body.config.path,
+			listFiles: req.body.config.listFiles
 		}
 	}else if (app.type == "proxy"){
 		app.config = {
-			url: req.body.url
+			url: req.body.config.url
 		}
 	}else{
 		return next(new HttpError('"type" is a required field and can only be equal to "static" or "proxy"', 500));
@@ -68,12 +76,12 @@ appRouter.put("/:id", async (req,res,next)=>{
 	app.type = req.body.type;
 	if (app.type == "static"){
 		app.config = {
-			path: req.body.path,
-			listFiles: req.body.listFiles
+			path: req.body.config.path,
+			listFiles: req.body.config.listFiles
 		}
 	}else if (app.type == "proxy"){
 		app.config = {
-			url: req.body.url
+			url: req.body.config.url
 		}
 	}else{
 		return next(new HttpError('"type" is a required field and can only be equal to "static" or "proxy"', 500));

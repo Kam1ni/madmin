@@ -14,14 +14,19 @@ export class AppService{
 		return this.apps.value;
 	}
 
-	domainInUse(domain:string):boolean{
+	async getApp(id:string):Promise<App>{
+		let result = await Axios.get(AppService.API_URL + "/" + id, {headers:HeaderBuilder.getDefaultHeaders()});
+		return new App(result.data);
+	}
+
+	domainInUse(domain:string, appId:string = null):boolean{
 		if (this.apps.value == null){
 			this.getApps();
 			return false;
 		}
 
 		for (let app of this.apps.value){
-			if (app.subdomain.toLowerCase() == domain.toLowerCase()){
+			if (app.subdomain.toLowerCase() == domain.toLowerCase() && app.id != appId){
 				return true;
 			}
 		}

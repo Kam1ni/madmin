@@ -15,7 +15,7 @@ export interface IProxyAppConfig{
 export class App {
 	private _id:string;
 	subdomain:string;
-	enabled:boolean;
+	enabled:boolean = true;
 	type:"static"|"proxy";
 	config:IProxyAppConfig|IStaticAppConfig;
 	private _created:boolean = false;
@@ -24,12 +24,24 @@ export class App {
 		return this._id;
 	}
 
+	get enabledWeb():boolean{
+		return this.enabled;
+	}
+
+	set enabledWeb(val:boolean){
+		if (val){
+			this.enable();
+		}else{
+			this.disable();
+		}
+	}
+
 	constructor(data:any = null){
 		if (!data) return;
 		this._created = true;
 		this._id = data._id;
 		this.subdomain = data.subdomain;
-		this.enabled = data.enabled;
+		this.enabled = data.enabled == null ? true : data.enabled;
 		this.type = data.type;
 		this.config = data.config;
 	}
@@ -46,6 +58,12 @@ export class App {
 			this._created = true;
 		}else{
 			await Axios.put(AppService.API_URL + "/" + this._id, this, {headers:HeaderBuilder.getDefaultHeaders()});
+			let index = appService.apps.value.findIndex((item)=>{return item.id == this.id});
+			if (index != -1){
+				appService.apps.value[index] = this;
+			}else{
+				appService.apps.value.push(this);
+			}
 		}
 	}
 

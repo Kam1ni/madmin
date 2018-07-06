@@ -33,7 +33,7 @@ exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, 
         let domains = req.hostname.split("." + config.baseUrl);
         domains.splice(domains.length - 1, 1);
         let subdomain = domains.join("." + req.baseUrl);
-        let app = yield app_2.App.findOne({ subdomain });
+        let app = yield app_2.App.findOne({ subdomain, $or: [{ enabled: true }, { enabled: undefined }] });
         if (!app) {
             return next(new HttpError_1.HttpError("Subdomain does not exist", 500));
         }
