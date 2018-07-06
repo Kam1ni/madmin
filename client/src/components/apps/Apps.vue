@@ -4,11 +4,11 @@
 			<v-progress-circular color="accent" :indeterminate="true"></v-progress-circular>
 		</v-layout>
 		<v-layout align-center justify-center v-else-if="items.length == 0">
-			No apps available
+			<v-subheader>No apps available</v-subheader> 
 		</v-layout>
-		<v-layout v-else row wrap justify-center="">
+		<v-layout v-else row wrap justify-center>
 			<v-flex xs12 md10 lg6>
-				Apps
+				<v-subheader>Apps</v-subheader>
 				<v-card>
 					<v-card-text>
 						<v-list>
