@@ -1,7 +1,11 @@
 <template>
-	<v-container fluid>
-		<v-subheader>New App</v-subheader>
-		<Editor save-button="Create" @save-clicked="onSave" :app="app"></Editor>	
+	<v-container fluid grid-list-md>
+		<v-layout row wrap justify-center>
+			<v-flex xs12 md10 lg6>
+				<v-subheader>New App</v-subheader>
+				<Editor save-button="Create" @save-clicked="onSave" :app="app"></Editor>	
+			</v-flex>
+		</v-layout>
 	</v-container>
 </template>
 

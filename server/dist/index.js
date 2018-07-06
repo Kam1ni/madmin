@@ -31,4 +31,4 @@ function main() {
     });
 }
 main();
-//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/index.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/index.js.map

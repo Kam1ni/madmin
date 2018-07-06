@@ -11,6 +11,7 @@ export function isStringNullOrWhiteSpace(text:string):boolean{
 }
 
 export function stringHasWhiteSpace(text:string):boolean{
+	if (isStringNullOrEmpty(text)) return false;
 	if (text.match(/\s/)) return true;
 	return false;
 }

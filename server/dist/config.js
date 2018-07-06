@@ -5,4 +5,4 @@ function getConfig() {
     return config;
 }
 exports.getConfig = getConfig;
-//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/config.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/config.js.map

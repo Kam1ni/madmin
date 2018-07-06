@@ -1,20 +1,26 @@
 <template>
 	<v-card>
-		<v-form ref="form" :value="valid" lazy-validation>
+		<v-form ref="form" v-model="valid">
 			<v-card-text>
-				<v-layout row wrap>
-					<v-flex xs12 md6 lg4 column>
-						<v-text-field label="Subdomain" v-model="app.subdomain" :rules="subdomainRuless"></v-text-field>
+				<v-layout row wrap align-center>
+					<v-flex xs12 md6 xl4 column>
+						<v-text-field label="Subdomain" v-model="app.subdomain" :rules="subdomainRules"></v-text-field>
 					</v-flex>
-					<v-flex xs12 md6 lg8 column>
+					<v-flex xs12 md6 xl8 column >
 						{{fullDomain}}
 					</v-flex>
 				</v-layout>
+				<v-layout row wrap>
+					<v-flex xs12 md6 xl4 column>
+						<v-select label="App type" :items="appTypes" v-model="app.type" :rules="typeRules"></v-select>
+					</v-flex>
+				</v-layout>
+				<Static :app="app" v-if="app.type == 'static'"></Static>
 			</v-card-text>
 			<v-card-actions>
 				<v-flex class="text-xs-right">
 					<v-btn flat color="accent">Cancel</v-btn>
-					<v-btn flat color="primary">Submit</v-btn>
+					<v-btn flat color="primary" :disabled="!valid">Submit</v-btn>
 				</v-flex>
 			</v-card-actions>
 		</v-form>
@@ -25,6 +31,8 @@
 import Vue from 'vue'
 import { applicationConfig } from '@/app-config';
 import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '@/functions/string';
+import Static from './Static.vue';
+
 export default Vue.extend({
 	data(){
 		return {
@@ -32,6 +40,13 @@ export default Vue.extend({
 			subdomainRules:[
 				(v:string) => !isStringNullOrWhiteSpace(v) || "Subdomain may not be empty",
 				(v:string) => !stringHasWhiteSpace(v) || "Subdomain may not have spaces"
+			],
+			typeRules:[
+				(v:string) => v != null || "You must select a type"
+			],
+			appTypes:[
+				"static",
+				"proxy"
 			]
 		};
 	},
@@ -44,6 +59,13 @@ export default Vue.extend({
 			return url[0] + "//" + this.app.subdomain + "." + url[1];
 		}
 	},
+	watch:{
+		"app.type"(newType, oldType){
+			if (newType != oldType){
+				this.app.config = {};
+			}
+		}
+	},
 	props:["app"],
 	methods:{
 		submit(){
@@ -51,6 +73,9 @@ export default Vue.extend({
 				this.$emit("submit", this.app);
 			}
 		}
+	},
+	components:{
+		Static
 	}
 })
 </script>

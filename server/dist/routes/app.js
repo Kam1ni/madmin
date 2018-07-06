@@ -93,4 +93,4 @@ exports.appRouter.delete("/:id", (req, res, next) => __awaiter(this, void 0, voi
     yield app.remove();
     res.json({ message: "Success" });
 }));
-//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/routes/app.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/routes/app.js.map

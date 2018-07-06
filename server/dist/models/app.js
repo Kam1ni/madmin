@@ -7,4 +7,4 @@ const AppSchema = new mongoose_1.Schema({
     config: { type: mongoose_1.Schema.Types.Mixed, required: true }
 });
 exports.App = mongoose_1.model("App", AppSchema);
-//# sourceMappingURL=D:/Documents/Projects/javascript/madmin/server/dist/models/app.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/models/app.js.map
