@@ -19,6 +19,7 @@
 		</v-navigation-drawer>
 		<v-toolbar color="primary" text-color="white" app>
 			<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+	        <img src="@/assets/logo.png" alt="Vuetify.js" class="icon">
 			<v-toolbar-title v-text="title"></v-toolbar-title>
 			<v-spacer></v-spacer>
 		</v-toolbar>
@@ -65,3 +66,9 @@ export default Vue.extend({
 	}
 });
 </script>
+
+<style scoped>
+.icon {
+	max-height: 80%;
+}
+</style>

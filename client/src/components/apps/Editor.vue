@@ -20,7 +20,7 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-flex class="text-xs-right">
-					<v-btn flat color="accent">Cancel</v-btn>
+					<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
 					<v-btn flat color="primary" :disabled="!valid">Submit</v-btn>
 				</v-flex>
 			</v-card-actions>
@@ -74,6 +74,9 @@ export default Vue.extend({
 			if ((<HTMLFormElement>this.$refs.form).validate()){
 				this.$emit("submit", this.app);
 			}
+		},
+		cancel(){
+			this.$router.go(-1);
 		}
 	},
 	components:{

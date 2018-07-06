@@ -16,7 +16,7 @@
 				</v-list-tile>
 			</v-list>
 		</v-layout>
-		<v-btn fixed fab bottom right color="accent" small to="/apps/new"><v-icon class="fix-fab-icon">add</v-icon></v-btn>
+		<v-btn fixed fab bottom right color="accent" to="/apps/new"><v-icon class="fix-fab-icon">add</v-icon></v-btn>
 	</v-container>
 </template>
 
