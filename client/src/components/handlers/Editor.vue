@@ -11,7 +11,7 @@
 					</v-flex>
 				</v-layout>
 			</v-card-text>
-			async function(request, response){
+			async function(req, res, require){
 			<v-textarea v-model="handler.code" label="code" box auto-grow></v-textarea>
 			}
 			<v-card-actions>

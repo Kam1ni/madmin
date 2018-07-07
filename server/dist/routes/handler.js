@@ -48,7 +48,8 @@ exports.handlerRouter.put("/:id", (req, res, next) => __awaiter(this, void 0, vo
         res.json(handler);
     }
     catch (err) {
-        return next(new HttpError_1.HttpError("Invalid handler"));
+        console.log(err);
+        return next(new HttpError_1.HttpError("Invalid handler " + err.message));
     }
 }));
 exports.handlerRouter.delete("/:id", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -59,4 +60,4 @@ exports.handlerRouter.delete("/:id", (req, res, next) => __awaiter(this, void 0,
     yield handler.remove();
     res.json({ message: "Success" });
 }));
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/routes/handler.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/routes/handler.js.map

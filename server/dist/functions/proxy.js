@@ -36,4 +36,4 @@ function proxy(app, req, res) {
     });
 }
 exports.proxy = proxy;
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/functions/proxy.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/functions/proxy.js.map

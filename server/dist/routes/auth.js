@@ -87,4 +87,4 @@ exports.authRouter.post("/change-password", (req, res, next) => __awaiter(this, 
     yield user.save();
     res.json({ message: "Success" });
 }));
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/routes/auth.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/routes/auth.js.map

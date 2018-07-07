@@ -9,34 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-let AsyncFunction = Object.getPrototypeOf(function () {
-    return __awaiter(this, void 0, void 0, function* () { });
-}).constructor;
+const AsyncFunction = new Function("return Object.getPrototypeOf(async function(){}).constructor")();
 const HandlerSchema = new mongoose_1.Schema({
     path: { type: String, required: true, unique: true },
     code: { type: String, required: true }
 });
 HandlerSchema.methods.getFunction = function () {
-    return new AsyncFunction("req", "res", this.code);
+    return new AsyncFunction("req", "res", "require", this.code);
 };
 HandlerSchema.methods.execute = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let fn = this.getFunction();
-            yield fn(req, res);
+            yield fn(req, res, require);
             if (!res.headersSent) {
                 res.send("Request Handled");
             }
         }
         catch (err) {
-            res.send("A crash occured");
+            if (!res.headersSent) {
+                res.send("A crash occured");
+            }
             console.error(`Handler "${this.path}" crashed`);
+            console.error(err.message);
         }
     });
 };
 HandlerSchema.pre("validate", function (next) {
     let obj = this;
-    console.log(obj);
     obj.path = obj.path.toLowerCase();
     if (obj.path[0] != "/") {
         obj.path = "/" + obj.path;
@@ -44,4 +44,4 @@ HandlerSchema.pre("validate", function (next) {
     next();
 });
 exports.Handler = mongoose_1.model("Handler", HandlerSchema);
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/models/handler.js.map
+//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/models/handler.js.map

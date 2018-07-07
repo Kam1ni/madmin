@@ -1,14 +1,14 @@
 import { Document, Schema, model } from "mongoose";
 import {Request, Response} from "express";
 
-let AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+const AsyncFunction = new Function("return Object.getPrototypeOf(async function(){}).constructor")();
 
 export interface IHandler extends Document{
 	path:string;
 	code:string;
 
 	execute(request:Request, response:Response);
-	getFunction():(Request,Response)=>Promise<void>;
+	getFunction():(Request:Request,Response:Response,require:NodeRequire)=>Promise<void>;
 }
 
 const HandlerSchema = new Schema({
@@ -17,25 +17,27 @@ const HandlerSchema = new Schema({
 });
 
 HandlerSchema.methods.getFunction = function(){
-	return new AsyncFunction("req", "res", this.code);
+	return new AsyncFunction("req", "res", "require", this.code);
 }
 
 HandlerSchema.methods.execute = async function(req:Request, res:Response){
 	try{
 		let fn = this.getFunction();
-		await fn(req,res);
+		await fn(req, res, require);
 		if (!res.headersSent){
 			res.send("Request Handled");
 		}
 	}catch(err){
-		res.send("A crash occured");
+		if (!res.headersSent){
+			res.send("A crash occured");
+		}
 		console.error(`Handler "${this.path}" crashed`);
+		console.error(err.message);
 	}
 }
 
 HandlerSchema.pre("validate", function(next){
 	let obj = <IHandler>this;
-	console.log(obj);
 	obj.path = (<string>obj.path).toLowerCase();
 	if (obj.path[0] != "/"){
 		obj.path = "/" + obj.path;

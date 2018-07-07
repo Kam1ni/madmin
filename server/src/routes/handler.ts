@@ -44,7 +44,8 @@ handlerRouter.put("/:id", async (req,res,next)=>{
 		await handler.save();
 		res.json(handler);
 	}catch(err){
-		return next(new HttpError("Invalid handler"));
+		console.log(err);
+		return next(new HttpError("Invalid handler " + err.message));
 	}
 });
 
