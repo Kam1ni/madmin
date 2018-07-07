@@ -48,9 +48,9 @@ exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, 
 }));
 exports.mainRouter.use("/*", express.static("../../client"));
 exports.mainRouter.use("/auth", auth_1.authRouter);
-exports.mainRouter.use("/handler/*", function (req, res, next) {
+exports.mainRouter.use("/exec-handler/*", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        let path = req.path.split("/handler").join("");
+        let path = req.originalUrl.split("/exec-handler").join("");
         let handler = yield handler_2.Handler.findOne({ path: path });
         if (!handler) {
             return next(new HttpError_1.HttpError(`No handler found at path "${path}"`, 404));

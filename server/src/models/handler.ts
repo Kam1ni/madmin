@@ -33,10 +33,12 @@ HandlerSchema.methods.execute = async function(req:Request, res:Response){
 	}
 }
 
-HandlerSchema.pre("validate", (next)=>{
-	this.path = (<string>this.path).toLowerCase();
-	if (this.path[0] != "/"){
-		this.path = "/" + this.path;
+HandlerSchema.pre("validate", function(next){
+	let obj = <IHandler>this;
+	console.log(obj);
+	obj.path = (<string>obj.path).toLowerCase();
+	if (obj.path[0] != "/"){
+		obj.path = "/" + obj.path;
 	}
 	next();
 });

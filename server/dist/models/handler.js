@@ -34,10 +34,12 @@ HandlerSchema.methods.execute = function (req, res) {
         }
     });
 };
-HandlerSchema.pre("validate", (next) => {
-    this.path = this.path.toLowerCase();
-    if (this.path[0] != "/") {
-        this.path = "/" + this.path;
+HandlerSchema.pre("validate", function (next) {
+    let obj = this;
+    console.log(obj);
+    obj.path = obj.path.toLowerCase();
+    if (obj.path[0] != "/") {
+        obj.path = "/" + obj.path;
     }
     next();
 });

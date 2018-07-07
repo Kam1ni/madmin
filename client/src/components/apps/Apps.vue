@@ -12,7 +12,7 @@
 				<v-card>
 					<v-card-text>
 						<v-list>
-							<v-list-tile v-for="item in items" :key="item._id">
+							<v-list-tile v-for="item in items" :key="item.id">
 								<v-list-tile-content>
 									<v-list-tile-title v-html="item.subdomain"></v-list-tile-title>
 									<v-list-tile-sub-title v-html="item.type"></v-list-tile-sub-title>
@@ -21,7 +21,7 @@
 									<v-switch label="enabled" v-model="item.enabledWeb"></v-switch>
 								</v-list-tile-action>
 								<v-list-tile-action>
-									<v-btn icon :to="'/apps/edit/' + item._id"><v-icon>edit</v-icon></v-btn>
+									<v-btn icon :to="'/apps/edit/' + item.id"><v-icon>edit</v-icon></v-btn>
 								</v-list-tile-action>
 								<v-list-tile-action>
 									<v-btn icon @click="deleteClicked(item)"><v-icon>delete</v-icon></v-btn>

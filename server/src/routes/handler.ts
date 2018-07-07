@@ -10,6 +10,14 @@ handlerRouter.get("/", async (req,res,next)=>{
 	res.json(handlers);
 });
 
+handlerRouter.get("/:id", async(req,res,next)=>{
+	let handler = await Handler.findById(req.params.id);
+	if (!handler){
+		return next(new HttpError("No such handler", 404));
+	}
+	res.json(handler);
+});
+
 handlerRouter.post("/", async (req,res,next)=>{
 	try{
 		let handler = new Handler(req.body);
@@ -17,6 +25,7 @@ handlerRouter.post("/", async (req,res,next)=>{
 		await handler.save();
 		res.json(handler);
 	}catch(err){
+		console.log(err);
 		next(new HttpError("Invalid handler", 500));
 	}
 });

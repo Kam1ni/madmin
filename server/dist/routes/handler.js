@@ -16,6 +16,13 @@ exports.handlerRouter.get("/", (req, res, next) => __awaiter(this, void 0, void 
     let handlers = yield handler_1.Handler.find();
     res.json(handlers);
 }));
+exports.handlerRouter.get("/:id", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    let handler = yield handler_1.Handler.findById(req.params.id);
+    if (!handler) {
+        return next(new HttpError_1.HttpError("No such handler", 404));
+    }
+    res.json(handler);
+}));
 exports.handlerRouter.post("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let handler = new handler_1.Handler(req.body);
@@ -24,6 +31,7 @@ exports.handlerRouter.post("/", (req, res, next) => __awaiter(this, void 0, void
         res.json(handler);
     }
     catch (err) {
+        console.log(err);
         next(new HttpError_1.HttpError("Invalid handler", 500));
     }
 }));

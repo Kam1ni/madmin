@@ -19,10 +19,9 @@
 				<Proxy :app="app" v-else-if="app.type == 'proxy'"></Proxy>
 			</v-card-text>
 			<v-card-actions>
-				<v-flex class="text-xs-right">
-					<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
-					<v-btn flat color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
-				</v-flex>
+				<v-spacer/>
+				<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn flat color="primary" :disabled="!valid" @click="submit">Save</v-btn>
 			</v-card-actions>
 		</v-form>
 	</v-card>

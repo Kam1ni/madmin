@@ -3,7 +3,7 @@
 		<v-layout row wrap justify-center>
 			<v-flex xs12 md10 lg6>
 				<v-subheader>New App</v-subheader>
-				<Editor save-button="Create" @submit="onSave($event)" :app="app"></Editor>	
+				<Editor @submit="onSave($event)" :app="app"></Editor>	
 			</v-flex>
 		</v-layout>
 	</v-container>

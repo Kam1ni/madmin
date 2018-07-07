@@ -43,8 +43,8 @@ mainRouter.all("/", async (req,res,next)=>{
 mainRouter.use("/*", express.static("../../client"));
 mainRouter.use("/auth", authRouter);
 
-mainRouter.use("/handler/*", async function(req,res,next){
-	let path = req.path.split("/handler").join("");
+mainRouter.use("/exec-handler/*", async function(req,res,next){
+	let path = req.originalUrl.split("/exec-handler").join("");
 	let handler = await Handler.findOne({path:path});
 	if (!handler){
 		return next(new HttpError(`No handler found at path "${path}"`, 404));

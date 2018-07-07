@@ -1,0 +1,56 @@
+<template>
+	<v-card>
+		<v-form v-model="valid">
+			<v-card-text>
+				<v-layout row wrap align-center>
+					<v-flex xs12 md6 xl8>
+						{{apiUrl}}{{handler.path}}
+					</v-flex>
+					<v-flex xs12 md6 xl4>
+						<v-text-field v-model="handler.path" label="Path" :rules="pathRules"></v-text-field>
+					</v-flex>
+				</v-layout>
+			</v-card-text>
+			async function(request, response){
+			<v-textarea v-model="handler.code" label="code" box auto-grow></v-textarea>
+			}
+			<v-card-actions>
+				<v-spacer/>
+				<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn flat color="primary" @click="save">Save</v-btn>
+			</v-card-actions>
+		</v-form>
+	</v-card>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { applicationConfig } from '@/app-config';
+import { isNullOrUndefined } from 'util';
+import { stringHasWhiteSpace } from '@/functions/string';
+import { handlerServcie } from '@/services/handler-service';
+export default Vue.extend({
+	data(){
+		return {
+			valid:false,
+			apiUrl:applicationConfig.apiUrl + "/exec-handler/",
+			pathRules:[
+				(v:string) => !isNullOrUndefined(v) || "Path may not be empty",
+				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
+				(v:string) => !handlerServcie.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
+			]
+		}
+	},
+	methods:{
+		cancel(){
+			this.$router.go(-1);
+		},
+		async save(){
+			await this.handler.save();
+			this.$router.go(-1);
+		}
+	},
+	props:["handler"]
+})
+</script>
+
