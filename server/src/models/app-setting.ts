@@ -16,7 +16,7 @@ export const AppSetting = model<IAppSetting>("AppSetting", AppSettingSchema);
 
 export enum SETTINGS{
 	Version = "version",
-	DefaultRedirect = "default-redirect",
+	DefaultRedirect = "defaultRedirect",
 }
 
 export async function getSettings(){

@@ -11,6 +11,7 @@ import { proxy } from "../functions/proxy";
 import { handlerRouter } from "./handler";
 import { Handler } from "../models/handler";
 import { configRouter } from "./config";
+import { AppSetting, SETTINGS } from "../models/app-setting";
 
 export const mainRouter = Router();
 
@@ -20,7 +21,8 @@ mainRouter.all("/", async (req,res,next)=>{
 		return next();
 	}
 	else if(req.hostname == config.baseUrl){
-		return res.redirect("http://" + config.clientDomain + "." + req.hostname);
+		let redirectUrl = await AppSetting.findOne({name:SETTINGS.DefaultRedirect});
+		return res.redirect("http://" + redirectUrl.value + "." + req.hostname);
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);

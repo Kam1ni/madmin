@@ -21,6 +21,7 @@ const proxy_1 = require("../functions/proxy");
 const handler_1 = require("./handler");
 const handler_2 = require("../models/handler");
 const config_2 = require("./config");
+const app_setting_1 = require("../models/app-setting");
 exports.mainRouter = express_1.Router();
 exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let config = config_1.getConfig();
@@ -28,7 +29,8 @@ exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, 
         return next();
     }
     else if (req.hostname == config.baseUrl) {
-        return res.redirect("http://" + config.clientDomain + "." + req.hostname);
+        let redirectUrl = yield app_setting_1.AppSetting.findOne({ name: app_setting_1.SETTINGS.DefaultRedirect });
+        return res.redirect("http://" + redirectUrl.value + "." + req.hostname);
     }
     else {
         let domains = req.hostname.split("." + config.baseUrl);

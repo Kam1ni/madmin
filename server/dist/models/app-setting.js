@@ -18,7 +18,7 @@ exports.AppSetting = mongoose_1.model("AppSetting", AppSettingSchema);
 var SETTINGS;
 (function (SETTINGS) {
     SETTINGS["Version"] = "version";
-    SETTINGS["DefaultRedirect"] = "default-redirect";
+    SETTINGS["DefaultRedirect"] = "defaultRedirect";
 })(SETTINGS = exports.SETTINGS || (exports.SETTINGS = {}));
 function getSettings() {
     return __awaiter(this, void 0, void 0, function* () {
