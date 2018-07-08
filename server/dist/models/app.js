@@ -24,4 +24,4 @@ AppSchema.pre("validate", function (next) {
     next();
 });
 exports.App = mongoose_1.model("App", AppSchema);
-//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/models/app.js.map
+//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/models/app.js.map

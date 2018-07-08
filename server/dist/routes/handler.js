@@ -60,4 +60,4 @@ exports.handlerRouter.delete("/:id", (req, res, next) => __awaiter(this, void 0,
     yield handler.remove();
     res.json({ message: "Success" });
 }));
-//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/routes/handler.js.map
+//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/routes/handler.js.map

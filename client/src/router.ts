@@ -7,6 +7,9 @@ import AppNew from '@/components/apps/New.vue';
 import Handlers from '@/components/handlers/Handlers.vue';
 import HandlerNew from '@/components/handlers/New.vue';
 import HandlerEdit from '@/components/handlers/Edit.vue';
+import Settings from '@/components/settings/Settings.vue';
+import SettingsList from '@/components/settings/List.vue';
+import SettingsTokens from '@/components/settings/Tokens.vue';
 
 Vue.use(Router)
 
@@ -42,6 +45,14 @@ const router = new Router({
 		{
 			path: '/handlers/edit/:id',
 			component: HandlerEdit
+		},
+		{
+			path: '/settings',
+			component: Settings,
+			children:[
+				{path:'', component:SettingsList, name: "Settings"},
+				{path:'tokens', component:SettingsTokens }
+			]
 		}
 	]
 });

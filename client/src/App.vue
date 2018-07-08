@@ -51,6 +51,10 @@ export default Vue.extend({
 				{
 					icon: 'memory',
 					title: 'Handlers'
+				},
+				{
+					icon: 'settings',
+					title: 'Settings'
 				}
 			],
 			title: 'Madmin'

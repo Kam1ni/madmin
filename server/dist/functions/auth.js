@@ -27,4 +27,4 @@ function authenticate(token) {
     });
 }
 exports.authenticate = authenticate;
-//# sourceMappingURL=D:/Documents/Projects/js/madmin/server/dist/functions/auth.js.map
+//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/functions/auth.js.map
