@@ -10,6 +10,7 @@ import { server } from "../functions/server";
 import { proxy } from "../functions/proxy";
 import { handlerRouter } from "./handler";
 import { Handler } from "../models/handler";
+import { configRouter } from "./config";
 
 export const mainRouter = Router();
 
@@ -66,6 +67,7 @@ mainRouter.use("/*", async (req,res,next)=>{
 
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
+mainRouter.use("/config", configRouter);
 
 mainRouter.use("/*", (err, req, res, next)=>{
 	let error = <HttpError> err;

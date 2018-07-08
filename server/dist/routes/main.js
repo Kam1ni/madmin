@@ -20,6 +20,7 @@ const server_1 = require("../functions/server");
 const proxy_1 = require("../functions/proxy");
 const handler_1 = require("./handler");
 const handler_2 = require("../models/handler");
+const config_2 = require("./config");
 exports.mainRouter = express_1.Router();
 exports.mainRouter.all("/", (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     let config = config_1.getConfig();
@@ -72,6 +73,7 @@ exports.mainRouter.use("/*", (req, res, next) => __awaiter(this, void 0, void 0,
 }));
 exports.mainRouter.use("/app", app_1.appRouter);
 exports.mainRouter.use("/handler", handler_1.handlerRouter);
+exports.mainRouter.use("/config", config_2.configRouter);
 exports.mainRouter.use("/*", (err, req, res, next) => {
     let error = err;
     let response = res;
