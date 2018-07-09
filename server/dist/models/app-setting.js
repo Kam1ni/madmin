@@ -46,4 +46,4 @@ function initialiseSettings() {
     });
 }
 exports.initialiseSettings = initialiseSettings;
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/models/app-setting.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/models/app-setting.js.map

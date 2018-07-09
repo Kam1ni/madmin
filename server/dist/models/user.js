@@ -57,4 +57,4 @@ UserSchema.methods.addToken = function (token, name = null) {
     this.tokens.push({ token: token, deviceName: name });
 };
 exports.User = mongoose_1.model("User", UserSchema);
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/models/user.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/models/user.js.map

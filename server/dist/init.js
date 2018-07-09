@@ -104,4 +104,4 @@ function init() {
     });
 }
 exports.init = init;
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/init.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/init.js.map

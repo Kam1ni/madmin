@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import './plugins/vuetify'
+import 'vuetify/dist/vuetify.css'
 import Root from "./Root.vue";
 import router from './router'
 

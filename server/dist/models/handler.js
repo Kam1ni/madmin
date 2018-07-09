@@ -44,4 +44,4 @@ HandlerSchema.pre("validate", function (next) {
     next();
 });
 exports.Handler = mongoose_1.model("Handler", HandlerSchema);
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/models/handler.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/models/handler.js.map

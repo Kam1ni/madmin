@@ -11,4 +11,4 @@ class HttpError extends Error {
     }
 }
 exports.HttpError = HttpError;
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/classes/HttpError.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/classes/HttpError.js.map

@@ -30,4 +30,4 @@ exports.configRouter.put("/:name", (req, res, next) => __awaiter(this, void 0, v
     yield config.save();
     res.json(config);
 }));
-//# sourceMappingURL=d:/Documents/Projects/js/madmin/server/dist/routes/config.js.map
+//# sourceMappingURL=d:/Documents/Projects/javascript/madmin/server/dist/routes/config.js.map
