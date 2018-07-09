@@ -29,13 +29,20 @@ export async function getSettings(){
 }
 
 export async function initialiseSettings(){
-	async function createSettingIfNotExists(name:string, defaultValue:any){
+	async function createSettingIfNotExists(name:string, defaultValue:any, readonly:boolean = false){
 		let setting = await AppSetting.findOne({name});
 		if (!setting){
-			setting = new AppSetting({name, value:defaultValue});
+			setting = new AppSetting({name, value:defaultValue, readonly});
 			await setting.save();
 		}
 	}
 
 	await createSettingIfNotExists(SETTINGS.DefaultRedirect, "madmin");
+
+	let version = require("../../package.json").version;
+	await createSettingIfNotExists(SETTINGS.Version, version, true);
+	let versionSetting = await AppSetting.findOne({name:SETTINGS.Version});
+	if (version != versionSetting.value){
+		console.warn("Migration required");
+	}
 }

@@ -18,6 +18,11 @@ export class ConfigService{
 		this.appSettings.next(new AppSettings(result.data));
 		return this.appSettings.value;
 	}
+
+	async updateSetting(name:string, value:any){
+		await Axios.put(ConfigService.API_URL + "/" + name, {value}, {headers:HeaderBuilder.getDefaultHeaders()});
+		(<any>this.appSettings.value)[name] = value;
+	}
 }
 
 export const configService = new ConfigService();

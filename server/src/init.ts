@@ -5,6 +5,7 @@ import * as mongoose from "mongoose";
 import { UV_UDP_REUSEADDR } from "constants";
 import { User } from "./models/user";
 import * as readline from "readline";
+import { AppSetting, initialiseSettings } from "./models/app-setting";
 
 const defaultConfig:IConfig = {
 	host: "0.0.0.0",
@@ -90,6 +91,8 @@ export async function init(){
 		console.log("Closing Server.");
 		process.exit(0);
 	}
+
+	await initialiseSettings();
 
 	let users = await User.find();
 	if (users.length == 0){

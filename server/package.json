@@ -1,6 +1,6 @@
 {
   "name": "madmin-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Server for madmin server management platform",
   "main": "index.js",
   "scripts": {
