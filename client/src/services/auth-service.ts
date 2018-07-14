@@ -5,6 +5,7 @@ import Axios, { AxiosResponse } from "axios";
 import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
 import ClientJs from "clientjs";
+import { Token } from '@/classes/token';
 
 export enum LoginState{
 	default = 0,
@@ -96,6 +97,15 @@ export class AuthService {
 		this.user.next(null);
 		this.loginState.next(LoginState.default);
 		this._token = null;
+	}
+
+	async removeToken(token:Token){
+		await Axios.post(AuthService.API_URL + "/logout", null, {headers:new HeaderBuilder().setAuthorization(false).setHeader("Authorization", token.token).build()});
+		let userTokens = this.user.value.tokens;
+		let index = userTokens.findIndex((t)=>{return t.token == token.token});
+		if (index != -1){
+			userTokens.splice(index, 1);
+		}
 	}
 
 	getDiveceName():string{
