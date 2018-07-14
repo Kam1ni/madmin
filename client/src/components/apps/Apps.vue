@@ -33,7 +33,7 @@
 			</v-flex>
 		</v-layout>
 		<v-btn fixed fab bottom right color="accent" to="/apps/new"><v-icon class="fix-fab-icon">add</v-icon></v-btn>
-		<v-dialog :value="true" max-width="250" v-if="toDeleteApp != null">
+		<v-dialog :value="true" max-width="250" v-if="toDeleteApp != null" persistent>
 			<v-card>
 				<v-card-title class="headline">Warning</v-card-title>
 				<v-card-text>
