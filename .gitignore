@@ -63,4 +63,4 @@ package-lock.json
 
 /server-old/
 /client-old/
-code-workspace
+*.code-workspace
