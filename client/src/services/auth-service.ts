@@ -4,6 +4,7 @@ import { User } from '@/classes/user';
 import Axios, { AxiosResponse } from "axios";
 import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
+import ClientJs from "clientjs";
 
 export enum LoginState{
 	default = 0,
@@ -68,7 +69,7 @@ export class AuthService {
 
 	async login(username:string, password:string):Promise<any>{
 		try{
-			let result = await Axios.post(AuthService.API_URL + "/login", {username, password});
+			let result = await Axios.post(AuthService.API_URL + "/login", {username, password, deviceName:this.getDiveceName()});
 			this.user.next(new User(result.data));
 			this._token = result.data.token;
 		}catch(err){
@@ -95,6 +96,11 @@ export class AuthService {
 		this.user.next(null);
 		this.loginState.next(LoginState.default);
 		this._token = null;
+	}
+
+	getDiveceName():string{
+		let client = new ClientJs();
+		return `${(<any>client.getBrowser()).name} @${(<any>client.getOS()).name}`;
 	}
 
 }

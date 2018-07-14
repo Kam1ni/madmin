@@ -20,7 +20,8 @@ authRouter.post("/login", async (req,res,next)=>{
 	}
 
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
-	foundUser.addToken(token);
+	let name = req.body.deviceName == null ? null : req.body.deviceName + "/" + req.ip;
+	foundUser.addToken(token, name);
 	await foundUser.save();
 	let user:any = foundUser.getPrivateJson();
 	user.token = token;
