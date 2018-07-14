@@ -1,8 +1,8 @@
 <template>
     <v-card>
-        <v-card-text>
-            
-        </v-card-text>
+        <v-list two-line class="no-padding">
+            WIP
+        </v-list>
     </v-card>
 </template>
 

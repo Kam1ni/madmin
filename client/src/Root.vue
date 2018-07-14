@@ -27,3 +27,10 @@ export default Vue.extend({
 
 </script>
 
+<style>
+.no-padding{
+	padding: 0;
+}
+</style>
+
+

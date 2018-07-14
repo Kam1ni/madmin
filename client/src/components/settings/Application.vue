@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-list>
+        <v-list two-line class="no-padding">
             <v-list-tile>
                 <v-list-tile-content>
                     <v-list-tile-title>Version</v-list-tile-title>

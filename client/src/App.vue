@@ -10,11 +10,6 @@
 						<v-list-tile-title v-text="item.title"></v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
-				<v-list-tile @click="logout()">
-					<v-list-tile-content>
-						<v-list-tile-title v-text="'logout'"></v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
 			</v-list>
 		</v-navigation-drawer>
 		<v-toolbar color="primary" text-color="white" app>
@@ -63,11 +58,6 @@ export default Vue.extend({
 	components:{
 		HelloWorld
 	},
-	methods:{
-		async logout(){
-			await authService.logout();
-		}
-	}
 });
 </script>
 
