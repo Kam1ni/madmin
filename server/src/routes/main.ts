@@ -17,8 +17,6 @@ export const mainRouter = Router();
 
 mainRouter.all("/*", async (req,res,next)=>{
 	let config = getConfig();
-	console.log(req.hostname);
-	console.log("got request");
 	if (req.hostname == `${config.clientDomain}.${config.baseUrl}`){
 		return next();
 	}
