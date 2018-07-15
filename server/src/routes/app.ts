@@ -34,8 +34,12 @@ appRouter.post("/", async (req,res,next)=>{
 		return next(new HttpError('"type" is a required field and can only be equal to "static" or "proxy"', 500));
 	}
 
-	await app.save();
-	res.json(app);
+	try{
+		await app.save();
+		res.json(app);
+	}catch(err){
+		return next(new HttpError("Database error " + err.message, 500));
+	}
 });
 
 appRouter.put("/:id/enable", async (req,res,next)=>{
