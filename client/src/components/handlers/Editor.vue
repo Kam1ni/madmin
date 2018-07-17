@@ -28,7 +28,7 @@ import Vue from 'vue'
 import { applicationConfig } from '@/app-config';
 import { isNullOrUndefined } from 'util';
 import { stringHasWhiteSpace } from '@/functions/string';
-import { handlerServcie } from '@/services/handler-service';
+import { handlerService } from '@/services/handler-service';
 export default Vue.extend({
 	data(){
 		return {
@@ -37,7 +37,7 @@ export default Vue.extend({
 			pathRules:[
 				(v:string) => !isNullOrUndefined(v) || "Path may not be empty",
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
-				(v:string) => !handlerServcie.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
+				(v:string) => !handlerService.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
 			]
 		}
 	},

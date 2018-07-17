@@ -1,5 +1,5 @@
 <template>
-	<Login v-if="!isLoggedIn"></Login>
+	<Login v-if="!authService.user"></Login>
 	<App v-else></App>
 </template>
 
@@ -12,12 +12,7 @@ import {authService} from './services/auth-service';
 
 export default Vue.extend({
 	data(){
-		return {isLoggedIn:false};
-	},
-	mounted(){
-		authService.isLoggedIn.subscribe(val=>{
-			this.isLoggedIn = val;
-		});
+		return {authService};
 	},
 	components:{
 		Login,

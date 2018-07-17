@@ -16,7 +16,7 @@
 import Vue from 'vue'
 import { Handler } from '@/classes/handler';
 import Editor from './Editor.vue';
-import { handlerServcie } from '@/services/handler-service';
+import { handlerService } from '@/services/handler-service';
 
 export default Vue.extend({
 	data(){
@@ -28,7 +28,7 @@ export default Vue.extend({
 		Editor
 	},
 	async mounted(){
-		this.handler = await handlerServcie.getHandler(this.$route.params.id);
+		this.handler = await handlerService.getHandler(this.$route.params.id);
 	}
 })
 </script>

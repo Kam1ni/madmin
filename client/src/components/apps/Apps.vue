@@ -56,21 +56,17 @@ import { appService } from '@/services/app-service';
 export default Vue.extend({
 	data(){
 		return { 
-			items:<App[]|null>null,
-			subs:<any[]>[],
 			toDeleteApp:<App|null>null,
+			appService
 		};
 	},
-	mounted(){
-		this.subs = [
-			appService.apps.subscribe(apps=>{
-				this.items = apps;
-			})
-		];
-		appService.getApps();
+	computed:{
+		items():App[]{
+			return this.appService.apps;
+		}
 	},
-	destroyed(){
-		this.subs.forEach(sub=>{sub.unsubscribe()});
+	mounted(){
+		appService.getApps();
 	},
 	methods:{
 		deleteClicked(item:App){

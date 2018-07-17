@@ -48,15 +48,15 @@ export class App extends BaseResource{
 	async save(){
 		if (!this.created){
 			let result = await Axios.post(AppService.API_URL, this, {headers:HeaderBuilder.getDefaultHeaders()});
-			appService.apps.value.push(new App(result.data));
+			appService.apps.push(new App(result.data));
 			this._created = true;
 		}else{
 			await Axios.put(AppService.API_URL + "/" + this.id, this, {headers:HeaderBuilder.getDefaultHeaders()});
-			let index = appService.apps.value.findIndex((item)=>{return item.id == this.id});
+			let index = appService.apps.findIndex((item)=>{return item.id == this.id});
 			if (index != -1){
-				appService.apps.value[index] = this;
+				appService.apps[index] = this;
 			}else{
-				appService.apps.value.push(this);
+				appService.apps.push(this);
 			}
 		}
 	}
@@ -74,9 +74,9 @@ export class App extends BaseResource{
 	async remove(){
 		await Axios.delete(AppService.API_URL + "/" + this.id, {headers:HeaderBuilder.getDefaultHeaders()});
 		this._created = false;
-		let index = appService.apps.value.findIndex((item)=>{return item.id == this.id});
+		let index = appService.apps.findIndex((item)=>{return item.id == this.id});
 		if (index != -1){
-			appService.apps.value.splice(index, 1);
+			appService.apps.splice(index, 1);
 		}
 	}
 }

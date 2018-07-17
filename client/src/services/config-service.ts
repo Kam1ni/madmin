@@ -7,7 +7,7 @@ import { HeaderBuilder } from '@/classes/header-builder';
 export class ConfigService{
 	static readonly API_URL:string = applicationConfig.apiUrl + "/config";
 
-	appSettings:BehaviorSubject<AppSettings> = new BehaviorSubject(null);
+	appSettings:AppSettings = null;
 
 	constructor(){
 		this.getSettings();
@@ -15,13 +15,13 @@ export class ConfigService{
 
 	async getSettings():Promise<AppSettings>{
 		let result = await Axios.get(ConfigService.API_URL, {headers:HeaderBuilder.getDefaultHeaders()});
-		this.appSettings.next(new AppSettings(result.data));
-		return this.appSettings.value;
+		this.appSettings = new AppSettings(result.data);
+		return this.appSettings;
 	}
 
 	async updateSetting(name:string, value:any){
 		await Axios.put(ConfigService.API_URL + "/" + name, {value}, {headers:HeaderBuilder.getDefaultHeaders()});
-		(<any>this.appSettings.value)[name] = value;
+		(<any>this.appSettings)[name] = value;
 	}
 }
 

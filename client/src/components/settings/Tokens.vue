@@ -45,13 +45,21 @@
 import Vue from 'vue'
 import { authService } from '@/services/auth-service';
 import { Token } from '@/classes/token';
+import { User } from '@/classes/user';
 export default Vue.extend({
     data(){
         return{
-            user:authService.user.value,
-            currentToken:authService.token,
+            authService,
             toDeleteToken:<null|Token>null
         };
+    },
+    computed:{
+        currentToken():string{
+            return this.authService.token;
+        },
+        user():User{
+            return this.authService.user;
+        }
     },
     methods:{
         back(){

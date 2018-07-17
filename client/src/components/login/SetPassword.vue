@@ -25,7 +25,7 @@ import { AxiosResponse } from 'axios';
 export default Vue.extend({
 	data(){
 		return {
-			user:authService.user.value,
+			user:authService.user,
 			processing:false,
 			password:"",
 			retypedPassword:"",

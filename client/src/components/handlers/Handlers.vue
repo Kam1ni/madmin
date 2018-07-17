@@ -48,26 +48,21 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Handler} from "@/classes/handler";
-import { handlerServcie } from '@/services/handler-service';
+import { handlerService } from '@/services/handler-service';
 export default Vue.extend({
 	data(){
 		return {
-			items:<null|Handler[]>null,
-			subs:[],
-			toDeleteHandler:<null|Handler>null
+			toDeleteHandler:<null|Handler>null,
+			handlerService
+		}
+	},
+	computed:{
+		items():Handler[]{
+			return this.handlerService.handlers;
 		}
 	},
 	mounted(){
-		handlerServcie.getHandlers();
-		this.subs = [
-			handlerServcie.handlers.subscribe(h=>{
-				this.items = h;
-				console.log(this.items)
-			})
-		];
-	},
-	destroyed(){
-		this.subs.forEach(sub=>sub.unsubscribe());
+		handlerService.getHandlers();
 	},
 	methods:{
 		deleteClicked(handler:Handler){
