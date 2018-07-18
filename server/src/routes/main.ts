@@ -26,7 +26,6 @@ mainRouter.all("/*", async (req,res,next)=>{
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);
-		console.log(domains);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);
 		let app = await App.findOne({subdomain, $or:[{enabled:true}, {enabled:undefined}]});
