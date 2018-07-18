@@ -13,10 +13,8 @@ authRouter.post("/login", async (req,res,next)=>{
 		return next(new HttpError("Invalid login", 400));
 	}
 
-	if (foundUser.hasPassword()){
-		if (!await foundUser.comparePassword(req.body.password)){
-			return next(new HttpError("Invalid login", 400));
-		}
+	if (!await foundUser.comparePassword(req.body.password)){
+		return next(new HttpError("Invalid login", 400));
 	}
 
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
@@ -25,28 +23,7 @@ authRouter.post("/login", async (req,res,next)=>{
 	await foundUser.save();
 	let user:any = foundUser.getPrivateJson();
 	user.token = token;
-	if (!foundUser.hasPassword()){
-		res.status(400);
-		user.data = "NO PASSWORD";
-	}
 	res.json(user);
-});
-
-authRouter.post("/set-new-password", async (req,res,next)=>{
-	try{
-		let user = await authenticate(req.headers.authorization);
-		if (user.hasPassword()){
-			return next(new HttpError("You already have a password", 500));
-		}
-		if (req.body.password == null){
-			return next(new HttpError("Password cannot be \"null\"", 400));
-		}
-		await user.setPassword(req.body.password);
-		await user.save();
-		return res.json({message:"New password set"});
-	}catch(err){
-		next(err);
-	}
 });
 
 authRouter.post("/logout", async (req,res,next)=>{
@@ -60,9 +37,6 @@ authRouter.post("/logout", async (req,res,next)=>{
 authRouter.use("/*", async (req,res,next)=>{
 	try{
 		res.locals.user = await authenticate(req.headers.authorization);
-		if (!res.locals.user.hasPassword()){
-			return next(new HttpError("User has no password. Please use route \"/auth/set-new-password\"", 400, "NO PASSWORD"));
-		}
 		next();
 	}catch(err){
 		next(err);
@@ -86,4 +60,12 @@ authRouter.post("/change-password", async (req,res,next)=>{
 	await user.setPassword(req.body.newPassword);
 	await user.save();
 	res.json({message:"Success"});
+});
+
+authRouter.delete("/remove-all-tokens", async (req, res, next)=>{
+	let user:IUser = res.locals.user;
+	user.removeAllTokens(req.headers.authorization);
+	await user.save();
+	console.log(user.tokens);
+	res.json({message:"Success", tokens:user.tokens});
 });

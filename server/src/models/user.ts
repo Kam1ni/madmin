@@ -20,17 +20,17 @@ export interface IUser extends IPrivateUser, Document {
 	
 	comparePassword(password:string):Promise<boolean>;
 	setPassword(newPassword:string):Promise<void>;
-	hasPassword():boolean;
 	getPublicJson():IPublicUser;
 	getPrivateJson():IPrivateUser;
 	addToken(token:string, name?:string);
 	removeToken(token:string);
+	removeAllTokens(currentToken:string);
 }
 
 const UserSchema = new Schema({
 	username:{type:String, required:true},
-	password:{type:String, requried:false},
-	isAdmin:{type:Boolean, required:false},
+	password:{type:String, requried:true},
+	isAdmin:{type:Boolean, required:false, default:false},
 	tokens:[
 		{
 			token:{type:String, required:true, unique:true},
@@ -38,10 +38,6 @@ const UserSchema = new Schema({
 		}
 	]
 })
-
-UserSchema.methods.hasPassword = function():boolean{
-	return this.password != null;
-}
 
 UserSchema.methods.setPassword = async function(newPassword:string):Promise<void>{
 	if (newPassword == null){
@@ -75,6 +71,16 @@ UserSchema.methods.addToken = function(token:string, name:string = null){
 	}
 
 	this.tokens.push({token:token, deviceName:name});
+}
+
+UserSchema.methods.removeAllTokens = function(currentToken:string){
+	let user = <IUser>this;
+	user.tokens.reverse().forEach((token)=>{
+		if (token.token != currentToken) {
+			user.tokens.splice(user.tokens.indexOf(token), 1);
+		}
+	});
+	console.log("remove end");
 }
 
 export const User = model<IUser>("User", UserSchema);

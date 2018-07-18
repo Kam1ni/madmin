@@ -3,7 +3,11 @@
         <v-layout row wrap justify-center>
             <v-flex xs12 md10 lg6>
                 <v-card>
-                    <v-btn icon @click="back()"><v-icon>arrow_back</v-icon></v-btn>Tokens
+                    <v-card-actions>
+                        <v-btn icon @click="back()"><v-icon>arrow_back</v-icon></v-btn>Tokens
+                        <v-spacer />
+                        <v-btn depressed color="accent" @click="deleteAllDialog = true">remove all</v-btn>
+                    </v-card-actions>
                     <v-divider></v-divider>
                     <v-list two-line class="no-padding">
                         <template v-for="(token, i) in user.tokens" >
@@ -37,6 +41,19 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
+            <v-dialog :value="deleteAllDialog" max-width="400">
+                <v-card>
+                    <v-card-title class="headline">Warning</v-card-title>
+                    <v-card-text>
+                        Are you sure you want to delete all tokens. Your current login will still work but you will be logged out of all your other devices.
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="accent" @click="deleteAllDialog = false" flat>NO</v-btn>
+                        <v-btn color="primary" @click="deleteAllTokens()" flat>YES</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-layout>
     </v-container>
 </template>
@@ -50,7 +67,8 @@ export default Vue.extend({
     data(){
         return{
             authService,
-            toDeleteToken:<null|Token>null
+            toDeleteToken:<null|Token>null,
+            deleteAllDialog: false
         };
     },
     computed:{
@@ -71,6 +89,10 @@ export default Vue.extend({
         async deleteToken(){
             await authService.removeToken(this.toDeleteToken);
             this.toDeleteToken = null;
+        },
+        async deleteAllTokens(){
+            await authService.removeAllTokens();
+            this.deleteAllDialog = false;
         }
     }
 })

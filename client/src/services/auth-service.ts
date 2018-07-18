@@ -115,6 +115,11 @@ export class AuthService {
 		return `${(<any>client.getBrowser()).name} @${(<any>client.getOS()).name}`;
 	}
 
+	async removeAllTokens(){
+		let message = await Axios.delete(AuthService.API_URL + "/remove-all-tokens", {headers:HeaderBuilder.getDefaultHeaders()});
+		this.user.tokens = message.data.tokens.map((t:any) => new Token(t));
+	}
+
 }
 
 export const authService:AuthService = new AuthService();
