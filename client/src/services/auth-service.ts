@@ -7,11 +7,6 @@ import { HeaderBuilder } from '@/classes/header-builder';
 import ClientJs from "clientjs";
 import { Token } from '@/classes/token';
 
-export enum LoginState{
-	default = 0,
-	newPassword = 1
-}
-
 export class AuthService {
 	static readonly API_URL:string = applicationConfig.apiUrl+"/auth";
 	private static readonly LOCAL_STORAGE_TOKEN = "auth_token";
@@ -27,7 +22,6 @@ export class AuthService {
 	get user():User{
 		return this._user;
 	}
-	loginState:BehaviorSubject<LoginState> = new BehaviorSubject<LoginState>(LoginState.default);
 	
 	get token():string{
 		return localStorage.getItem(AuthService.LOCAL_STORAGE_TOKEN);
@@ -47,8 +41,10 @@ export class AuthService {
 		Axios.interceptors.response.use((response)=>{
 			return response;
 		}, (error:AxiosResponse)=>{
-			if (error.status == 400 && error.data.data == "NO PASSWORD"){
-				this.loginState.next(LoginState.newPassword);
+			// LOGOUT if token invalid
+			if (error.status == 400 && error.data.message == "Invalid token"){
+				this.user = null;
+				this._token = null;
 			}
 			return Promise.reject(error);
 		})
@@ -91,13 +87,11 @@ export class AuthService {
 
 	async setNewPassword(password:string):Promise<any>{
 		let result = await Axios.post(AuthService.API_URL + "/set-new-password", {password}, {headers:HeaderBuilder.getDefaultHeaders()});
-		this.loginState.next(LoginState.default);
 	}
 
 	async logout(){
 		await Axios.post(AuthService.API_URL + "/logout", null, {headers:HeaderBuilder.getDefaultHeaders()});
 		this.user = null;
-		this.loginState.next(LoginState.default);
 		this._token = null;
 	}
 

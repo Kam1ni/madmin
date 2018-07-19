@@ -22,7 +22,7 @@ mainRouter.all("/*", async (req,res,next)=>{
 	}
 	else if(req.hostname == config.baseUrl){
 		let redirectUrl = await AppSetting.findOne({name:SETTINGS.DefaultRedirect});
-		return res.redirect("http://" + redirectUrl.value + "." + req.hostname);
+		return res.redirect("http://" + redirectUrl.value + "." + req.hostname + ":" + getConfig().port);
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);
