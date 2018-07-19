@@ -12,6 +12,7 @@ import { handlerRouter } from "./handler";
 import { Handler } from "../models/handler";
 import { configRouter } from "./config";
 import { AppSetting, SETTINGS } from "../models/app-setting";
+import { userRouter } from "./user";
 
 export const mainRouter = Router();
 
@@ -54,6 +55,8 @@ mainRouter.use("/exec-handler/*", async function(req,res,next){
 	}
 	await handler.execute(req,res);
 });
+
+mainRouter.use("/user", userRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
