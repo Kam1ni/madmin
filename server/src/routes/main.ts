@@ -56,7 +56,6 @@ mainRouter.use("/exec-handler/*", async function(req,res,next){
 	await handler.execute(req,res);
 });
 
-mainRouter.use("/user", userRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
@@ -67,6 +66,7 @@ mainRouter.use("/*", async (req,res,next)=>{
 	}
 });
 
+mainRouter.use("/user", userRouter);
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
 mainRouter.use("/config", configRouter);
