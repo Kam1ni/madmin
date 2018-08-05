@@ -20,8 +20,8 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer/>
-				<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
-				<v-btn flat color="primary" :disabled="!valid" @click="submit">Save</v-btn>
+				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn depressed color="primary" :disabled="!valid" @click="submit">Save</v-btn>
 			</v-card-actions>
 		</v-form>
 	</v-card>

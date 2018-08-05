@@ -16,8 +16,8 @@
 			}
 			<v-card-actions>
 				<v-spacer/>
-				<v-btn flat color="accent" @click="cancel">Cancel</v-btn>
-				<v-btn flat color="primary" @click="save">Save</v-btn>
+				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn depressed color="primary" @click="save">Save</v-btn>
 			</v-card-actions>
 		</v-form>
 	</v-card>

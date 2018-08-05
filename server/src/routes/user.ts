@@ -29,13 +29,17 @@ userRouter.post("/", async function(req,res,next){
 	}
 });
 
-userRouter.all("/:id/*", async function(req,res,next){
+userRouter.use("/:id", async function(req,res,next){
 	let user = await User.findById(req.params.id);
 	if (!user){
 		return next(new HttpError("User does not exist", 404));
 	}
 	res.locals.foundUser = user;
 	next();
+})
+
+userRouter.get("/:id/", async function(req,res,next){
+	res.json((<IUser>res.locals.foundUser).getPublicJson());
 })
 
 userRouter.put("/:id/edit", async function(req,res,next){

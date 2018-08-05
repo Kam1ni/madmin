@@ -4,6 +4,7 @@ import * as bcrypt from "bcrypt";
 import { getConfig } from "../config";
 
 export interface IPublicUser {
+	identifier:string;
 	isAdmin:boolean;
 	username:string;
 }
@@ -53,7 +54,9 @@ UserSchema.methods.comparePassword = async function(password:string):Promise<boo
 }
 
 UserSchema.methods.getPublicJson = function():IPublicUser{
+	let id = this._id;
 	return {
+		identifier: id,
 		username: this.username,
 		isAdmin: this.isAdmin,
 	}

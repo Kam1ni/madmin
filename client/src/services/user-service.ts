@@ -13,9 +13,21 @@ export class UserService {
 	}
 
 	async getUsers():Promise<User[]>{
-		let response = await Axios.get(UserService.API_URL, HeaderBuilder.getDefaultHeaders());
+		let response = await Axios.get(UserService.API_URL, {headers:HeaderBuilder.getDefaultHeaders()});
 		this.users = (<any[]>response.data).map(d=>new User(d));
 		return this.users;
+	}
+
+	async getUser(id:string):Promise<User>{
+		let response = await Axios.get(UserService.API_URL + "/" + id, {headers:HeaderBuilder.getDefaultHeaders()});
+		let user = new User(response.data);
+		let i = this.users.findIndex(u=> u.id == id);
+		if (i!=-1){
+			this.users[i] = user;
+		}else{
+			this.users.push(user);
+		}
+		return user;
 	}
 
 }

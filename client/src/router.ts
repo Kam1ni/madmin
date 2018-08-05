@@ -10,6 +10,7 @@ import HandlerEdit from '@/components/handlers/Edit.vue';
 import Settings from '@/components/settings/Settings.vue';
 import SettingsList from '@/components/settings/List.vue';
 import SettingsTokens from '@/components/settings/Tokens.vue';
+import UserEdit from '@/components/settings/UserEdit.vue';
 
 Vue.use(Router)
 
@@ -51,7 +52,9 @@ const router = new Router({
 			component: Settings,
 			children:[
 				{path:'', component:SettingsList, name: "Settings"},
-				{path:'tokens', component:SettingsTokens }
+				{path:'tokens', component:SettingsTokens },
+				{path:'user/edit/:id', component:UserEdit},
+				{path:'user/new', component:UserEdit}
 			]
 		}
 	]

@@ -1,5 +1,5 @@
 export abstract class BaseResource{
-	private _id:string;
+	protected _id:string;
 	get id():string {
 		return this._id;
 	}
