@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { User, IUser } from "../models/user";
+import { User } from "../models/user";
 import { HttpError } from "../classes/HttpError";
 
 export const userRouter = Router();
@@ -9,7 +9,7 @@ userRouter.get("/", async (req, res, next)=>{
 });
 
 userRouter.all("/*", async function(req,res,next){
-	let loggedInUser = <IUser>res.locals.user;
+	let loggedInUser = <User>res.locals.user;
 	if (!loggedInUser.isAdmin){
 		return next(new HttpError("Access denied", 403));
 	}
@@ -39,11 +39,11 @@ userRouter.use("/:id", async function(req,res,next){
 })
 
 userRouter.get("/:id/", async function(req,res,next){
-	res.json((<IUser>res.locals.foundUser).getPublicJson());
+	res.json((<User>res.locals.foundUser).getPublicJson());
 })
 
 userRouter.put("/:id/edit", async function(req,res,next){
-	let user:IUser = res.locals.foundUser;
+	let user:User = res.locals.foundUser;
 	user.username = req.body.username;
 	user.isAdmin = req.body.isAdmin;
 	try{
@@ -55,8 +55,8 @@ userRouter.put("/:id/edit", async function(req,res,next){
 });
 
 userRouter.put("/:id/change-password", async function(req,res,next){
-	let user:IUser = res.locals.foundUser;
-	if (user.id == res.locals.user.id){
+	let user:User = res.locals.foundUser;
+	if (user._id == res.locals.user._id){
 		return next(new HttpError("You cannot change your own password with this route. User \"/auth/change-password\"", 403));
 	}
 	user.setPassword(req.body.password);
@@ -69,8 +69,8 @@ userRouter.put("/:id/change-password", async function(req,res,next){
 });
 
 userRouter.delete("/:id", async function(req,res,next){
-	let user:IUser = res.locals.foundUser;
-	if (user.id == res.locals.user.id){
+	let user:User = res.locals.foundUser;
+	if (user._id == res.locals.user._id){
 		return next(new HttpError("You cannot delete your own account.", 403));
 	}
 	await user.remove();

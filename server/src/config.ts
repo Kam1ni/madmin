@@ -1,12 +1,5 @@
-export interface IDatabaseConfig{
-	host:string;
-	database:string;
-	username?:string;
-	password?:string;
-}
-
 export interface IConfig {
-	database:IDatabaseConfig;
+	dataPath:string;
 	port:number;
 	host:string;
 	baseUrl:string;

@@ -1,32 +1,33 @@
 {
-  "name": "madmin-server",
-  "version": "0.1.0",
-  "description": "Server for madmin server management platform",
-  "main": "index.js",
-  "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc",
-    "dev": "tsc-watch --onSuccess \"npm run start\""
-  },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "bcrypt": "^2.0.1",
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.4",
-    "express": "^4.16.3",
-    "jsonwebtoken": "^8.3.0",
-    "mongoose": "^4.13.10"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^2.0.0",
-    "@types/body-parser": "^1.17.0",
-    "@types/express": "^4.16.0",
-    "@types/jsonwebtoken": "^7.2.7",
-    "@types/mongoose": "^5.0.18",
-    "@types/node": "^10.3.5",
-    "tsc-watch": "^1.0.22",
-    "typescript": "^2.9.2"
-  }
+	"name": "madmin-server",
+	"version": "0.1.0",
+	"description": "Server for madmin server management platform",
+	"main": "index.js",
+	"scripts": {
+		"start": "node dist/index.js",
+		"build": "tsc",
+		"dev": "tsc-watch --onSuccess \"npm run start\""
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"axios": "^0.18.0",
+		"bcrypt": "^2.0.1",
+		"body-parser": "^1.18.3",
+		"cors": "^2.8.4",
+		"express": "^4.16.3",
+		"jsonwebtoken": "^8.3.0",
+		"nedb": "^1.8.0"
+	},
+	"devDependencies": {
+		"@types/bcrypt": "^2.0.0",
+		"@types/body-parser": "^1.17.0",
+		"@types/express": "^4.16.0",
+		"@types/jsonwebtoken": "^7.2.7",
+		"@types/mongoose": "^5.0.18",
+		"@types/nedb": "^1.8.6",
+		"@types/node": "^10.3.5",
+		"tsc-watch": "^1.0.22",
+		"typescript": "^2.9.2"
+	}
 }

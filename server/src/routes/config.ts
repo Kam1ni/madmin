@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AppSetting, getSettings } from "../models/app-setting";
 import { HttpError } from "../classes/HttpError";
-import { IUser } from "../models/user";
+import { User } from "../models/user";
 
 export const configRouter = Router();
 
@@ -10,7 +10,7 @@ configRouter.get("/", async (req,res,next)=>{
 });
 
 configRouter.put("/:name", async (req, res, next)=>{
-	if (!(<IUser>res.locals.user).isAdmin){
+	if (!(<User>res.locals.user).isAdmin){
 		return next(new HttpError("You are not allowed to edit application settings", 403));
 	}
 	let config = await AppSetting.findOne({name:req.params.name});

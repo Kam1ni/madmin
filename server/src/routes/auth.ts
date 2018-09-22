@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {User, IUser} from "../models/user";
+import {User} from "../models/user";
 import * as jwt from "jsonwebtoken";
 import { HttpError } from "../classes/HttpError";
 import { getConfig } from "../config";
@@ -44,11 +44,11 @@ authRouter.use("/*", async (req,res,next)=>{
 });
 
 authRouter.get("/", async (req,res,next)=>{
-	res.json((<IUser>res.locals.user).getPrivateJson());
+	res.json((<User>res.locals.user).getPrivateJson());
 });
 
 authRouter.post("/change-password", async (req,res,next)=>{
-	let user:IUser = res.locals.user;
+	let user:User = res.locals.user;
 	if (!await user.comparePassword(req.body.oldPassword)){
 		return next(new HttpError("Old password does not match", 500));
 	}
@@ -63,7 +63,7 @@ authRouter.post("/change-password", async (req,res,next)=>{
 });
 
 authRouter.delete("/remove-all-tokens", async (req, res, next)=>{
-	let user:IUser = res.locals.user;
+	let user:User = res.locals.user;
 	user.removeAllTokens(req.headers.authorization);
 	await user.save();
 	console.log(user.tokens);

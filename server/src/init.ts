@@ -1,11 +1,11 @@
 import { IConfig, getConfig } from "./config";
 import * as fs from "fs";
 import * as path from "path";
-import * as mongoose from "mongoose";
 import { UV_UDP_REUSEADDR } from "constants";
 import { User } from "./models/user";
 import * as readline from "readline";
 import { AppSetting, initialiseSettings } from "./models/app-setting";
+import * as Nedb from "nedb";
 
 const defaultConfig:IConfig = {
 	host: "0.0.0.0",
@@ -14,12 +14,7 @@ const defaultConfig:IConfig = {
 	saltRounds: 10,
 	tokenSecret: "secret",
 	clientDomain: "madmin",
-	database: {
-		host: "mongodb://localhost:27017",
-		database: "madmin",
-		username: null,
-		password: null
-	}
+	dataPath:"./data/"
 }
 
 async function createFirstUser(){
@@ -75,17 +70,11 @@ export async function init(){
 	}
 
 	// Initialise database
-	(<any>mongoose).Promise = global.Promise;
 	try{
-		console.log("Connecting to the database");
-		let dbConf = config.database;
-		let dbUrl = dbConf.host + "/" + dbConf.database;
-		if (dbConf.username){
-			let url = config.database.host.split("//");
-			let dbUrl = `${url[0]}//${dbConf.username}:${dbConf.password}@${url}`;
+		if (!fs.existsSync(config.dataPath)){
+			fs.mkdirSync(config.dataPath);
 		}
-		await mongoose.connect(dbUrl, {useMongoClient:true});
-		console.log("Connected to the database");
+		
 	}catch(err){
 		console.error("Failed connecting to the database.");
 		console.log("Closing Server.");
