@@ -4,14 +4,14 @@ import { getConfig } from "../config";
 import { authRouter } from "./auth";
 import { authenticate } from "../functions/auth";
 import { appRouter } from "./app";
-import { App } from "../models/app";
+import { App, AppQuery } from "../models/app";
 import { HttpError } from "../classes/HttpError";
 import { server } from "../functions/server";
 import { proxy } from "../functions/proxy";
 import { handlerRouter } from "./handler";
-import { Handler } from "../models/handler";
+import { Handler, HandlerQuery } from "../models/handler";
 import { configRouter } from "./config";
-import { AppSetting, SETTINGS } from "../models/app-setting";
+import { AppSetting, SETTINGS, AppSettingQuery } from "../models/app-setting";
 import { userRouter } from "./user";
 
 export const mainRouter = Router();
@@ -22,14 +22,14 @@ mainRouter.all("/*", async (req,res,next)=>{
 		return next();
 	}
 	else if(req.hostname == config.baseUrl){
-		let redirectUrl = await AppSetting.findOne({name:SETTINGS.DefaultRedirect});
+		let redirectUrl = await AppSettingQuery.default.findOne({name:SETTINGS.DefaultRedirect});
 		return res.redirect("http://" + redirectUrl.value + "." + req.hostname + ":" + getConfig().port);
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);
-		let app = await App.findOne({subdomain, $or:[{enabled:true}, {enabled:undefined}]});
+		let app = await AppQuery.default.findOne({subdomain, $or:[{enabled:true}, {enabled:undefined}]});
 		if (!app){
 			return next(new HttpError("Subdomain does not exist", 500));
 		}
@@ -49,7 +49,7 @@ mainRouter.use("/auth", authRouter);
 
 mainRouter.use("/exec-handler/*", async function(req,res,next){
 	let path = req.originalUrl.split("/exec-handler").join("");
-	let handler = await Handler.findOne({path:path});
+	let handler = await HandlerQuery.default.findOne({path:path});
 	if (!handler){
 		return next(new HttpError(`No handler found at path "${path}"`, 404));
 	}

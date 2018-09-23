@@ -2,7 +2,7 @@ import { IConfig, getConfig } from "./config";
 import * as fs from "fs";
 import * as path from "path";
 import { UV_UDP_REUSEADDR } from "constants";
-import { User } from "./models/user";
+import { User, UserQuery } from "./models/user";
 import * as readline from "readline";
 import { AppSetting, initialiseSettings } from "./models/app-setting";
 import * as Nedb from "nedb";
@@ -83,7 +83,7 @@ export async function init(){
 
 	await initialiseSettings();
 
-	let users = await User.find();
+	let users = await UserQuery.default.find();
 	if (users.length == 0){
 		await createFirstUser();
 	}

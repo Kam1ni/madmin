@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {User} from "../models/user";
+import {User, UserQuery} from "../models/user";
 import * as jwt from "jsonwebtoken";
 import { HttpError } from "../classes/HttpError";
 import { getConfig } from "../config";
@@ -8,7 +8,7 @@ import { authenticate } from "../functions/auth";
 export const authRouter = Router();
 
 authRouter.post("/login", async (req,res,next)=>{
-	let foundUser = await User.findOne({username:req.body.username});
+	let foundUser = await UserQuery.default.findOne({username:req.body.username});
 	if (!foundUser){
 		return next(new HttpError("Invalid login", 400));
 	}

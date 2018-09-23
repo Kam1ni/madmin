@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 
 import { getConfig } from "../config";
-import { BaseModel } from "./base-model";
+import { BaseModel, BaseQuery } from "./base-model";
 import * as path from 'path';
 
 import * as Nedb from "nedb";
@@ -23,8 +23,8 @@ export interface IPrivateUser extends IPublicUser{
 	tokens:IToken[];
 }
 
-export class User extends BaseModel {
-	protected db: Nedb = db;
+export class User extends BaseModel<User> {
+	protected db = db;
 	username:string;
 	password:string;
 	isAdmin:boolean;
@@ -34,34 +34,6 @@ export class User extends BaseModel {
 		super();
 		if (!doc) return;
 		this.parse(doc, ["username", "password", "isAdmin", "tokens"])
-	}
-
-	static async findById(id:string):Promise<User>{
-		return User.findOne({_id:id});
-	}
-
-	static async find(query:any = null):Promise<User[]> {
-		let promise = <Promise<User[]>>new Promise((resolve, reject)=>{
-			db.find(query, (err, docs)=>{
-				if (err){
-					return reject(err);
-				}
-				resolve(docs.map(doc=>new User(doc)));
-			})
-		})
-		return await promise;
-	}
-
-	static async findOne(query:any):Promise<User>{
-		let promise = <Promise<User>>new Promise((resolve, reject)=>{
-			db.findOne(query, (err, doc)=>{
-				if (err){
-					return reject(err);
-				}
-				resolve(new User(doc));
-			});
-		});
-		return promise;
 	}
 
 	async comparePassword(password:string):Promise<boolean> {
@@ -115,4 +87,10 @@ export class User extends BaseModel {
 			}
 		});
 	}
+}
+
+export class UserQuery extends BaseQuery<User>{
+	protected type: new (data: any) => User = User;
+	protected db: Nedb = db;
+	static default:UserQuery = new UserQuery();
 }

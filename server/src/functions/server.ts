@@ -1,4 +1,4 @@
-import { IApp, IStaticApp } from "../models/app";
+import { App, IStaticApp } from "../models/app";
 import { Request, Response } from "express";
 import { resolve } from "path";
 import * as fs from "fs";
@@ -18,7 +18,7 @@ async function listFiles(path:string, res:Response){
 }
 
 
-export async function server(app:IApp, req:Request,res:Response){
+export async function server(app:App, req:Request,res:Response){
 	let config = (<IStaticApp>app.config);
 	let basePath = config.path;
 	let fullPath = resolve(basePath, req.path);

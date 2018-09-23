@@ -1,4 +1,11 @@
 import {Schema, Document, model} from "mongoose";
+import { getConfig } from "../config";
+import { BaseModel, BaseQuery } from "./base-model";
+import * as path from 'path';
+
+import * as Nedb from "nedb";
+
+const db = new Nedb({filename:path.join(getConfig().dataPath, "app.db"), autoload:true})
 
 export interface IProxyApp {
 	url:string;
@@ -9,37 +16,42 @@ export interface IStaticApp {
 	listFiles:boolean;
 }
 
-export interface IApp extends Document {
-	subdomain:string;
-	enabled:boolean;
-	type:"static"|"proxy";
-	config:IStaticApp|IProxyApp
+enum AppTypes{
+	static = "static",
+	proxy = "proxy"
 }
 
-const AppSchema = new Schema({
-	subdomain:{type:String, required:true, unique:true},
-	type:{type:String, enum:["static", "proxy"], required:true},
-	config:{type:Schema.Types.Mixed, required:true},
-	enabled:{type:Boolean, default:true}
-});
 
-AppSchema.path("subdomain").validate(function(value){
-	return !/\s/.test(value);
-}, "Subdomain may not have spaces");
+export class App extends BaseModel<App>{
+	protected db: Nedb = db;
+	subdomain:string;
+	type:AppTypes;
+	config:IProxyApp|IStaticApp;
+	enabled:boolean = true;
 
-AppSchema.path("config").validate(function(value){
-	if (this.type == "static"){
-		return value.path != null;
+	async validate():Promise<string>{
+		this.subdomain = this.subdomain.toLowerCase();
+
+		if (!!/\s/.test(this.subdomain)){
+			return "Subdomain may not have spaces";
+		}
+
+		if (this.type == "static"){
+			if ((<IStaticApp>this.config).path == null){
+				return "Invalid configuration";
+			}
+		}
+		else if (this.type == "proxy"){
+			if ((<IProxyApp>this.config).url == null){
+				return "Invalid configuration";
+			}
+		}
+		return null;
 	}
-	else if (this.type == "proxy"){
-		return value.url != null;
-	}
-}, "Invalid configuration");
+}
 
-AppSchema.pre("validate", function(next){
-	let obj = <IApp>this;
-	obj.subdomain = obj.subdomain.toLowerCase();
-	next();
-});
-
-export const App = model<IApp>("App", AppSchema);
+export class AppQuery extends BaseQuery<App>{
+	protected type: new (data: any) => App = App;
+	protected db: Nedb = db;
+	static default = new AppQuery();
+}

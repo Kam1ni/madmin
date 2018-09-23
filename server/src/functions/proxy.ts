@@ -1,10 +1,10 @@
-import { IApp, IProxyApp } from "../models/app";
+import { IProxyApp, App } from "../models/app";
 import { Request, Response } from "express";
 import * as http from "http";
 import * as url from "url";
 import Axios, { AxiosRequestConfig, AxiosError } from "axios";
 
-export async function proxy(app:IApp, req:Request, res:Response){
+export async function proxy(app:App, req:Request, res:Response){
 	try{
 		let config = <IProxyApp>app.config;
 		let parsedUrl = url.parse(config.url + req.path);

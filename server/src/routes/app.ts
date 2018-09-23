@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { App } from "../models/app";
+import { App, AppQuery } from "../models/app";
 import { HttpError } from "../classes/HttpError";
 
 export const appRouter = Router();
 
 appRouter.get("/", async (req,res,next)=>{
-	res.json(await App.find());
+	res.json(await AppQuery.default.find());
 });
 
 appRouter.get("/:id", async(req,res,next)=>{
-	let app = await App.findById(req.params.id);
+	let app = await AppQuery.default.findById(req.params.id);
 	if (!app){
 		return next(new HttpError("App does not exist!", 404));
 	}
@@ -43,7 +43,7 @@ appRouter.post("/", async (req,res,next)=>{
 });
 
 appRouter.put("/:id/enable", async (req,res,next)=>{
-	let app = await App.findById(req.params.id);
+	let app = await AppQuery.default.findById(req.params.id);
 	if (!app){
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}
@@ -57,7 +57,7 @@ appRouter.put("/:id/enable", async (req,res,next)=>{
 });
 
 appRouter.put("/:id/disable", async (req,res,next)=>{
-	let app = await App.findById(req.params.id);
+	let app = await AppQuery.default.findById(req.params.id);
 	if (!app){
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}
@@ -71,7 +71,7 @@ appRouter.put("/:id/disable", async (req,res,next)=>{
 });
 
 appRouter.put("/:id", async (req,res,next)=>{
-	let app = await App.findById(req.params.id);
+	let app = await AppQuery.default.findById(req.params.id);
 	if (!app){
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}
@@ -96,7 +96,7 @@ appRouter.put("/:id", async (req,res,next)=>{
 });
 
 appRouter.delete("/:id", async (req,res,next)=>{
-	let app = await App.findById(req.params.id);
+	let app = await AppQuery.default.findById(req.params.id);
 	if (!app){
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}

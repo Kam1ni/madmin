@@ -1,48 +1,57 @@
 import { Document, Schema, model } from "mongoose";
 import {Request, Response} from "express";
+import * as Nedb from "nedb";
+import * as path from "path";
+import { getConfig } from "../config";
+import { BaseModel, BaseQuery } from "./base-model";
 
 const AsyncFunction = new Function("return Object.getPrototypeOf(async function(){}).constructor")();
 
-export interface IHandler extends Document{
+const db = new Nedb({filename:path.join(getConfig().dataPath, "handler.db"), autoload:true})
+
+export class Handler extends BaseModel<Handler>{
+	protected db: Nedb = db;
+
 	path:string;
 	code:string;
 
-	execute(request:Request, response:Response);
-	getFunction():(Request:Request,Response:Response,require:NodeRequire)=>Promise<void>;
-}
+	constructor(data:any = null){
+		super(data);
+		if (!data) return;
+		this.parse(data, ["path", "code"]);
+	}
 
-const HandlerSchema = new Schema({
-	path:{type:String, required:true, unique:true},
-	code:{type:String, required:true}
-});
-
-HandlerSchema.methods.getFunction = function(){
-	return new AsyncFunction("req", "res", "require", this.code);
-}
-
-HandlerSchema.methods.execute = async function(req:Request, res:Response){
-	try{
-		let fn = this.getFunction();
-		await fn(req, res, require);
-		if (!res.headersSent){
-			res.send("Request Handled");
+	async execute(request:Request, response:Response){
+		try{
+			let fn = this.getFunction();
+			await fn(request, response, require);
+			if (!response.headersSent){
+				response.send("Request Handled");
+			}
+		}catch(err){
+			if (!response.headersSent){
+				response.send("A crash occured");
+			}
+			console.error(`Handler "${this.path}" crashed`);
+			console.error(err.message);
 		}
-	}catch(err){
-		if (!res.headersSent){
-			res.send("A crash occured");
+	}
+
+	getFunction():(Request:Request,Response:Response,require:NodeRequire)=>Promise<void>{
+		return new AsyncFunction("req", "res", "require", this.code);
+	}
+
+	validate():Promise<string>{
+		this.path = (<string>this.path).toLowerCase();
+		if (this.path[0] != "/"){
+			this.path = "/" + this.path;
 		}
-		console.error(`Handler "${this.path}" crashed`);
-		console.error(err.message);
+		return null;
 	}
 }
 
-HandlerSchema.pre("validate", function(next){
-	let obj = <IHandler>this;
-	obj.path = (<string>obj.path).toLowerCase();
-	if (obj.path[0] != "/"){
-		obj.path = "/" + obj.path;
-	}
-	next();
-});
-
-export const Handler = model<IHandler>("Handler", HandlerSchema);
+export class HandlerQuery extends BaseQuery<Handler>{
+	protected type: new (data: any) => Handler = Handler;
+	protected db: Nedb = db;
+	static default = new HandlerQuery();
+}
