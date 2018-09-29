@@ -8,12 +8,19 @@ import { BaseModel, BaseQuery } from "./base-model";
 const AsyncFunction = new Function("return Object.getPrototypeOf(async function(){}).constructor")();
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "handler.db"), autoload:true})
+const ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
 
 export class Handler extends BaseModel<Handler>{
 	protected db: Nedb = db;
+	_defaultValues = [
+		{property:"enabled", value:true}
+	]
 
 	path:string;
 	code:string;
+	enabled:boolean;
+	methods:string[];
+	
 
 	constructor(data:any = null){
 		super(data);
@@ -39,10 +46,18 @@ export class Handler extends BaseModel<Handler>{
 		return new AsyncFunction("req", "res", "require", this.code);
 	}
 
-	validate():Promise<string>{
+	async validate():Promise<string>{
 		this.path = (<string>this.path).toLowerCase();
 		if (this.path[0] != "/"){
 			this.path = "/" + this.path;
+		}
+		if (this.methods.length == 0){
+			return "Handler should have at least 1 method"
+		}
+		for (let method of this.methods){
+			if (ALLOWED_METHODS.indexOf(method) == -1){
+				return `"${method}" is not a valid method. Please only use these methods: ` + ALLOWED_METHODS.join(", ");
+			}
 		}
 		return null;
 	}

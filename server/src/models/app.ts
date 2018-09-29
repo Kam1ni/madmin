@@ -24,6 +24,10 @@ enum AppTypes{
 
 export class App extends BaseModel<App>{
 	protected db: Nedb = db;
+	_defaultValues = [
+		{property:"enabled",value:true}
+	]
+	
 	subdomain:string;
 	type:AppTypes;
 	config:IProxyApp|IStaticApp;
@@ -31,6 +35,9 @@ export class App extends BaseModel<App>{
 
 	async validate():Promise<string>{
 		this.subdomain = this.subdomain.toLowerCase();
+		if (this.enabled === undefined){
+			this.enabled = true;
+		}
 
 		if (!!/\s/.test(this.subdomain)){
 			return "Subdomain may not have spaces";
@@ -45,6 +52,10 @@ export class App extends BaseModel<App>{
 			if ((<IProxyApp>this.config).url == null){
 				return "Invalid configuration";
 			}
+		}
+		let app = await AppQuery.default.findOne({subdomain:this.subdomain, _id:{$ne: this._id}});
+		if (app != null){
+			return `subdomain "${this.subdomain}" already in use`
 		}
 		return null;
 	}

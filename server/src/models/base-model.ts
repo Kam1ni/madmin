@@ -1,10 +1,16 @@
 import * as Nedb from "nedb";
 
+interface IDefaultValue {
+	property:string,
+	value:any;
+}
+
 export abstract class BaseModel<T extends BaseModel<T>>{
 	_id:string;
 	protected static db:Nedb;
 	protected abstract db:Nedb;
 	protected readonly _ignoredFields:string[] = [];
+	protected _defaultValues:IDefaultValue[] = [];
 
 	constructor(doc:any=null){
 		if (!doc) return;
@@ -23,8 +29,13 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 
 	private getSaveableObject():any{
 		let object:any = {}
+		for (let val of this._defaultValues){
+			if (this[val.property] === undefined){
+				this[val.property] = val.value;
+			}
+		}
 		for (let key of Object.keys(this)){
-			if (key == "_ignoredFields" || this._ignoredFields.indexOf(key) != -1){
+			if (key == "_ignoredFields" || this._ignoredFields.indexOf(key) != -1 || key == "_defaultValues"){
 				continue;
 			}
 			let value = this[key];

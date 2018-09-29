@@ -48,9 +48,6 @@ appRouter.put("/:id/enable", async (req,res,next)=>{
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}
 
-	if (app.enabled){
-		return next(new HttpError("App is already enabled", 400));
-	}
 	app.enabled = true;
 	await app.save();
 	return res.json(app);
@@ -62,9 +59,6 @@ appRouter.put("/:id/disable", async (req,res,next)=>{
 		return next(new HttpError("There is no app with id " + req.params.id, 500));
 	}
 
-	if (!app.enabled){
-		return next(new HttpError("App is already disabled", 400));
-	}
 	app.enabled = false;
 	await app.save();
 	return res.json(app);

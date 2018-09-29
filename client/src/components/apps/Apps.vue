@@ -21,7 +21,7 @@
 							</v-list-tile-content>
 							<v-list-tile-action>
 								<v-menu offset-y>
-									<v-btn slot="activator" @click.prevent icon><v-icon>more_vert</v-icon></v-btn>
+									<v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
 									<v-list>
 										<v-list-tile :to="'/apps/edit/' + item.id">
 											<v-list-tile-avatar><v-icon>edit</v-icon></v-list-tile-avatar>

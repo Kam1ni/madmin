@@ -6,7 +6,17 @@
 					<v-flex xs12 md6 xl8>
 						{{fullUrl}}
 					</v-flex>
-					<v-flex xs12 md6 xl4>
+				</v-layout>
+				<v-layout row wrap align-center>
+					<v-flex xs12 sm6 d-flex>
+						<v-select
+						:items="allowedMethods"
+						label="Methods"
+						v-model="handler.methods"
+						multiple
+						></v-select>
+					</v-flex>
+					<v-flex xs12 md6>
 						<v-text-field v-model="handler.path" label="Path" :rules="pathRules"></v-text-field>
 					</v-flex>
 				</v-layout>
@@ -29,6 +39,7 @@ import { applicationConfig } from '@/app-config';
 import { isNullOrUndefined } from 'util';
 import { stringHasWhiteSpace } from '@/functions/string';
 import { handlerService } from '@/services/handler-service';
+import { Handler } from '@/classes/handler';
 const {codemirror} = require('vue-codemirror')
 
 export default Vue.extend({
@@ -41,7 +52,7 @@ export default Vue.extend({
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
 				(v:string) => !handlerService.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
 			],
-			
+			allowedMethods:Handler.ALLOWED_METHODS
 		}
 	},
 	computed:{

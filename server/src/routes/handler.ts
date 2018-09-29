@@ -30,6 +30,28 @@ handlerRouter.post("/", async (req,res,next)=>{
 	}
 });
 
+handlerRouter.put("/:id/enable", async (req,res,next)=>{
+	let handler =  await HandlerQuery.default.findById(req.params.id);
+	if (!handler){
+		return next(new HttpError("Handler does not exist", 404));
+	}
+
+	handler.enabled = true;
+	await handler.save();
+	res.json(handler);
+})
+
+handlerRouter.put("/:id/disable", async (req,res,next)=>{
+	let handler =  await HandlerQuery.default.findById(req.params.id);
+	if (!handler){
+		return next(new HttpError("Handler does not exist", 404));
+	}
+
+	handler.enabled = false;
+	await handler.save();
+	res.json(handler);
+})
+
 handlerRouter.put("/:id", async (req,res,next)=>{
 	let handler =  await HandlerQuery.default.findById(req.params.id);
 	if (!handler){
@@ -38,6 +60,7 @@ handlerRouter.put("/:id", async (req,res,next)=>{
 
 	handler.path = req.body.path;
 	handler.code = req.body.code;
+	handler.methods = req.body.methods;
 
 	try{
 		handler.getFunction();

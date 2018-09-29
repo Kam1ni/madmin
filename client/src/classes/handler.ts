@@ -6,12 +6,17 @@ import { HeaderBuilder } from '@/classes/header-builder';
 export class Handler extends BaseResource{
 	path:string;
 	code:string;
+	methods:string[] = [];
+	enabled:boolean = true;
+	static readonly ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"];
 
 	constructor(data:any = null){
 		super(data);
 		if (!data) return;
 		this.path = data.path;
 		this.code = data.code;
+		this.methods = data.methods;
+		this.enabled = data.enabled;
 	}
 
 	async save(){
@@ -28,6 +33,16 @@ export class Handler extends BaseResource{
 				handlerService.handlers.push(new Handler(result.data));
 			}
 		}
+	}
+
+	async enable(){
+		await Axios.put(HandlerService.API_URL + "/" + this.id + "/enable", null, {headers:HeaderBuilder.getDefaultHeaders()});
+		this.enabled = true;
+	}
+
+	async disable(){
+		await Axios.put(HandlerService.API_URL + "/" + this.id + "/disable", null, {headers:HeaderBuilder.getDefaultHeaders()});
+		this.enabled = false;
 	}
 
 	async remove(){
