@@ -49,11 +49,13 @@ mainRouter.use("/auth", authRouter);
 
 mainRouter.use("/exec-handler/*", async function(req,res,next){
 	let path = req.originalUrl.split("/exec-handler").join("");
-	let handler = await HandlerQuery.default.findOne({path:path, methods:req.method, enabled:true});
-	if (!handler){
-		return next(new HttpError(`No handler found at path "${path}"`, 404));
+	let handlers = await HandlerQuery.default.find({path:path, methods:req.method, enabled:true});
+	for (let handler of handlers){
+		await handler.execute(req,res);
 	}
-	await handler.execute(req,res);
+	if (!res.headersSent){
+		res.send("handled")
+	}
 });
 
 
