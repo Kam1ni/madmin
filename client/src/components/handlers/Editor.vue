@@ -4,7 +4,7 @@
 			<v-card-text>
 				<v-layout row wrap align-center>
 					<v-flex xs12 md6 xl8>
-						{{apiUrl}}{{handler.path}}
+						{{fullUrl}}
 					</v-flex>
 					<v-flex xs12 md6 xl4>
 						<v-text-field v-model="handler.path" label="Path" :rules="pathRules"></v-text-field>
@@ -12,7 +12,6 @@
 				</v-layout>
 			</v-card-text>
 			async function(req, res, require){
-			<!--<v-textarea v-model="handler.code" label="code" box auto-grow></v-textarea>-->
 			<codemirror v-model="handler.code"></codemirror>
 			}
 			<v-card-actions>
@@ -36,13 +35,21 @@ export default Vue.extend({
 	data(){
 		return {
 			valid:false,
-			apiUrl:applicationConfig.apiUrl + "/exec-handler/",
+			apiUrl:applicationConfig.apiUrl + "/exec-handler",
 			pathRules:[
 				(v:string) => !isNullOrUndefined(v) || "Path may not be empty",
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
 				(v:string) => !handlerService.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
 			],
 			
+		}
+	},
+	computed:{
+		fullUrl():string{
+			if (!this.handler.path.match(/^\//)){
+				return this.apiUrl + "/" + this.handler.path
+			}
+			return this.apiUrl + this.handler.path;
 		}
 	},
 	methods:{
@@ -60,4 +67,3 @@ export default Vue.extend({
 	}
 })
 </script>
-
