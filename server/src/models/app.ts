@@ -27,7 +27,7 @@ export class App extends BaseModel<App>{
 	subdomain:string;
 	type:AppTypes;
 	config:IProxyApp|IStaticApp;
-	enabled:boolean = true;
+	enabled:boolean;
 
 	async validate():Promise<string>{
 		this.subdomain = this.subdomain.toLowerCase();
