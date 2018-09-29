@@ -57,5 +57,4 @@ handlerRouter.delete("/:id", async (req,res,next)=>{
 
 	await handler.remove();
 	res.json({message:"Success"});
-
 });
