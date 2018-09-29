@@ -19,8 +19,6 @@ export class AppSetting extends BaseModel<AppSetting>{
 
 	constructor(data:any = null){
 		super(data);
-		if (!data) return;
-		this.parse(data, ["name", "value", "readonly"]);
 	}
 }
 

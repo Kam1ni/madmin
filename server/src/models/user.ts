@@ -28,12 +28,13 @@ export class User extends BaseModel<User> {
 	username:string;
 	password:string;
 	isAdmin:boolean;
-	tokens:IToken[] = [];
+	tokens:IToken[];
 
 	constructor(doc:any = null){
-		super();
-		if (!doc) return;
-		this.parse(doc, ["username", "password", "isAdmin", "tokens"])
+		super(doc);
+		if (!this.tokens) {
+			this.tokens = []
+		}
 	}
 
 	async comparePassword(password:string):Promise<boolean> {
@@ -61,14 +62,13 @@ export class User extends BaseModel<User> {
 	getPrivateJson():IPrivateUser{
 		let privateUser = <IPrivateUser>this.getPublicJson();
 		privateUser.tokens = this.tokens;
-		return;
+		return privateUser;
 	}
 
 	addToken(token:string, name?:string){
 		if (name == null){
 			name = new Date().toUTCString();
 		}
-	
 		this.tokens.push({token:token, deviceName:name});
 	}
 

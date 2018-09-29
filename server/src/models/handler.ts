@@ -17,8 +17,6 @@ export class Handler extends BaseModel<Handler>{
 
 	constructor(data:any = null){
 		super(data);
-		if (!data) return;
-		this.parse(data, ["path", "code"]);
 	}
 
 	async execute(request:Request, response:Response){

@@ -7,6 +7,17 @@ import * as readline from "readline";
 import { AppSetting, initialiseSettings } from "./models/app-setting";
 import * as Nedb from "nedb";
 
+const oldLog = console.log;
+console.log = function(...params){
+	for (let i in params){
+		let param = params[i];
+		if (typeof(param) == "object" && param && param.toJSON){
+			params[i] = param.toJSON();
+		}
+	}
+	oldLog(...params)
+}
+
 const defaultConfig:IConfig = {
 	host: "0.0.0.0",
 	port: 3000,
@@ -30,15 +41,17 @@ async function createFirstUser(){
 			let user = new User();
 			user.username = username;
 			let passwordsMatch = false;
-			let createPassword = new Promise((resolve, reject)=>{
-				rl.question("password: ", (password:string)=>{
-					rl.question("repeat password: ", (repeatPassword:string)=>{
-						resolve({password, repeatPassword});
-					});
+			function createPassword(){ 
+				return new Promise((resolve, reject)=>{
+					rl.question("password: ", (password:string)=>{
+						rl.question("repeat password: ", (repeatPassword:string)=>{
+							resolve({password, repeatPassword});
+						});
+					})
 				});
-			});
+			}
 			while(!passwordsMatch){
-				let result:any = await createPassword;
+				let result:any = await createPassword();
 				if (result.password != result.repeatPassword){
 					console.log("Passwords dont match");
 					console.log("Retry");

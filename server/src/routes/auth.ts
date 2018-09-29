@@ -66,6 +66,5 @@ authRouter.delete("/remove-all-tokens", async (req, res, next)=>{
 	let user:User = res.locals.user;
 	user.removeAllTokens(req.headers.authorization);
 	await user.save();
-	console.log(user.tokens);
 	res.json({message:"Success", tokens:user.tokens});
 });
