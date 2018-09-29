@@ -14,7 +14,6 @@
                             <v-list-tile :key="i">
                                 <v-list-tile-content>
                                     <v-list-tile-title>{{token.deviceName}}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{token.token}}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                                 <v-list-tile-action-text v-if="token.token == currentToken">
                                     <v-chip color="primary">current</v-chip>

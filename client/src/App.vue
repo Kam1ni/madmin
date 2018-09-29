@@ -27,7 +27,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import HelloWorld from "./components/HelloWorld.vue";
 import { authService } from '@/services/auth-service';
 
 export default Vue.extend({
@@ -54,9 +53,6 @@ export default Vue.extend({
 			],
 			title: 'Madmin'
 		}
-	},
-	components:{
-		HelloWorld
 	},
 });
 </script>
