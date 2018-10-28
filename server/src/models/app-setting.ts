@@ -2,7 +2,7 @@ import { Schema, Mongoose, model, Document } from "mongoose";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as Nedb from "nedb";
 import * as path from "path";
-import { getConfig } from "../config";
+import { getConfig, IConfig } from "../config";
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "app-setting.db"), autoload:true})
 
@@ -53,6 +53,7 @@ export async function initialiseSettings(){
 	await createSettingIfNotExists(SETTINGS.Version, version, true);
 	let versionSetting = await AppSettingQuery.default.findOne({name:SETTINGS.Version});
 	if (version != versionSetting.value){
+		// TODO: CREATE MIGRATION SERVICE
 		console.warn("Migration required");
 	}
 }

@@ -3,9 +3,8 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as http from "http";
 
-import {init} from "./init";
+import {init} from "./init/index";
 import {getConfig} from "./config";
-import {mainRouter} from "./routes/main";
 
 async function main(){
 	await init();
@@ -16,6 +15,7 @@ async function main(){
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
+	const mainRouter = require("./routes/main").mainRouter;
 	app.use(mainRouter);
 	
 	const server = http.createServer(app);
