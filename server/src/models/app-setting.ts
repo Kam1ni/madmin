@@ -1,4 +1,3 @@
-import { Schema, Mongoose, model, Document } from "mongoose";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as Nedb from "nedb";
 import * as path from "path";

@@ -1,4 +1,3 @@
-import {Schema, Document, model} from "mongoose";
 import { getConfig } from "../config";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as path from 'path';
