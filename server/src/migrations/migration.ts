@@ -8,7 +8,7 @@ const SettingsDB = promisify(new Nedb({filename:path.join(getConfig().dataPath, 
 let versions = [1];
 
 export async function migrate(){
-	let settings = require("../settings.json")
+	let settings = require("../assets/settings.json")
 	let currentVersion = await SettingsDB.findOne({name:SETTINGS.DbVersion});
 	if (currentVersion.value < settings.DbVersion){
 		console.log("Migrating")

@@ -6,8 +6,9 @@
 	"scripts": {
 		"start": "node dist/index.js",
 		"build": "tsc",
-		"dev": "tsc-watch --onSuccess \"npm run start\"",
-		"migrate":"node dist/migration.js"
+		"dev": "tsc-watch --onSuccess \"node dev-run.js\"",
+		"migrate":"node dist/migration.js",
+		"copy-assets":"cp -R src/assets dist/assets"
 	},
 	"author": "",
 	"license": "MIT",
