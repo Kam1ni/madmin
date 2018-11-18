@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import * as Vuetify from 'vuetify'
+import Vuetify from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 
-Vue.use(Vuetify, {
+Vue.use(Vuetify as any, {
 	theme: {
 		primary: "#2196F3",
 		secondary: "#1E88E5",
