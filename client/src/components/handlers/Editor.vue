@@ -57,6 +57,9 @@ export default Vue.extend({
 	},
 	computed:{
 		fullUrl():string{
+			if (!this.handler.path){
+				return "";
+			}
 			if (!this.handler.path.match(/^\//)){
 				return this.apiUrl + "/" + this.handler.path
 			}

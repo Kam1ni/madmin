@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {BehaviorSubject} from "rxjs";
 import { User } from '@/classes/user';
-import Axios, { AxiosResponse } from "axios";
+import Axios, { AxiosResponse, AxiosError } from "axios";
 import { HeaderBuilder } from '@/classes/header-builder';
 import ClientJs from "clientjs";
 import { Token } from '@/classes/token';
@@ -80,15 +80,19 @@ export const authService = new Vue({
 		}
 	},
 	async created(){
+		console.log("ADDING INTERCEPTORS");
 		Axios.interceptors.response.use((response)=>{
 			return response;
-		}, (error:AxiosResponse)=>{
+		}, (error:AxiosError)=>{
 			// LOGOUT if token invalid
-			if (error.status == 400 && error.data.message == "Invalid token"){
+			if (!error.response){
+				return error;
+			}
+			if (error.response.status == 400 && error.response.data.message == "Invalid token"){
 				this.user = null;
 				this.token = null;
 			}
-			return Promise.reject(error);
+			return error;
 		})
 		this.token = getLocalStorage(LOCAL_STORAGE_TOKEN);
 		if (this.isLoggedIn){

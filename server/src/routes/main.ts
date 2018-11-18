@@ -33,7 +33,6 @@ mainRouter.all("/*", async (req,res,next)=>{
 		return ClientInterfaceServe(req, res, next);
 	}
 	else if(req.hostname == config.baseUrl){
-		console.log("NEXT");
 		return next();
 	}
 	else {

@@ -14,12 +14,9 @@ authRouter.post("/login", async (req,res,next)=>{
 		return next(new HttpError("Invalid login", 400));
 	}
 
-	console.log("COMPARING PASSWORDS")
 	if (!await foundUser.comparePassword(req.body.password)){
 		return next(new HttpError("Invalid login", 400));
 	}
-	console.log("PASS CORRECT")
-
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
 	let name = req.body.deviceName == null ? null : req.body.deviceName + "/" + req.ip;
 	foundUser.addToken(token, name);
