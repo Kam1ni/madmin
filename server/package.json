@@ -7,18 +7,18 @@
 		"start": "node dist/index.js",
 		"build": "tsc",
 		"dev": "tsc-watch --onSuccess \"node dev-run.js\"",
-		"migrate":"node dist/migration.js",
-		"copy-assets":"cp -R src/assets dist/assets"
+		"migrate": "node dist/migration.js",
+		"copy-assets": "node copy-assets"
 	},
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
 		"axios": "^0.18.0",
-		"bcrypt": "^3.0.2",
 		"body-parser": "^1.18.3",
 		"cors": "^2.8.4",
 		"express": "^4.16.3",
 		"jsonwebtoken": "^8.3.0",
+		"md5": "^2.2.1",
 		"nedb": "^1.8.0"
 	},
 	"devDependencies": {
@@ -26,8 +26,10 @@
 		"@types/body-parser": "^1.17.0",
 		"@types/express": "^4.16.0",
 		"@types/jsonwebtoken": "^7.2.7",
+		"@types/md5": "^2.1.33",
 		"@types/nedb": "^1.8.6",
 		"@types/node": "^10.3.5",
+		"fs-extra": "^7.0.1",
 		"tsc-watch": "^1.0.22",
 		"typescript": "^2.9.2"
 	}

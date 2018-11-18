@@ -1,10 +1,9 @@
-import * as bcrypt from "bcrypt";
-
 import { getConfig } from "../config";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as path from 'path';
 
 import * as Nedb from "nedb";
+import { hashCompare, hash } from "../functions/hash";
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "user.db"), autoload:true})
 
@@ -38,16 +37,16 @@ export class User extends BaseModel<User> {
 	}
 
 	async comparePassword(password:string):Promise<boolean> {
-		return await bcrypt.compare(password, this.password);
+		return await hashCompare(password, this.password);
 	}
 
 	async setPassword(newPassword:string):Promise<void> {
 		if (newPassword == null){
 			return this.password = null;
 		}
-		
-		let hash = await bcrypt.hash(newPassword, getConfig().saltRounds);
-		this.password = hash;
+		let generatedHash = await hash(newPassword, getConfig().saltRounds);
+		this.password = generatedHash;
+		console.log({generatedHash})
 	}
 
 	getPublicJson():IPublicUser {
