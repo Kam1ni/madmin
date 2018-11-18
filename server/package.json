@@ -1,6 +1,7 @@
 {
 	"name": "madmin-server",
 	"version": "0.1.0",
+	"bin":"dist/index.js",
 	"description": "Server for madmin server management platform",
 	"main": "index.js",
 	"scripts": {
@@ -20,6 +21,10 @@
 		"jsonwebtoken": "^8.3.0",
 		"md5": "^2.2.1",
 		"nedb": "^1.8.0"
+	},
+	"pkg":{
+		"scripts":"dist/**/*.js",
+		"assets":"dist/assets/*"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^2.0.0",

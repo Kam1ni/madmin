@@ -46,7 +46,6 @@ export class User extends BaseModel<User> {
 		}
 		let generatedHash = await hash(newPassword, getConfig().saltRounds);
 		this.password = generatedHash;
-		console.log({generatedHash})
 	}
 
 	getPublicJson():IPublicUser {

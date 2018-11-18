@@ -1,3 +1,5 @@
+import * as fs from "fs"
+
 export interface IConfig {
 	dataPath:string;
 	port:number;
@@ -8,7 +10,12 @@ export interface IConfig {
 	clientDomain:string;
 }
 
+let config:IConfig;
+
+export function setConfig(conf:IConfig){
+	config = conf;
+}
+
 export function getConfig():IConfig{
-	let config:IConfig = require("../config/config.json");
 	return config;
 }

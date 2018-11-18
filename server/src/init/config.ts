@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { IConfig } from "../config";
+import { IConfig, setConfig } from "../config";
+const mainFilePath = process.cwd();
 
 const defaultConfig:IConfig = {
 	host: "0.0.0.0",
@@ -13,11 +14,19 @@ const defaultConfig:IConfig = {
 }
 
 export function configInit(){
-	if (!fs.existsSync(path.resolve(__dirname, "../../config/config.json"))){
-		console.error("No config available.");
-		fs.mkdirSync(path.resolve(__dirname, "../../config/"))
-		fs.writeFileSync(path.resolve(__dirname, "../../config/config.json"), JSON.stringify(defaultConfig, null, 2));
-		console.error("New config created. Please finish the configuration at ../config/config.json before continuing.");
+	let confDir = path.resolve(mainFilePath, "config");
+	let confPath = path.resolve(confDir, "config.json")
+	if (!fs.existsSync(confPath)){
+		console.error("No config available.", {confDir});
+		if (!fs.existsSync(confDir)){
+			fs.mkdirSync(path.resolve(confDir))
+		}
+		fs.writeFileSync(confPath, JSON.stringify(defaultConfig, null, 2));
+		console.error(`New config created. Please finish the configuration at ${confPath} before continuing.`);
 		process.exit(0);
+	}else {
+		let result = fs.readFileSync(confPath);
+		let conf = <IConfig>JSON.parse(result.toString())
+		setConfig(conf)
 	}
 }
