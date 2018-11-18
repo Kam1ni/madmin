@@ -26,7 +26,6 @@ export const mainRouter = Router();
 mainRouter.all("/*", async (req,res,next)=>{
 	let config = getConfig();
 	if (req.hostname == `${config.clientDomain}.${config.baseUrl}`){
-		console.log("MAIN");
 		if (req.path == "/manifest"){
 			return res.json(getClientConfig())
 		}

@@ -20,8 +20,8 @@ async function listFiles(host:string, urlPath:string, path:string, res:Response)
 
 export async function server(app:App, req:Request,res:Response){
 	let path = req.path;
-	if (!path.match(/\/$/)){
-		path = path += "/"
+	if (path == ""){
+		path = "/"
 	}
 	if (!path.match(/^\//)){
 		path = "/" + path;
