@@ -35,6 +35,19 @@ export async function server(app:App, req:Request,res:Response){
 		return res.sendFile(fullPath);
 	}
 
+	if (path == "/"){
+		let indexPath = join(fullPath, "index.html");
+		let promise = new Promise<boolean>((resolve)=>{
+			fs.exists(indexPath, (exists)=>{
+				resolve(exists);
+			});
+		})
+		let exists = await promise;
+		if (exists){
+			res.sendFile(indexPath)
+		}
+	}
+
 	if (!config.listFiles){
 		return res.status(404).send("Don't mind us. Nothing to see here :)")
 	}
