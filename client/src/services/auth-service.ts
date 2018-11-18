@@ -2,12 +2,12 @@ import Vue from 'vue';
 import {BehaviorSubject} from "rxjs";
 import { User } from '@/classes/user';
 import Axios, { AxiosResponse } from "axios";
-import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
 import ClientJs from "clientjs";
 import { Token } from '@/classes/token';
 import { setLocalStorage, getLocalStorage } from '@/functions/storage';
 import { BaseRoutes } from '@/classes/api';
+import { ConfigService } from './config-service';
 
 const API_URL:string = BaseRoutes.AUTH;
 const LOCAL_STORAGE_TOKEN = "auth_token";
@@ -79,12 +79,7 @@ export const authService = new Vue({
 			this.user.tokens = message.data.tokens.map((t:any) => new Token(t));
 		}
 	},
-	created(){
-		this.token = getLocalStorage(LOCAL_STORAGE_TOKEN);
-		if (this.isLoggedIn){
-			this.user = new User(JSON.parse(getLocalStorage(LOCAL_STORAGE_USER, "{}")))
-			this.fetchProfile();
-		}
+	async created(){
 		Axios.interceptors.response.use((response)=>{
 			return response;
 		}, (error:AxiosResponse)=>{
@@ -95,5 +90,11 @@ export const authService = new Vue({
 			}
 			return Promise.reject(error);
 		})
+		this.token = getLocalStorage(LOCAL_STORAGE_TOKEN);
+		if (this.isLoggedIn){
+			this.user = new User(JSON.parse(getLocalStorage(LOCAL_STORAGE_USER, "{}")))
+			await this.fetchProfile();
+			await ConfigService.getSettings();
+		}
 	}
 })

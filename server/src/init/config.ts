@@ -1,6 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { IConfig, setConfig } from "../config";
+import * as randomstring from "randomstring";
+import md5 = require("md5");
+
 const mainFilePath = process.cwd();
 
 const defaultConfig:IConfig = {
@@ -8,7 +11,7 @@ const defaultConfig:IConfig = {
 	port: 3000,
 	baseUrl:"yourdomain",
 	saltRounds: 10,
-	tokenSecret: "secret",
+	tokenSecret: md5(randomstring.generate()),
 	clientDomain: "madmin",
 	dataPath:"./data/"
 }
@@ -17,7 +20,7 @@ export function configInit(){
 	let confDir = path.resolve(mainFilePath, "config");
 	let confPath = path.resolve(confDir, "config.json")
 	if (!fs.existsSync(confPath)){
-		console.error("No config available.", {confDir});
+		console.error("No config available.");
 		if (!fs.existsSync(confDir)){
 			fs.mkdirSync(path.resolve(confDir))
 		}

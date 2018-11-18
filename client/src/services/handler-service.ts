@@ -1,11 +1,11 @@
-import { applicationConfig } from '@/app-config';
 import { BehaviorSubject } from 'rxjs';
 import { Handler } from '@/classes/handler';
 import Axios from 'axios';
 import { HeaderBuilder } from '@/classes/header-builder';
+import { BaseRoutes } from '@/classes/api';
 
 export class HandlerService{
-	static readonly API_URL:string = applicationConfig.apiUrl + "/handler";
+	static readonly API_URL:string = BaseRoutes.HANDLER;
 	handlers:Handler[] = null;
 
 	async getHandlers():Promise<Handler[]>{

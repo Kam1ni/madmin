@@ -1,11 +1,10 @@
 import { App } from '@/classes/app';
-import { BehaviorSubject } from 'rxjs';
 import Axios from 'axios';
-import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
+import { BaseRoutes } from '@/classes/api';
 
 export class AppService{
-	static readonly API_URL:string = applicationConfig.apiUrl + "/app";
+	static readonly API_URL:string = BaseRoutes.APP;
 	apps:App[] = null;
 
 	async getApps():Promise<App[]>{

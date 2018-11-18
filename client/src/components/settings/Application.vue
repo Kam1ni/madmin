@@ -37,7 +37,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { configService } from '@/services/config-service';
 import { AppSettings } from '@/classes/app-settings';
 export default Vue.extend({
     data(){

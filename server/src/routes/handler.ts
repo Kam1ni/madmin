@@ -6,12 +6,12 @@ import { HttpError } from "../classes/HttpError";
 export const handlerRouter = Router();
 
 handlerRouter.get("/", async (req,res,next)=>{
-	let handlers = await HandlerQuery.default.find();
+	let handlers = await HandlerQuery.find();
 	res.json(handlers);
 });
 
 handlerRouter.get("/:id", async(req,res,next)=>{
-	let handler = await HandlerQuery.default.findById(req.params.id);
+	let handler = await HandlerQuery.findById(req.params.id);
 	if (!handler){
 		return next(new HttpError("No such handler", 404));
 	}
@@ -31,7 +31,7 @@ handlerRouter.post("/", async (req,res,next)=>{
 });
 
 handlerRouter.put("/:id/enable", async (req,res,next)=>{
-	let handler =  await HandlerQuery.default.findById(req.params.id);
+	let handler =  await HandlerQuery.findById(req.params.id);
 	if (!handler){
 		return next(new HttpError("Handler does not exist", 404));
 	}
@@ -42,7 +42,7 @@ handlerRouter.put("/:id/enable", async (req,res,next)=>{
 })
 
 handlerRouter.put("/:id/disable", async (req,res,next)=>{
-	let handler =  await HandlerQuery.default.findById(req.params.id);
+	let handler =  await HandlerQuery.findById(req.params.id);
 	if (!handler){
 		return next(new HttpError("Handler does not exist", 404));
 	}
@@ -53,7 +53,7 @@ handlerRouter.put("/:id/disable", async (req,res,next)=>{
 })
 
 handlerRouter.put("/:id", async (req,res,next)=>{
-	let handler =  await HandlerQuery.default.findById(req.params.id);
+	let handler =  await HandlerQuery.findById(req.params.id);
 	if (!handler){
 		return next(new HttpError("Handler does not exist", 404));
 	}
@@ -73,7 +73,7 @@ handlerRouter.put("/:id", async (req,res,next)=>{
 });
 
 handlerRouter.delete("/:id", async (req,res,next)=>{
-	let handler =  await HandlerQuery.default.findById(req.params.id);
+	let handler =  await HandlerQuery.findById(req.params.id);
 	if (!handler){
 		return next(new HttpError("Handler does not exist", 404));
 	}

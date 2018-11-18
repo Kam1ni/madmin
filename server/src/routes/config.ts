@@ -13,7 +13,7 @@ configRouter.put("/:name", async (req, res, next)=>{
 	if (!(<User>res.locals.user).isAdmin){
 		return next(new HttpError("You are not allowed to edit application settings", 403));
 	}
-	let config = await AppSettingQuery.default.findOne({name:req.params.name});
+	let config = await AppSettingQuery.findOne({name:req.params.name});
 	if (!config){
 		return next(new HttpError("Setting \"" + req.params.name + "\" does not exist" ));
 	}

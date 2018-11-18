@@ -48,7 +48,7 @@ export async function authInit(){
 	// Initialise database
 	
 
-	let users = await UserQuery.default.find();
+	let users = await UserQuery.find();
 	if (users.length == 0){
 		await createFirstUser();
 	}

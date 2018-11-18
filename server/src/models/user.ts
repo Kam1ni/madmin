@@ -87,8 +87,10 @@ export class User extends BaseModel<User> {
 	}
 }
 
-export class UserQuery extends BaseQuery<User>{
+export class UserQueryClass extends BaseQuery<User>{
 	protected type: new (data: any) => User = User;
 	protected db: Nedb = db;
-	static default:UserQuery = new UserQuery();
+	static default = new UserQueryClass();
 }
+
+export const UserQuery = UserQueryClass.default;

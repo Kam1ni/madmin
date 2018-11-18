@@ -62,8 +62,10 @@ export class Handler extends BaseModel<Handler>{
 	}
 }
 
-export class HandlerQuery extends BaseQuery<Handler>{
+export class HandlerQueryClass extends BaseQuery<Handler>{
 	protected type: new (data: any) => Handler = Handler;
 	protected db: Nedb = db;
-	static default = new HandlerQuery();
+	static default = new HandlerQueryClass();
 }
+
+export const HandlerQuery = HandlerQueryClass.default;

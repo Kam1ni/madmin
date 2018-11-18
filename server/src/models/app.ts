@@ -52,7 +52,8 @@ export class App extends BaseModel<App>{
 				return "Invalid configuration";
 			}
 		}
-		let app = await AppQuery.default.findOne({subdomain:this.subdomain, _id:{$ne: this._id}});
+		let app = await AppQuery.findOne({subdomain:this.subdomain, _id:{$ne: this._id}});
+		console.log({app});
 		if (app != null){
 			return `subdomain "${this.subdomain}" already in use`
 		}
@@ -60,8 +61,10 @@ export class App extends BaseModel<App>{
 	}
 }
 
-export class AppQuery extends BaseQuery<App>{
+class AppQueryClass extends BaseQuery<App>{
 	protected type: new (data: any) => App = App;
 	protected db: Nedb = db;
-	static default = new AppQuery();
+	static default = new AppQueryClass();
 }
+
+export const AppQuery = AppQueryClass.default;

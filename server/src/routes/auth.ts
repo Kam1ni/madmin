@@ -8,14 +8,17 @@ import { authenticate } from "../functions/auth";
 export const authRouter = Router();
 
 authRouter.post("/login", async (req,res,next)=>{
-	let foundUser = await UserQuery.default.findOne({username:req.body.username});
+	console.log("LOGIN")
+	let foundUser = await UserQuery.findOne({username:req.body.username});
 	if (!foundUser){
 		return next(new HttpError("Invalid login", 400));
 	}
 
+	console.log("COMPARING PASSWORDS")
 	if (!await foundUser.comparePassword(req.body.password)){
 		return next(new HttpError("Invalid login", 400));
 	}
+	console.log("PASS CORRECT")
 
 	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
 	let name = req.body.deviceName == null ? null : req.body.deviceName + "/" + req.ip;

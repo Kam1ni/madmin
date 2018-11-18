@@ -5,7 +5,7 @@ import { HttpError } from "../classes/HttpError";
 export const userRouter = Router();
 
 userRouter.get("/", async (req, res, next)=>{
-	res.json((await UserQuery.default.find()).map(u => u.getPublicJson()));
+	res.json((await UserQuery.find()).map(u => u.getPublicJson()));
 });
 
 userRouter.all("/*", async function(req,res,next){
@@ -30,7 +30,7 @@ userRouter.post("/", async function(req,res,next){
 });
 
 userRouter.use("/:id", async function(req,res,next){
-	let user = await UserQuery.default.findById(req.params.id);
+	let user = await UserQuery.findById(req.params.id);
 	if (!user){
 		return next(new HttpError("User does not exist", 404));
 	}

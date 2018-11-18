@@ -1,26 +1,12 @@
-import Vue from 'vue'
-import './plugins/vuetify'
-import 'vuetify/dist/vuetify.css'
-import Root from "./Root.vue";
-import router from './router'
-const VueCodemirror = require("vue-codemirror");
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/base16-dark.css'
-import 'codemirror/mode/javascript/javascript'
+import Axios from 'axios';
+import { AppConfig } from './conifg';
 
-Vue.config.productionTip = false
-
-Vue.use(VueCodemirror, {
-	options:{
-		tabSize:4,
-		mode: 'text/javascript',
-		theme: 'base16-dark',
-		lineNumbers: true,
-		line:true
+Axios.get("/manifest").then(response=>{
+	interface IManifest {
+		baseUrl:string;
 	}
+	let data = <IManifest>response.data;
+	console.log(data.baseUrl)
+	AppConfig.baseUrl = "http://" + data.baseUrl;
+	require("./app-init").appInit();
 })
-
-new Vue({
-	router,
-	render: h => h(Root)
-}).$mount('#app')

@@ -19,7 +19,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component';
 import { authService } from '@/services/auth-service';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 
 export default Vue.extend({
 	data(){
@@ -43,9 +43,12 @@ export default Vue.extend({
 				this.errorMessage = null;
 				await authService.login(this.username, this.password);
 			}catch(err){
-				console.log("error caught");
-				let ex:AxiosResponse = err;
-				this.errorMessage = ex.data.message;
+				let ex:AxiosError = err;
+				if (ex.response){
+					this.errorMessage = ex.response.data.message || "INVALID LOGIN";
+				}else{
+					this.errorMessage = "ERROR"
+				}
 			}
 			this.logingIn = false;
 		}

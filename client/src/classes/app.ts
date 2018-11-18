@@ -1,8 +1,8 @@
 import Axios from 'axios';
 import { AppService, appService } from '@/services/app-service';
 import { HeaderBuilder } from '@/classes/header-builder';
-import { applicationConfig } from '@/app-config';
 import { BaseResource } from '@/classes/base-resource';
+import { AppConfig } from '@/conifg';
 
 export interface IStaticAppConfig{
 	path:string;
@@ -41,7 +41,7 @@ export class App extends BaseResource{
 	}
 
 	get fullUrl():string{
-		let url = applicationConfig.baseUrl.split("//");
+		let url = AppConfig.baseUrl.split("//");
 		return url[0] + "//" + this.subdomain + "." + url[1];
 	}
 

@@ -35,18 +35,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { applicationConfig } from '@/app-config';
 import { isNullOrUndefined } from 'util';
 import { stringHasWhiteSpace } from '@/functions/string';
 import { handlerService } from '@/services/handler-service';
 import { Handler } from '@/classes/handler';
+import { BaseRoutes } from '@/classes/api';
 const {codemirror} = require('vue-codemirror')
 
 export default Vue.extend({
 	data(){
 		return {
 			valid:false,
-			apiUrl:applicationConfig.apiUrl + "/exec-handler",
+			apiUrl:BaseRoutes.HANDLER_EXEC,
 			pathRules:[
 				(v:string) => !isNullOrUndefined(v) || "Path may not be empty",
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",

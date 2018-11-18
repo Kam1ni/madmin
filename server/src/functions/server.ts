@@ -1,6 +1,6 @@
 import { App, IStaticApp } from "../models/app";
 import { Request, Response } from "express";
-import { resolve } from "path";
+import { resolve, join } from "path";
 import * as fs from "fs";
 import { promisify } from "util";
 
@@ -29,7 +29,7 @@ export async function server(app:App, req:Request,res:Response){
 	path = decodeURIComponent(path)
 	let config = (<IStaticApp>app.config);
 	let basePath = config.path;
-	let fullPath = resolve(basePath, path);
+	let fullPath = join(basePath, path);
 	let pathStats = await lstatAsync(fullPath);
 	if (pathStats.isFile()){
 		return res.sendFile(fullPath);

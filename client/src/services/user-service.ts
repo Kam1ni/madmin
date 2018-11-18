@@ -1,11 +1,11 @@
 import Axios from "axios";
 import { User } from '@/classes/user';
-import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
 import Vue from 'vue';
 import { BaseRoutes } from '@/classes/api';
 
 const API_URL = BaseRoutes.USER;
+console.log(API_URL)
 export const userService = new Vue({
 	data(){
 		return {
@@ -14,7 +14,9 @@ export const userService = new Vue({
 	},
 	methods:{
 		async getUsers():Promise<User[]>{
+			console.log("GETTING USERS", {API_URL});
 			let response = await Axios.get(API_URL, {headers:HeaderBuilder.getDefaultHeaders()});
+			console.log("GOT USERS")
 			this.users = (<any[]>response.data).map(d=>new User(d));
 			return this.users;
 		},
@@ -29,8 +31,5 @@ export const userService = new Vue({
 			}
 			return user;
 		}
-	},
-	created(){
-		this.getUsers();
 	}
 });

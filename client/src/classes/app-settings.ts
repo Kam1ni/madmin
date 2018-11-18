@@ -1,4 +1,4 @@
-import { configService } from '@/services/config-service';
+import { ConfigService } from '@/services/config-service';
 
 export class AppSettings{
 	defaultRedirect:string;
@@ -10,6 +10,6 @@ export class AppSettings{
 	}
 
 	static async updateDefaultRedirect(newRedirect:string){
-		return await configService.updateSetting("defaultRedirect", newRedirect);
+		return await ConfigService.updateSetting("defaultRedirect", newRedirect);
 	}
 }

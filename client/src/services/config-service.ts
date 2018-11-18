@@ -1,28 +1,26 @@
 import { BehaviorSubject } from '../../node_modules/rxjs';
 import { AppSettings } from '@/classes/app-settings';
 import Axios from '../../node_modules/axios';
-import { applicationConfig } from '@/app-config';
 import { HeaderBuilder } from '@/classes/header-builder';
+import { BaseRoutes } from '@/classes/api';
+import Vue from 'vue';
 
-export class ConfigService{
-	static readonly API_URL:string = applicationConfig.apiUrl + "/config";
-
-	appSettings:AppSettings = null;
-
-	constructor(){
-		this.getSettings();
+const API_URL:string = BaseRoutes.CONFIG;
+export const ConfigService = new Vue({
+	data(){
+		return {
+			appSettings:<AppSettings|null>null
+		}
+	},
+	methods:{
+		async getSettings():Promise<AppSettings>{
+			let result = await Axios.get(API_URL, {headers:HeaderBuilder.getDefaultHeaders()});
+			this.appSettings = new AppSettings(result.data);
+			return this.appSettings;
+		},
+		async updateSetting(name:string, value:any){
+			await Axios.put(API_URL + "/" + name, {value}, {headers:HeaderBuilder.getDefaultHeaders()});
+			(<any>this.appSettings)[name] = value;
+		}
 	}
-
-	async getSettings():Promise<AppSettings>{
-		let result = await Axios.get(ConfigService.API_URL, {headers:HeaderBuilder.getDefaultHeaders()});
-		this.appSettings = new AppSettings(result.data);
-		return this.appSettings;
-	}
-
-	async updateSetting(name:string, value:any){
-		await Axios.put(ConfigService.API_URL + "/" + name, {value}, {headers:HeaderBuilder.getDefaultHeaders()});
-		(<any>this.appSettings)[name] = value;
-	}
-}
-
-export const configService = new ConfigService();
+});

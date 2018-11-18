@@ -29,7 +29,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { applicationConfig } from '@/app-config';
 import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '@/functions/string';
 import { appService } from '@/services/app-service';
 import Static from './Static.vue';

@@ -34,14 +34,14 @@ import Application from './Application.vue';
 import Users from './Users.vue';
 import Profile from './Profile.vue';
 import { authService } from '@/services/auth-service';
-import { configService } from '@/services/config-service';
 import { AppSettings } from '@/classes/app-settings';
+import { ConfigService } from '@/services/config-service';
 
 export default Vue.extend({
     data(){
         return {
             authService:authService,
-            configService:configService,
+            configService:ConfigService,
         };
     },
     components:{

@@ -123,6 +123,9 @@ export abstract class BaseQuery<T extends BaseModel<T>>{
 				if (err){
 					return reject(err);
 				}
+				if (!doc){
+					resolve(null)
+				}
 				resolve(new this.type(doc));
 			});
 		});

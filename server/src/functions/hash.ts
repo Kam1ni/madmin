@@ -15,7 +15,7 @@ export async function hashCompare(input:string, hash:string, maxRounds:number = 
 		for (let i = 0; i < maxRounds; i++){
 			input = md5(input);
 			if (input == hash){
-				return true;
+				resolve(true);
 			}
 		}
 		resolve(false)

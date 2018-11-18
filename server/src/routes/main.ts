@@ -1,6 +1,6 @@
 import {Router} from "express";
 import * as express from "express";
-import { getConfig } from "../config";
+import { getConfig, getClientConfig } from "../config";
 import { authRouter } from "./auth";
 import { authenticate } from "../functions/auth";
 import { appRouter } from "./app";
@@ -11,25 +11,36 @@ import { proxy } from "../functions/proxy";
 import { handlerRouter } from "./handler";
 import { Handler, HandlerQuery } from "../models/handler";
 import { configRouter } from "./config";
-import { AppSetting, SETTINGS, AppSettingQuery } from "../models/app-setting";
+import { AppSetting, SETTINGS, AppSettingQuery, getSettings } from "../models/app-setting";
 import { userRouter } from "./user";
+import * as serveStatic from "serve-static"
+import { resolve, join, dirname } from "path";
+
+const mainFilePath = dirname(require.main.filename)
+console.log(mainFilePath)
+console.log(join(mainFilePath, "/public"))
+const ClientInterfaceServe = serveStatic(join(mainFilePath, "/public"))
 
 export const mainRouter = Router();
 
 mainRouter.all("/*", async (req,res,next)=>{
 	let config = getConfig();
 	if (req.hostname == `${config.clientDomain}.${config.baseUrl}`){
-		return next();
+		console.log("MAIN");
+		if (req.path == "/manifest"){
+			return res.json(getClientConfig())
+		}
+		return ClientInterfaceServe(req, res, next);
 	}
 	else if(req.hostname == config.baseUrl){
-		let redirectUrl = await AppSettingQuery.default.findOne({name:SETTINGS.DefaultRedirect, enabled:true});
-		return res.redirect("http://" + redirectUrl.value + "." + req.hostname + ":" + getConfig().port);
+		console.log("NEXT");
+		return next();
 	}
 	else {
 		let domains = req.hostname.split("."+config.baseUrl);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);
-		let app = await AppQuery.default.findOne({subdomain,enabled:true});
+		let app = await AppQuery.findOne({subdomain,enabled:true});
 		if (!app){
 			return next(new HttpError("Subdomain does not exist", 500));
 		}
@@ -40,8 +51,6 @@ mainRouter.all("/*", async (req,res,next)=>{
 			return proxy(app, req, res);
 		}
 	}
-
-	res.status(400).json({error:"Something not yet implemented"})
 });
 
 mainRouter.use("/*", express.static("../../client"));
@@ -49,7 +58,7 @@ mainRouter.use("/auth", authRouter);
 
 mainRouter.use("/exec-handler/*", async function(req,res,next){
 	let path = req.originalUrl.split("/exec-handler").join("");
-	let handlers = await HandlerQuery.default.find({path:path, methods:req.method, enabled:true});
+	let handlers = await HandlerQuery.find({path:path, methods:req.method, enabled:true});
 	for (let handler of handlers){
 		await handler.execute(req,res);
 	}
@@ -57,7 +66,6 @@ mainRouter.use("/exec-handler/*", async function(req,res,next){
 		res.send("handled")
 	}
 });
-
 
 mainRouter.use("/*", async (req,res,next)=>{
 	try{
@@ -72,6 +80,11 @@ mainRouter.use("/user", userRouter);
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
 mainRouter.use("/config", configRouter);
+
+mainRouter.use("/*", async (req,res,next)=>{
+	let result = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});
+	res.redirect(result.value);
+});
 
 mainRouter.use("/*", (err, req, res, next)=>{
 	let error = <HttpError> err;

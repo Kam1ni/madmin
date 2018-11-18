@@ -21,15 +21,16 @@ export class AppSetting extends BaseModel<AppSetting>{
 	}
 }
 
-export class AppSettingQuery extends BaseQuery<AppSetting>{
+class AppSettingQueryClass extends BaseQuery<AppSetting>{
 	protected type: new (data: any) => AppSetting = AppSetting;
 	protected db: Nedb = db;
-	static default = new AppSettingQuery();
+	static default = new AppSettingQueryClass();
 }
 
+export const AppSettingQuery = AppSettingQueryClass.default
 
 export async function getSettings(){
-	let configs = await AppSettingQuery.default.find();
+	let configs = await AppSettingQuery.find();
 	let result = {};
 	for (let config of configs){
 		result[config.name] = config.value;
@@ -40,7 +41,7 @@ export async function getSettings(){
 export async function initialiseSettings(){
 	let settings = require("../assets/settings.json");
 	async function createSettingIfNotExists(name:string, defaultValue:any, readonly:boolean = false){
-		let setting = await AppSettingQuery.default.findOne({name});
+		let setting = await AppSettingQuery.findOne({name});
 		if (!setting){
 			setting = new AppSetting({name, value:defaultValue, readonly});
 			await setting.save();
@@ -50,7 +51,7 @@ export async function initialiseSettings(){
 	await createSettingIfNotExists(SETTINGS.DefaultRedirect, "madmin");
 
 	await createSettingIfNotExists(SETTINGS.DbVersion, settings.DbVersion);
-	let versionSetting = await AppSettingQuery.default.findOne({name:SETTINGS.DbVersion});
+	let versionSetting = await AppSettingQuery.findOne({name:SETTINGS.DbVersion});
 	if (settings.version != versionSetting.value){
 		// TODO: CREATE MIGRATION SERVICE
 		console.warn("Migration required");
