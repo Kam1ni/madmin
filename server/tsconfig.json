@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es6",
+		"outDir": "./dist",
+		"mapRoot": "./dist",
+		"sourceRoot": "./src",
+		"sourceMap": true,
+		"removeComments": true
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.json"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
