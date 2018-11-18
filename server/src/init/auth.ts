@@ -25,7 +25,6 @@ async function createFirstUser(){
 			}
 			while(!passwordsMatch){
 				let result:any = await createPassword();
-				console.log("GOT RESULT", result)
 				if (result.password != result.repeatPassword){
 					console.log("Passwords dont match");
 					console.log("Retry");
