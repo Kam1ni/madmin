@@ -17,9 +17,8 @@ import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
 
 const mainFilePath = dirname(require.main.filename)
-console.log(mainFilePath)
-console.log(join(mainFilePath, "/public"))
-const ClientInterfaceServe = serveStatic(join(mainFilePath, "/public"))
+const clientPath = join(mainFilePath, "/public")
+const ClientInterfaceServe = serveStatic(clientPath)
 
 export const mainRouter = Router();
 
@@ -29,7 +28,9 @@ mainRouter.all("/*", async (req,res,next)=>{
 		if (req.path == "/manifest"){
 			return res.json(getClientConfig())
 		}
-		return ClientInterfaceServe(req, res, next);
+		return ClientInterfaceServe(req, res, ()=>{
+			res.sendFile(join(clientPath, "/index.html"))
+		});
 	}
 	else if(req.hostname == config.baseUrl){
 		return next();

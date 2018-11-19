@@ -15,6 +15,7 @@ import UserEdit from '@/components/settings/UserEdit.vue';
 Vue.use(Router)
 
 const router = new Router({
+	mode:"history",
 	routes: [
 		{
 			path: '/',
