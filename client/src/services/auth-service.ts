@@ -57,6 +57,9 @@ export const authService = new Vue({
 		async setNewPassword(password:string):Promise<any>{
 			let result = await Axios.post(API_URL + "/set-new-password", {password}, {headers:HeaderBuilder.getDefaultHeaders()});
 		},
+		async changePassword(oldPassword:string, newPassword:string):Promise<any>{
+			let result = await Axios.post(`${API_URL}/change-password`, {oldPassword, newPassword}, {headers:HeaderBuilder.getDefaultHeaders()});
+		},
 		async logout(){
 			await Axios.post(API_URL + "/logout", null, {headers:HeaderBuilder.getDefaultHeaders()});
 			this.user = null;
