@@ -7,6 +7,7 @@ const VueCodemirror = require("vue-codemirror");
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/base16-dark.css'
 import 'codemirror/mode/javascript/javascript'
+import "material-design-icons-iconfont/dist/material-design-icons.css"
 
 export function appInit(){
 	Vue.config.productionTip = false

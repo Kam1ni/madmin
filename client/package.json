@@ -9,6 +9,7 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"clientjs": "^0.1.11",
+		"material-design-icons-iconfont": "^4.0.2",
 		"rxjs": "^6.2.1",
 		"vue": "^2.5.16",
 		"vue-class-component": "^6.0.0",

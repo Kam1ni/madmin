@@ -48,8 +48,8 @@ export const authService = new Vue({
 			}catch(err){
 				let ex:AxiosResponse = err;
 				if (ex.status == 400 && ex.data.data == "NO PASSWORD"){
-					this.token = ex.data.token;
-					this.user = new User(ex.data);
+					this.token = null;
+					this.user = null;
 				}
 				throw err;
 			}
@@ -86,13 +86,13 @@ export const authService = new Vue({
 		}, (error:AxiosError)=>{
 			// LOGOUT if token invalid
 			if (!error.response){
-				return error;
+				throw error;
 			}
 			if (error.response.status == 400 && error.response.data.message == "Invalid token"){
 				this.user = null;
 				this.token = null;
 			}
-			return error;
+			throw error;
 		})
 		this.token = getLocalStorage(LOCAL_STORAGE_TOKEN);
 		if (this.isLoggedIn){

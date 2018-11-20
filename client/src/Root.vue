@@ -1,5 +1,5 @@
 <template>
-	<Login v-if="!authService.user"></Login>
+	<Login v-if="!authService.isLoggedIn"></Login>
 	<App v-else></App>
 </template>
 

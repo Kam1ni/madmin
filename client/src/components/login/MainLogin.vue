@@ -44,6 +44,7 @@ export default Vue.extend({
 				await authService.login(this.username, this.password);
 			}catch(err){
 				let ex:AxiosError = err;
+				console.log(ex);
 				if (ex.response){
 					this.errorMessage = ex.response.data.message || "INVALID LOGIN";
 				}else{
