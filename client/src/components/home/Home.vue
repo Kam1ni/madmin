@@ -4,9 +4,16 @@
 			<img src="@/assets/logo.png" alt="Vuetify.js" class="mb-5">
 		</v-layout>
 		<v-layout v-else>
-			<v-flex xs12 sm6 md4>
-				<v-card v-for="(app,i) in apps" :key="i">
+			<v-flex xs12 sm6 md4 v-for="(app,i) in apps" :key="i" wrap>
+				<v-card>
 					<v-card-title>{{app.subdomain}}</v-card-title>
+					<v-card-text>
+						{{app.fullUrl}}
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer/>
+						<v-btn flat @click="goTo(app)">OPEN</v-btn>
+					</v-card-actions>
 				</v-card>
 			</v-flex>
 		</v-layout>
@@ -21,6 +28,11 @@ export default Vue.extend({
 	data(){
 		return{
 			apps:<App[]>[]
+		}
+	},
+	methods:{
+		goTo(app:App){
+			window.open(app.fullUrl);
 		}
 	},
 	async mounted(){
