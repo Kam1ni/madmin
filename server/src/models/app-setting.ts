@@ -38,7 +38,7 @@ export async function getSettings(){
 	return result;
 }
 
-export async function initialiseSettings(){
+export async function initializeSettings(){
 	let settings = require("../assets/settings.json");
 	async function createSettingIfNotExists(name:string, defaultValue:any, readonly:boolean = false){
 		let setting = await AppSettingQuery.findOne({name});
