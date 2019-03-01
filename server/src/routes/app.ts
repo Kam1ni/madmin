@@ -24,7 +24,8 @@ appRouter.post("/", async (req,res,next)=>{
 	if (app.type == "static"){
 		app.config = {
 			path: req.body.config.path,
-			listFiles: req.body.config.listFiles
+			listFiles: req.body.config.listFiles,
+			error404File: req.body.config.error404File
 		}
 	}else if (app.type == "proxy"){
 		app.config = {
@@ -75,7 +76,8 @@ appRouter.put("/:id", async (req,res,next)=>{
 	if (app.type == "static"){
 		app.config = {
 			path: req.body.config.path,
-			listFiles: req.body.config.listFiles
+			listFiles: req.body.config.listFiles,
+			error404File: req.body.config.error404File
 		}
 	}else if (app.type == "proxy"){
 		app.config = {

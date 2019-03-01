@@ -6,6 +6,9 @@
 		<v-flex xs12 md6 xl8>
 			<v-checkbox label="List files in directories" v-model="app.config.listFiles"></v-checkbox>
 		</v-flex>
+		<v-flex xs12 md6 xl4>
+			<v-text-field label="404 file" v-model="app.config.error404File"></v-text-field>
+		</v-flex>
 	</v-layout>
 </template>
 

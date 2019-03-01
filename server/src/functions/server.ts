@@ -23,6 +23,18 @@ async function listFiles(host:string, urlPath:string, path:string, res:Response)
 export async function server(app:App, req:Request,res:Response){
 	let config = (<IStaticApp>app.config);
 	let serve = serveStatic(config.path, {fallthrough:false});
+	let basePath = config.path;
+
+	async function return404(){
+		if (config.error404File) {
+			let path404 = join(basePath, config.error404File);
+			if (await existsAsync(path404)) {
+				return res.sendFile(path404);
+			}
+		}
+		return res.status(404).send("FILE DOES NOT EXIST");
+	}
+
 	serve(req, res, async (err)=>{
 		console.log(err);
 		if (!err) return;
@@ -34,20 +46,18 @@ export async function server(app:App, req:Request,res:Response){
 			path = "/" + path;
 		}
 		path = decodeURIComponent(path)
-		let basePath = config.path;
 		let fullPath = join(basePath, path);
 		if (!await existsAsync(fullPath)){
-			return res.status(404).send("FILE DOES NOT EXIST");
+			return return404();
 		}
 		let pathStats = await lstatAsync(fullPath);
 		if (pathStats.isDirectory){
 			if (!config.listFiles){
-				return res.status(404).send("Don't mind us. Nothing to see here :). YES THIS IS A 404")
+				return return404();
 			}
-			
 			let host = req.protocol + "://" + req.get("host");
 			return listFiles(host, path, fullPath, res);
 		}
-		return res.status(404).send("FILE DOES NOT EXIST");
+		return return404();
 	})
 }

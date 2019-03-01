@@ -1,3 +1,3 @@
 {
-	"baseUrl":"dev.winfakt.be:80"
+	"baseUrl":"localhost.kami-dev.eu:3000"
 }

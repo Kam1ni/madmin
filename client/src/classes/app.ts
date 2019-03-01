@@ -7,6 +7,7 @@ import { AppConfig } from '@/conifg';
 export interface IStaticAppConfig{
 	path:string;
 	listFiles:boolean;
+	error404File?:string;
 }
 
 export interface IProxyAppConfig{

@@ -13,6 +13,7 @@ export interface IProxyApp {
 export interface IStaticApp {
 	path:string;
 	listFiles:boolean;
+	error404File?:string;
 }
 
 enum AppTypes{
@@ -43,8 +44,14 @@ export class App extends BaseModel<App>{
 		}
 
 		if (this.type == "static"){
-			if ((<IStaticApp>this.config).path == null){
+			let conf = this.config as IStaticApp;
+			if (conf.path == null){
 				return "Invalid configuration";
+			}
+			if (conf.error404File){
+				if (conf.error404File.match(/^\s*$/)){
+					conf.error404File = null;
+				}
 			}
 		}
 		else if (this.type == "proxy"){
