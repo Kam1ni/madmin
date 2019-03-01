@@ -27,7 +27,7 @@
 import Vue from 'vue'
 import { setTimeout } from 'timers';
 import { authService } from '../../services/auth-service';
-import { AxiosError } from '../../../../server/node_modules/axios';
+import { AxiosError } from 'axios';
 export default Vue.extend({
 	data(){
 		return {
