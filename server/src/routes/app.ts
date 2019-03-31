@@ -20,6 +20,7 @@ appRouter.post("/", async (req,res,next)=>{
 	let app = new App();
 	app.subdomain = req.body.subdomain;
 	app.type = req.body.type;
+	app.domainName = req.body.domainName;
 	app.enabled = true;
 	if (app.type == "static"){
 		app.config = {
@@ -73,6 +74,7 @@ appRouter.put("/:id", async (req,res,next)=>{
 
 	app.subdomain = req.body.subdomain;
 	app.type = req.body.type;
+	app.domainName = req.body.domainName;
 	if (app.type == "static"){
 		app.config = {
 			path: req.body.config.path,

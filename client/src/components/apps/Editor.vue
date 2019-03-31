@@ -2,6 +2,7 @@
 	<v-card>
 		<v-form ref="form" v-model="valid">
 			<v-card-text>
+
 				<v-layout row wrap align-center>
 					<v-flex xs12 md6 xl4 column>
 						<v-text-field label="Subdomain" v-model="app.subdomain" :rules="subdomainRules"></v-text-field>
@@ -10,14 +11,24 @@
 						{{fullDomain}}
 					</v-flex>
 				</v-layout>
+
+				<v-layout>
+					<v-flex xs12 md6 xl4 column>
+						<v-text-field label="Domain name (optional)" v-model="app.domainName"></v-text-field>
+					</v-flex>
+				</v-layout>
+
 				<v-layout row wrap>
 					<v-flex xs12 md6 xl4 column>
 						<v-select label="App type" :items="appTypes" v-model="app.type" :rules="typeRules"></v-select>
 					</v-flex>
 				</v-layout>
+
 				<Static :app="app" v-if="app.type == 'static'"></Static>
 				<Proxy :app="app" v-else-if="app.type == 'proxy'"></Proxy>
+
 			</v-card-text>
+
 			<v-card-actions>
 				<v-spacer/>
 				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>

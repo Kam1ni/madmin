@@ -22,6 +22,8 @@ const ClientInterfaceServe = serveStatic(clientPath)
 
 export const mainRouter = Router();
 
+const mainDomainRegex = new RegExp(getConfig().baseUrl + "$")
+
 mainRouter.all("/*", async (req,res,next)=>{
 	let config = getConfig();
 	if (req.hostname == `${config.clientDomain}.${config.baseUrl}`){
@@ -39,9 +41,14 @@ mainRouter.all("/*", async (req,res,next)=>{
 		let domains = req.hostname.split("."+config.baseUrl);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);
-		let app = await AppQuery.findOne({subdomain,enabled:true});
+		console.log(req.hostname);
+		if (req.hostname.match(mainDomainRegex)){
+			var app = await AppQuery.findOne({subdomain,enabled:true});
+		}else{
+			var app = await AppQuery.findOne({domainName:req.hostname});
+		}
 		if (!app){
-			return next(new HttpError("Subdomain does not exist", 500));
+			return next(new HttpError("Domain does not exist", 500));
 		}
 		if (app.type == "static"){
 			return server(app, req, res);

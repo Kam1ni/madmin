@@ -19,6 +19,7 @@ export class App extends BaseResource{
 	enabled:boolean = true;
 	type:"static"|"proxy";
 	config:IProxyAppConfig|IStaticAppConfig;
+	domainName:string|null;
 
 	get enabledWeb():boolean{
 		return this.enabled;
@@ -39,6 +40,7 @@ export class App extends BaseResource{
 		this.enabled = data.enabled == null ? true : data.enabled;
 		this.type = data.type;
 		this.config = data.config;
+		this.domainName = data.domainName;
 	}
 
 	get fullUrl():string{

@@ -29,6 +29,7 @@ export class App extends BaseModel<App>{
 	]
 	
 	subdomain:string;
+	domainName?:string;
 	type:AppTypes;
 	config:IProxyApp|IStaticApp;
 	enabled:boolean;
@@ -63,6 +64,11 @@ export class App extends BaseModel<App>{
 		console.log({app});
 		if (app != null){
 			return `subdomain "${this.subdomain}" already in use`
+		}
+		if (/^\s*$/.exec(this.domainName)){
+			this.domainName = null;
+		}else{
+			app = await AppQuery.findOne({domainName:this.domainName, _id:{$ne:this._id}});
 		}
 		return null;
 	}
