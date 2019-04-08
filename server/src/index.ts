@@ -12,8 +12,9 @@ async function main(){
 	
 	const app = express();
 	app.use(cors());
-	app.use(bodyParser.json());
+	app.use(bodyParser.json({limit:"50mb", type:"application/json"}));
 	app.use(bodyParser.urlencoded({extended:true}));
+	app.use(bodyParser());
 
 	const mainRouter = require("./routes/main").mainRouter;
 	app.use(mainRouter);
