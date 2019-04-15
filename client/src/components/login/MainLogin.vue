@@ -38,7 +38,6 @@ export default Vue.extend({
 				return this.errorMessage = "Login values are invalid";
 			}
 			this.logingIn = true;
-			console.log("login");
 			try{
 				this.errorMessage = null;
 				await authService.login(this.username, this.password);
