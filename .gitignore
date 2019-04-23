@@ -62,3 +62,5 @@ typings/
 /server-old/
 /client-old/
 *.code-workspace
+
+.vscode
