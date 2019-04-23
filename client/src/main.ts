@@ -7,6 +7,6 @@ Axios.get("/manifest").then(response=>{
 	}
 	let data = <IManifest>response.data;
 	console.log(data.baseUrl)
-	AppConfig.baseUrl = "http://" + data.baseUrl;
+	AppConfig.baseUrl = location.protocol + "//" + data.baseUrl;
 	require("./app-init").appInit();
 })
