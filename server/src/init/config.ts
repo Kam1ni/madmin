@@ -13,7 +13,10 @@ const defaultConfig:IConfig = {
 	saltRounds: 10,
 	tokenSecret: md5(randomstring.generate()),
 	clientDomain: "madmin",
-	dataPath:"./data/"
+	dataPath:"./data/",
+	redirectHttpToHttpsPort:null,
+	sslCert:null,
+	sslKey:null
 }
 
 export function configInit(){

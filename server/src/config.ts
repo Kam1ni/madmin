@@ -8,6 +8,9 @@ export interface IConfig {
 	saltRounds:number;
 	tokenSecret:string;
 	clientDomain:string;
+	sslKey:string;
+	sslCert:string;
+	redirectHttpToHttpsPort:number;
 }
 
 export interface IClientConfig {
