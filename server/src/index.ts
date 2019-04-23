@@ -32,7 +32,7 @@ async function main(){
 			redirectApp.use(cors());
 			redirectApp.use(function(req, res){
 				let hostName = req.hostname.split(":")[0];
-				res.redirect(`https://${hostName}:${config.port}/${req.path}`);
+				res.redirect(`https://${hostName}:${config.port}${req.path}`);
 			})
 			const redirectServer = http.createServer(redirectApp);
 			redirectServer.listen(config.redirectHttpToHttpsPort, config.host, function(){
