@@ -9,4 +9,4 @@ Axios.get("/manifest").then(response=>{
 	console.log(data.baseUrl)
 	AppConfig.baseUrl = location.protocol + "//" + data.baseUrl;
 	require("./app-init").appInit();
-})
+});
