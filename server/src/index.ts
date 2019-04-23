@@ -29,12 +29,12 @@ async function main(){
 	}else{
 		if (config.redirectHttpToHttpsPort){
 			const redirectApp = express();
-			app.use(cors());
-			app.use(function(req, res){
+			redirectApp.use(cors());
+			redirectApp.use(function(req, res){
 				let hostName = req.hostname.split(":")[0];
 				res.redirect(`https://${hostName}:${config.port}/${req.path}`);
 			})
-			const redirectServer = http.createServer(app);
+			const redirectServer = http.createServer(redirectApp);
 			redirectServer.listen(config.redirectHttpToHttpsPort, config.host, function(){
 				console.log(`Redirect to https server started at ${config.host}:${config.redirectHttpToHttpsPort}`);
 			})
