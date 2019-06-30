@@ -1,7 +1,7 @@
 <template>
 	<v-container fluid grid-list-md>
 		<v-layout row wrap justify-center>
-			<v-flex xs12 md10 lg6>
+			<v-flex xs12>
 				<v-subheader>New Handler</v-subheader>
 				<Editor :handler="handler"/>
 			</v-flex>

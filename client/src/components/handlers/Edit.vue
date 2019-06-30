@@ -1,10 +1,10 @@
 <template>
-	<v-container fluid grid-list-md fill-height>
+	<v-container grid-list-md fill-height>
 		<v-layout align-center justify-center v-if="handler == null">
 			<v-progress-circular color="accent" :indeterminate="true"></v-progress-circular>
 		</v-layout>
 		<v-layout row wrap justify-center v-else>
-			<v-flex xs12 md10 lg6>
+			<v-flex xs12>
 				<v-subheader>Edit Handler</v-subheader>
 				<Editor :handler="handler"/>
 			</v-flex>

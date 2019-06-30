@@ -58,7 +58,7 @@ export default Vue.extend({
 	computed:{
 		fullUrl():string{
 			if (!this.handler.path){
-				return "";
+				return this.apiUrl+"/...";
 			}
 			if (!this.handler.path.match(/^\//)){
 				return this.apiUrl + "/" + this.handler.path
@@ -81,3 +81,9 @@ export default Vue.extend({
 	}
 })
 </script>
+
+<style>
+.CodeMirror-scroll{
+	z-index: 1;
+}
+</style>
