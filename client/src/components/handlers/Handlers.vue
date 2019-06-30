@@ -79,9 +79,6 @@ export default Vue.extend({
 			return this.handlerService.handlers;
 		}
 	},
-	mounted(){
-		handlerService.getHandlers();
-	},
 	methods:{
 		deleteClicked(handler:Handler){
 			this.toDeleteHandler = handler;
@@ -99,6 +96,9 @@ export default Vue.extend({
 				return "red";
 			}
 		}
+	},
+	mounted(){
+		handlerService.getHandlers();
 	}
 })
 </script>

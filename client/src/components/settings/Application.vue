@@ -45,7 +45,12 @@ export default Vue.extend({
             defaultRedirectText:this.settings.defaultRedirect
         };
     },
-    props:["settings"],
+    props:{
+        settings:{
+            type:Object as ()=>AppSettings,
+            required:true
+        }
+    },
     methods:{
         async saveNewDefaultRedirect(){
             await AppSettings.updateDefaultRedirect(this.defaultRedirectText);

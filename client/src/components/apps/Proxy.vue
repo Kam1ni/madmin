@@ -9,6 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '@/functions/string';
+import { App } from '@/classes/app';
 
 export default Vue.extend({
 	data(){
@@ -19,7 +20,12 @@ export default Vue.extend({
 			]
 		}
 	},
-	props:["app"]
+	props:{
+		app:{
+			type:Object as ()=>App,
+			required:true
+		}
+	}
 })
 </script>
 

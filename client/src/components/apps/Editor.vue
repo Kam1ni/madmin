@@ -72,7 +72,12 @@ export default Vue.extend({
 			return (<App>this.app).fullUrl;
 		}
 	},
-	props:["app"],
+	props:{
+		app:{
+			type:Object as ()=>App,
+			required:true
+		}
+	},
 	methods:{
 		submit(){
 			this.$emit("submit", this.app);

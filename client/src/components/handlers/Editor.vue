@@ -75,7 +75,12 @@ export default Vue.extend({
 			this.$router.go(-1);
 		}
 	},
-	props:["handler"],
+	props:{
+		handler:{
+			type:Object as ()=>Handler,
+			required:true
+		}
+	},
 	components:{
 		codemirror
 	}
