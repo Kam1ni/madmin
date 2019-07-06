@@ -15,6 +15,7 @@ import { AppSetting, SETTINGS, AppSettingQuery, getSettings } from "../models/ap
 import { userRouter } from "./user";
 import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
+import { scriptRouter } from './script';
 
 const mainFilePath = dirname(require.main.filename)
 const clientPath = join(mainFilePath, "/public")
@@ -86,6 +87,7 @@ mainRouter.use("/user", userRouter);
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
 mainRouter.use("/config", configRouter);
+mainRouter.use("/script", scriptRouter)
 
 mainRouter.use("/*", async (req,res,next)=>{
 	let result = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});

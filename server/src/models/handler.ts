@@ -4,8 +4,7 @@ import * as path from "path";
 import { getConfig } from "../config";
 import { BaseModel, BaseQuery } from "./base-model";
 import { exec } from "child_process";
-
-const AsyncFunction = new Function("return Object.getPrototypeOf(async function(){}).constructor")();
+import { AsyncFunction } from "../functions/async-function"
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "handler.db"), autoload:true})
 const ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
