@@ -3,7 +3,7 @@ import * as Nedb from "nedb";
 import * as path from "path";
 import { getConfig } from "../config";
 import { AsyncFunction } from "../functions/async-function"
-import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../../../client/src/functions/string';
+import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../functions/string';
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "script.db"), autoload:true})
 
@@ -38,7 +38,8 @@ export class Script extends BaseModel<Script> {
 			return "Name may not contain whitespace characters."
 		}
 
-		let foundScript = ScriptQuery.findOne({_id:{$ne:this._id}, name:this.name});
+		let foundScript = await ScriptQuery.findOne({_id:{$ne:this._id}, name:this.name});
+		console.log(foundScript);
 		if (foundScript != null){
 			return `Name must be unique. ${this.name} is already in use.`
 		}

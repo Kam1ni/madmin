@@ -11,6 +11,9 @@ import Settings from '@/components/settings/Settings.vue';
 import SettingsList from '@/components/settings/List.vue';
 import SettingsTokens from '@/components/settings/Tokens.vue';
 import UserEdit from '@/components/settings/UserEdit.vue';
+import Scripts from "@/components/scripts/Scripts.vue";
+import ScriptEdit from "@/components/scripts/Edit.vue";
+import ScriptNew from "@/components/scripts/New.vue";
 
 Vue.use(Router)
 
@@ -47,6 +50,19 @@ const router = new Router({
 		{
 			path: '/handlers/edit/:id',
 			component: HandlerEdit
+		},
+		{
+			path: '/scripts',
+			name: "Scripts",
+			component: Scripts
+		},
+		{
+			path: '/scripts/new',
+			component:ScriptNew
+		},
+		{
+			path: '/scripts/edit/:id',
+			component:ScriptEdit
 		},
 		{
 			path: '/settings',

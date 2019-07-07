@@ -55,6 +55,12 @@ export default Vue.extend({
 			allowedMethods:Handler.ALLOWED_METHODS
 		}
 	},
+	props:{
+		handler:{
+			type:Object as ()=>Handler,
+			required:true
+		}
+	},
 	computed:{
 		fullUrl():string{
 			if (!this.handler.path){
@@ -73,12 +79,6 @@ export default Vue.extend({
 		async save(){
 			await this.handler.save();
 			this.$router.go(-1);
-		}
-	},
-	props:{
-		handler:{
-			type:Object as ()=>Handler,
-			required:true
 		}
 	},
 	components:{

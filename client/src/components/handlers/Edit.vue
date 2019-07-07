@@ -6,7 +6,7 @@
 		<v-layout row wrap justify-center v-else>
 			<v-flex xs12>
 				<v-subheader>Edit Handler</v-subheader>
-				<Editor :handler="handler"/>
+				<app-editor :handler="handler"/>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Handler } from '@/classes/handler';
-import Editor from './Editor.vue';
+import AppEditor from './Editor.vue';
 import { handlerService } from '@/services/handler-service';
 
 export default Vue.extend({
@@ -25,7 +25,7 @@ export default Vue.extend({
 		}
 	},
 	components:{
-		Editor
+		AppEditor
 	},
 	async mounted(){
 		this.handler = await handlerService.getHandler(this.$route.params.id);

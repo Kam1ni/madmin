@@ -17,6 +17,8 @@ import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
 import { scriptRouter } from './script';
 
+console.log("main router")
+
 const mainFilePath = dirname(require.main.filename)
 const clientPath = join(mainFilePath, "/public")
 const ClientInterfaceServe = serveStatic(clientPath)
@@ -86,8 +88,8 @@ mainRouter.use("/*", async (req,res,next)=>{
 mainRouter.use("/user", userRouter);
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
-mainRouter.use("/config", configRouter);
 mainRouter.use("/script", scriptRouter)
+mainRouter.use("/config", configRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	let result = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});

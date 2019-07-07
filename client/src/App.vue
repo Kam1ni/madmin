@@ -43,8 +43,12 @@ export default Vue.extend({
 					title: 'Apps'
 				},
 				{
-					icon: 'memory',
+					icon: 'device_hub',
 					title: 'Handlers'
+				},
+				{
+					icon: 'memory',
+					title: 'Scripts'
 				},
 				{
 					icon: 'settings',

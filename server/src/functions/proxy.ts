@@ -2,7 +2,7 @@ import { IProxyApp, App } from "../models/app";
 import { Request, Response } from "express";
 import * as http from "http";
 import * as url from "url";
-import Axios, { AxiosRequestConfig, AxiosError } from "axios";
+import Axios, { AxiosRequestConfig, AxiosError, Method } from "axios";
 
 export async function proxy(app:App, req:Request, res:Response){
 	try{
@@ -10,7 +10,7 @@ export async function proxy(app:App, req:Request, res:Response){
 		let parsedUrl = url.parse(config.url + req.path);
 		let options:AxiosRequestConfig = {
 			url: parsedUrl.href,
-			method:req.method,
+			method:req.method as Method,
 			data:req.body,
 			headers:req.headers,
 			responseType:"arraybuffer"
