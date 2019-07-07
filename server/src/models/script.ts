@@ -19,15 +19,15 @@ export class Script extends BaseModel<Script> {
 
 	async execute(args:any[]):Promise<number>{
 		let fn = this.getFunction();
-		let result = await fn(args);
+		let result = await fn(require, args);
 		if (typeof(result) == "number"){
 			return result;
 		}
 		return 0;
 	}
 
-	getFunction():(args:any[])=>Promise<number|void>{
-		return new AsyncFunction("args", this.code);
+	getFunction():(require:any, args:any[])=>Promise<number|void>{
+		return new AsyncFunction("require", "args", this.code);
 	}
 
 	async validate():Promise<string>{
