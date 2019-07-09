@@ -21,7 +21,7 @@
 					</v-flex>
 				</v-layout>
 			</v-card-text>
-			async function(req, res, require){
+			async function(madmin, req, res, require){
 			<codemirror v-model="handler.code"></codemirror>
 			}
 			<v-card-actions>

@@ -6,7 +6,7 @@
 					<v-text-field v-model="script.name" label="Name" :rules="nameRules"></v-text-field>
 				</v-flex>
 			</v-card-text>
-			async function(require, ...args){
+			async function(madmin, require, ...args){
 			<codemirror v-model="script.code"></codemirror>
 			}
 			<v-card-actions>

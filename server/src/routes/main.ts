@@ -16,6 +16,7 @@ import { userRouter } from "./user";
 import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
 import { scriptRouter } from './script';
+import { madminScriptRefInstance } from '../classes/madmin-script-ref';
 
 console.log("main router")
 
@@ -69,7 +70,7 @@ mainRouter.use("/exec-handler/*", async function(req,res,next){
 	let path = req.originalUrl.split("/exec-handler").join("");
 	let handlers = await HandlerQuery.find({path:path, methods:req.method, enabled:true});
 	for (let handler of handlers){
-		await handler.execute(req,res);
+		await handler.execute(madminScriptRefInstance, req,res);
 	}
 	if (!res.headersSent){
 		res.send("handled")

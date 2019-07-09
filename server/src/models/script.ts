@@ -17,17 +17,17 @@ export class Script extends BaseModel<Script> {
 		super(data);
 	}
 
-	async execute(args:any[]):Promise<number>{
+	async execute(madmin:any, args:any[]):Promise<number>{
 		let fn = this.getFunction();
-		let result = await fn(require, args);
+		let result = await fn(madmin, require, args);
 		if (typeof(result) == "number"){
 			return result;
 		}
 		return 0;
 	}
 
-	getFunction():(require:any, args:any[])=>Promise<number|void>{
-		return new AsyncFunction("require", "args", this.code);
+	getFunction():(madmin:any, require:any, args:any[])=>Promise<number|void>{
+		return new AsyncFunction("madmin", "require", "args", this.code);
 	}
 
 	async validate():Promise<string>{

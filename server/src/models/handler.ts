@@ -25,10 +25,10 @@ export class Handler extends BaseModel<Handler>{
 		super(data);
 	}
 
-	async execute(request:Request, response:Response){
+	async execute(madmin:any, request:Request, response:Response){
 		try{
 			let fn = this.getFunction();
-			await fn(request, response, require);
+			await fn(madmin, request, response, require);
 			if (!response.headersSent){
 				response.send("Request Handled");
 			}
@@ -41,8 +41,8 @@ export class Handler extends BaseModel<Handler>{
 		}
 	}
 
-	getFunction():(Request:Request,Response:Response,require:NodeRequire)=>Promise<void>{
-		return new AsyncFunction("req", "res", "require", this.code);
+	getFunction():(madmin:any, Request:Request,Response:Response,require:NodeRequire)=>Promise<void>{
+		return new AsyncFunction("madmin", "req", "res", "require", this.code);
 	}
 
 	async validate():Promise<string>{

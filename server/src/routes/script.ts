@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ScriptQuery, Script } from "../models/script";
 import { HttpError } from '../classes/HttpError';
+import { madminScriptRefInstance } from '../classes/madmin-script-ref';
 
 export const scriptRouter = Router();
 
@@ -60,6 +61,6 @@ scriptRouter.post("/:id/execute", async (req,res,next)=>{
 	if (!script){
 		return next(new HttpError("Script does not exist", 404));
 	}
-	script.execute(req.body.args);
+	script.execute(madminScriptRefInstance, req.body.args);
 	res.json({message:"Script is beign executed"});
 });
