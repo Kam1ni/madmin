@@ -23,6 +23,13 @@ scriptRouter.post("/", async (req,res,next)=>{
 		let script = new Script();
 		script.name = req.body.name;
 		script.code = req.body.code;
+		script.runAtStartUp = req.body.runAtStartUp;
+		script.runAtInterval = req.body.runAtInterval;
+		script.dayOfTheMonth = req.body.dayOfTheMonth;
+		script.dayOfTheWeek = req.body.dayOfTheWeek;
+		script.month = req.body.month;
+		script.hour = req.body.hour;
+		script.minut = req.body.minut;
 		await script.save();
 		res.json(script);
 	}catch(err){
@@ -38,6 +45,13 @@ scriptRouter.put("/:id", async (req,res,next)=>{
 
 	script.name = req.body.name;
 	script.code = req.body.code;
+	script.runAtStartUp = req.body.runAtStartUp;
+	script.runAtInterval = req.body.runAtInterval;
+	script.dayOfTheMonth = req.body.dayOfTheMonth;
+	script.dayOfTheWeek = req.body.dayOfTheWeek;
+	script.month = req.body.month;
+	script.hour = req.body.hour;
+	script.minut = req.body.minut;
 
 	try{
 		await script.save();

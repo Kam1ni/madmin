@@ -7,11 +7,26 @@ export class Script extends BaseResource{
 	name:string;
 	code:string;
 
+	runAtStartUp:boolean = false;
+	runAtInterval:boolean = false
+	dayOfTheWeek:string = "*";
+	dayOfTheMonth:string = "*";
+	month:string = "*";
+	hour:string = "*";
+	minut:string = "*";
+
 	constructor(data:any = null){
 		super(data);
 		if(!data)return;
 		this.name = data.name;
 		this.code = data.code;
+		this.runAtStartUp = data.runAtStartUp;
+		this.runAtInterval = data.runAtInterval;
+		this.dayOfTheMonth = data.dayOfTheMonth;
+		this.dayOfTheWeek = data.dayOfTheWeek;
+		this.month = data.month;
+		this.hour = data.hour;
+		this.minut = data.minut;
 	}
 
 	async save(){

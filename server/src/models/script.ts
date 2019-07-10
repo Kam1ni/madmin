@@ -7,11 +7,36 @@ import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../functions/stri
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "script.db"), autoload:true})
 
+function createValidityArray(start:number, end:number):string[]{
+	let arr = ["*"] as string[];
+	for (let i = start; i <= end; i++){
+		arr.push(`${i}`);
+	}
+	return arr;
+}
+
+const validDaysOfTheWeek = createValidityArray(0, 6);
+const validDaysOfMonth = createValidityArray(1, 31);
+const validMonth = createValidityArray(0,11);
+const validHour = createValidityArray(0,23);
+const validMinut = createValidityArray(0, 59);
+
+function isTimeValueValid(value:string, arr:string[]):boolean{
+	return arr.indexOf(value) != -1;
+}
 export class Script extends BaseModel<Script> {
 	protected db: Nedb = db;
 
 	name:string;
 	code:string;
+	
+	runAtStartUp:boolean;
+	runAtInterval:boolean;
+	dayOfTheWeek:string;
+	dayOfTheMonth:string;
+	month:string;
+	hour:string;
+	minut:string;
 
 	constructor(data:any = null){
 		super(data);
@@ -39,7 +64,6 @@ export class Script extends BaseModel<Script> {
 		}
 
 		let foundScript = await ScriptQuery.findOne({_id:{$ne:this._id}, name:this.name});
-		console.log(foundScript);
 		if (foundScript != null){
 			return `Name must be unique. ${this.name} is already in use.`
 		}
@@ -47,6 +71,28 @@ export class Script extends BaseModel<Script> {
 			this.getFunction();
 		}catch(err){
 			return `Error in your code.\n${err}`
+		}
+		if (this.runAtInterval){
+			let valid = isTimeValueValid(this.dayOfTheWeek, validDaysOfTheWeek);
+			if (!valid){
+				return "Day of the week is not valid";
+			}
+			valid = isTimeValueValid(this.dayOfTheMonth, validDaysOfMonth);
+			if (!valid){
+				return "Day of the month is not valid";
+			}
+			valid = isTimeValueValid(this.month, validMonth);
+			if (!valid){
+				return "Month is not valid";
+			}
+			valid = isTimeValueValid(this.hour, validHour);
+			if (!valid){
+				return "Hour is not valid";
+			}
+			valid = isTimeValueValid(this.minut, validMinut);
+			if (!valid){
+				return "Minut is not valid";
+			}
 		}
 		return null;
 	}

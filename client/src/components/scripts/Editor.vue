@@ -2,9 +2,39 @@
 	<v-card>
 		<v-form v-model="valid">
 			<v-card-text>
-				<v-flex xs12 md6>
-					<v-text-field v-model="script.name" label="Name" :rules="nameRules"></v-text-field>
-				</v-flex>
+				<v-layout row>
+					<v-flex xs12 md6>
+						<v-text-field v-model="script.name" label="Name" :rules="nameRules"></v-text-field>
+					</v-flex>
+				
+				</v-layout>
+
+				<v-layout row>
+					<v-flex xs12>
+						<v-switch v-model="script.runAtStartUp" label="Run on madmin start"/>
+					</v-flex>
+					<v-flex xs12>
+						<v-switch v-model="script.runAtInterval" label="Run periodically"/>
+					</v-flex>
+				</v-layout>
+
+				<v-layout wrap v-if="script.runAtInterval">
+					<v-flex xs12 md6 xl3>
+						<v-select :items="months" label="Month" v-model="script.month"/>
+					</v-flex>
+					<v-flex xs12 md6 xl3>
+						<v-select :items="daysOfTheMonth" label="Day of the month" v-model="script.dayOfTheMonth"/>
+					</v-flex>
+					<v-flex xs12 md6 xl3>
+						<v-select :items="daysOfTheWeek" label="Day of the week" v-model="script.dayOfTheWeek"/>
+					</v-flex>
+					<v-flex xs12 md6 xl3>
+						<v-select :items="hours" label="Hour" v-model="script.hour"/>
+					</v-flex>
+					<v-flex xs12 md6 xl3 v-if="usesMinutesInterval">
+						<v-select :items="minutes" label="Minut" v-model="script.minut"/>
+					</v-flex>
+				</v-layout>
 			</v-card-text>
 			async function(madmin, require, ...args){
 			<codemirror v-model="script.code"></codemirror>
@@ -24,6 +54,13 @@ import { Script } from '@/classes/script';
 import { isNullOrUndefined } from 'util';
 import { stringHasWhiteSpace } from '@/functions/string';
 import { scriptService } from '../../services/script-service';
+import { AppConfig } from '../../conifg';
+
+interface ISelectItem {
+	text:string;
+	value:any;
+}
+
 export default Vue.extend({
 	data(){
 		return {
@@ -33,12 +70,64 @@ export default Vue.extend({
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
 				(v:string) => !scriptService.scriptNameInUse(this.script.name, this.script.id) || "Path must be unique"
 			],
+			usesMinutesInterval: AppConfig.scriptsRunAtMinutIntervals
 		}
 	},
 	props:{
 		script:{
 			type:Object as ()=>Script,
 			required:true
+		}
+	},
+	computed:{
+		daysOfTheWeek():ISelectItem[]{
+			return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Any"].map((day, i)=>{
+				return {
+					text:day,
+					value:i == 7 ? "*" : i
+				}
+			});
+		},
+		daysOfTheMonth():ISelectItem[]{
+			let list = [{text:"Any", value:"*"}] as ISelectItem[];
+			for (let i = 1; i <= 31; i++){
+				list.push({
+					text:i+"",
+					value:i+""
+				});
+			}
+			return list;
+		},
+		months():ISelectItem[]{
+			return ["January" , "February" , "March",
+				"April" , "May" , "June" , 
+				"July" , "August" , "September" , 
+				"October" , "November" , "December"].map((val, i)=>{
+					return {
+						text:val,
+						value:i+""
+					}
+			}).concat([{text:"Any", value:"*"}]);
+		},
+		hours():ISelectItem[]{
+			let list = [{text:"Any", value:"*"}] as ISelectItem[];
+			for (let i = 0; i <= 23; i++){
+				list.push({
+					text:i+"",
+					value:i+""
+				});
+			}
+			return list;
+		},
+		minutes():ISelectItem[]{
+			let list = [{text:"Any", value:"*"}] as ISelectItem[];
+			for (let i = 0; i <= 59; i++){
+				list.push({
+					text:i+"",
+					value:i+""
+				});
+			}
+			return list;
 		}
 	},
 	methods:{
@@ -48,7 +137,15 @@ export default Vue.extend({
 		async save(){
 			await this.script.save();
 			this.$router.go(-1);
+		},
+		createValidityArray(start:number, end:number):string[]{
+			let arr = ["*"] as string[];
+			for (let i = start; i <= end; i++){
+				arr.push(`${i}`);
+			}
+			return arr;
 		}
+
 	},
 })
 </script>

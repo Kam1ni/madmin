@@ -11,10 +11,12 @@ export interface IConfig {
 	sslKey:string;
 	sslCert:string;
 	redirectHttpToHttpsPort:number;
+	runScriptsAtMinutIntervals:boolean;
 }
 
 export interface IClientConfig {
 	baseUrl:string;
+	scriptsRunAtMinutIntervals:boolean;
 }
 
 let config:IConfig;
@@ -29,6 +31,7 @@ export function getConfig():IConfig{
 
 export function getClientConfig():IClientConfig{
 	return {
-		baseUrl:`${config.baseUrl}:${config.port}`
+		baseUrl:`${config.baseUrl}:${config.port}`,
+		scriptsRunAtMinutIntervals:config.runScriptsAtMinutIntervals,
 	}
 }

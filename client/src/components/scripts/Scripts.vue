@@ -102,6 +102,7 @@ export default Vue.extend({
 		},
 		async deleteScript(){
 			await this.toDeleteScript.remove();
+			this.toDeleteScript = null;
 		},
 		executeClicked(item:Script){
 			this.executeArgs = "";

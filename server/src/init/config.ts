@@ -16,7 +16,8 @@ const defaultConfig:IConfig = {
 	dataPath:"./data/",
 	redirectHttpToHttpsPort:null,
 	sslCert:null,
-	sslKey:null
+	sslKey:null,
+	runScriptsAtMinutIntervals:true
 }
 
 export function configInit(){

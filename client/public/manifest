@@ -1,3 +1,4 @@
 {
-	"baseUrl":"localhost.kami-dev.eu:3000"
+	"baseUrl":"localhost.kami-dev.eu:3000",
+	"scriptsRunAtMinutIntervals":true
 }

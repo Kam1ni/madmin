@@ -12,7 +12,7 @@ import * as fs from "fs";
 async function main(){
 	await init();
 	const config = getConfig();
-	
+	const {startScriptScheduler} = require("./script-scheduler");
 	const app = express();
 	app.use(cors());
 	app.use(bodyParser.json({limit:"50mb", type:"application/json"}));
@@ -25,6 +25,7 @@ async function main(){
 		const server = http.createServer(app);
 		server.listen(config.port, config.host, function(){
 			console.log(`server started at ${config.host}:${config.port}`);
+			startScriptScheduler();
 		});
 	}else{
 		if (config.redirectHttpToHttpsPort){
@@ -47,6 +48,7 @@ async function main(){
 		const server = https.createServer(options, app);
 		server.listen(config.port, config.host, function(){
 			console.log(`server started at ${config.host}:${config.port}`);
+			startScriptScheduler();
 		});
 	}
 }
