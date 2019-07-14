@@ -39,6 +39,12 @@ mainRouter.all("/*", async (req,res,next)=>{
 		});
 	}
 	else if(req.hostname == config.baseUrl){
+		if (/^\/?$/.exec(req.path)){
+			let defaultRedirect = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});
+			if (defaultRedirect){
+				return res.redirect(`${req.protocol}://${defaultRedirect.value}.${config.baseUrl}:${config.port}`);
+			}
+		}
 		return next();
 	}
 	else {
