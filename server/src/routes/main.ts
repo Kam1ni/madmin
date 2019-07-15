@@ -17,6 +17,7 @@ import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
 import { scriptRouter } from './script';
 import { madminScriptRefInstance } from '../classes/madmin-script-ref';
+import { fileSystemRouter } from './file-system';
 
 console.log("main router")
 
@@ -95,8 +96,9 @@ mainRouter.use("/*", async (req,res,next)=>{
 mainRouter.use("/user", userRouter);
 mainRouter.use("/app", appRouter);
 mainRouter.use("/handler", handlerRouter);
-mainRouter.use("/script", scriptRouter)
+mainRouter.use("/script", scriptRouter);
 mainRouter.use("/config", configRouter);
+mainRouter.use("/fs", fileSystemRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	let result = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});

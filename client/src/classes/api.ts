@@ -28,4 +28,8 @@ export class BaseRoutes {
 	static get SCRIPT():string{
 		return `${AppConfig.baseUrl}/script`
 	}
+
+	static get FS():string{
+		return `${AppConfig.baseUrl}/fs`
+	}
 }

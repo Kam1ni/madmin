@@ -14,6 +14,7 @@ import UserEdit from '@/components/settings/UserEdit.vue';
 import Scripts from "@/components/scripts/Scripts.vue";
 import ScriptEdit from "@/components/scripts/Edit.vue";
 import ScriptNew from "@/components/scripts/New.vue";
+import FsRoot from "@/components/fs/Root.vue";
 
 Vue.use(Router)
 
@@ -65,6 +66,15 @@ const router = new Router({
 			component:ScriptEdit
 		},
 		{
+			path: '/fs/:path(.*)',
+			component:FsRoot,
+		},
+		{
+			path: '/fs',
+			component:FsRoot,
+			name:"File System"
+		},
+		{
 			path: '/settings',
 			component: Settings,
 			children:[
@@ -83,11 +93,7 @@ function setTitle(title:string){
 }
 
 router.beforeEach((to,from,next)=>{
-	if (to.name){
-		setTitle(to.name);
-	}else{
-		setTitle(null);
-	}
+	setTitle(to.name || null);
 	next();
 });
 

@@ -19,7 +19,7 @@ userRouter.all("/*", async function(req,res,next){
 userRouter.post("/", async function(req,res,next){
 	let user = new User();
 	user.username = req.body.username;
-	user.setPassword(req.body.password);
+	await user.setPassword(req.body.password);
 	user.isAdmin = req.body.isAdmin;
 	try{
 		await user.save();
@@ -59,7 +59,7 @@ userRouter.put("/:id/change-password", async function(req,res,next){
 	if (user._id == res.locals.user._id){
 		return next(new HttpError("You cannot change your own password with this route. User \"/auth/change-password\"", 403));
 	}
-	user.setPassword(req.body.password);
+	await user.setPassword(req.body.password);
 	try{
 		await user.save();
 		res.json(user);

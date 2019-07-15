@@ -32,8 +32,13 @@ import { authService } from '@/services/auth-service';
 export default Vue.extend({
 	data(){
 		return {
+			title: 'Madmin',
 			drawer: true,
-			items: [
+		}
+	},
+	computed:{
+		items():any[]{
+		 	let res = [
 				{
 					icon: 'home',
 					title: 'Home'
@@ -54,8 +59,14 @@ export default Vue.extend({
 					icon: 'settings',
 					title: 'Settings'
 				}
-			],
-			title: 'Madmin'
+			];
+			if (authService.user.isAdmin){
+				res.push({
+					title:"File System",
+					icon:"folder_open"
+				})
+			}
+			return res;
 		}
 	},
 });

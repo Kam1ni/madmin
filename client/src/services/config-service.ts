@@ -1,6 +1,6 @@
 import { BehaviorSubject } from '../../node_modules/rxjs';
 import { AppSettings } from '@/classes/app-settings';
-import Axios from '../../node_modules/axios';
+import Axios from 'axios';
 import { HeaderBuilder } from '@/classes/header-builder';
 import { BaseRoutes } from '@/classes/api';
 import Vue from 'vue';
