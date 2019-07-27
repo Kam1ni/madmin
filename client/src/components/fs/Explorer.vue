@@ -4,13 +4,13 @@
 			<v-list-tile @click="goUp()" v-if="path != '/'">
 				<v-list-tile-title>..</v-list-tile-title>
 			</v-list-tile>
-			<v-list-tile v-for="(dir, i) of directories" :key="i" @click="goTo(dir.address)">
+			<v-list-tile v-for="dir of directories" :key="dir.name" @click="goTo(dir.address)">
 				<v-list-tile-avatar>
 					<v-icon>folder</v-icon>
 				</v-list-tile-avatar>
 				<v-list-tile-title>{{dir.name}}</v-list-tile-title>
 			</v-list-tile>
-			<v-list-tile v-for="(file, i) of files" :key="i" @click="goTo(dir.address)">
+			<v-list-tile v-for="file of files" :key="file.name" @click="goTo(file.address)">
 				<v-list-tile-avatar>
 					<v-icon>description</v-icon>
 				</v-list-tile-avatar>

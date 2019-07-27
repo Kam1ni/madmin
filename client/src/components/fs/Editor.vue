@@ -1,13 +1,6 @@
 <template>
 	<v-card>
 		<v-form>
-			<v-card-text>
-				<v-layout row wrap align-center>
-					<v-flex xs12 md6 xl8>
-						{{path}}
-					</v-flex>
-				</v-layout>
-			</v-card-text>
 			<codemirror :value="content"></codemirror>
 			<v-card-actions>
 				<v-spacer/>

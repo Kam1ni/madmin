@@ -16,12 +16,12 @@ fileSystemRouter.use(function(req, res, next){
 });
 
 fileSystemRouter.get("/*", async function(req, res, next){
-	let requestPath = req.path;
-	
+	let requestPath = decodeURI(req.path);
+	console.log(requestPath)
 	try{
 		let exists = await fs.exists(requestPath);
 		if (!exists){
-			return new HttpError("Path does not exist", 404);
+			return next(new HttpError("Path does not exist", 404));
 		}
 		
 		let stats = await fs.stat(requestPath);
@@ -56,8 +56,8 @@ fileSystemRouter.get("/*", async function(req, res, next){
 			return res.json(result);
 		}
 		
-		let content = await fs.readfile(requestPath);
-		res.send(content);
+		//let content = await fs.readfile(requestPath);
+		res.status(210).sendFile(requestPath);
 	}catch(err){
 		next(new HttpError(err, 500));
 	}

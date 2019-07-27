@@ -5,9 +5,10 @@
 		</v-layout>
 		<v-layout row wrap justify-center v-else>
 			<v-flex xs12>
-				<v-subheader>{{path}}</v-subheader>
+				<v-breadcrumbs :items="pathCrumbs" divider="/"/>
 				<app-explorer :files="files" :directories="directories" :path="path" v-if="isDirectory"/>
-				<app-editor :path="path" :content="content" v-else/>
+				<app-editor :path="path" :content="content" v-else-if="isTextFile"/>
+				<app-image-viewer :path="path" :content="content" :mime-type="mimeType" v-else-if="isImage"/>
 			</v-flex>
 		</v-layout>
 	</v-container>
@@ -17,9 +18,10 @@
 import Vue from 'vue'
 import { FsFile } from '../../classes/fs-file';
 import { FsDirectory } from '../../classes/fs-directory';
-import { fsService } from '../../services/fs-service';
+import { fsService, FSResponseTypes } from '../../services/fs-service';
 import AppExplorer from "./Explorer.vue";
 import AppEditor from "./Editor.vue";
+import AppImageViewer from "./ImageViewer.vue";
 
 export default Vue.extend({
 	data(){
@@ -28,8 +30,29 @@ export default Vue.extend({
 			files:[] as FsFile[],
 			directories: [] as FsDirectory[],
 			content:"",
-			isDirectory:true,
-			fetched:false
+			fetched:false,
+			contentType:"directory" as FSResponseTypes,
+			mimeType:"" as string | undefined
+		}
+	},
+	computed:{
+		pathCrumbs():any[]{
+			let parts = this.path.split("/")
+			return (parts.map((name, index)=>{
+				return {
+					text:name,
+					to: "/fs/" + parts.filter((p, i)=> i <= index).join("/")
+				};
+			}));
+		},
+		isDirectory():boolean{
+			return this.contentType == "directory";
+		},
+		isTextFile():boolean{
+			return this.contentType == "text";
+		},
+		isImage():boolean{
+			return this.contentType == "image";
 		}
 	},
 	watch:{
@@ -39,7 +62,6 @@ export default Vue.extend({
 	},
 	methods:{
 		async reload(){
-			console.log("Relaoding")
 			if (this.$route.params.path){
 				this.path = this.$route.params.path;
 			}else{
@@ -48,15 +70,18 @@ export default Vue.extend({
 			if (this.path.charAt(0) != "/"){
 				this.path = "/" + this.path;
 			}
-			console.log(this.path);
 			let result = await fsService.openContent(this.path);
-			if (typeof(result) == "string"){
-				this.isDirectory = false;
-				this.content = result;
-			}else{
-				this.files = result.files;
-				this.directories = result.directories;
-				this.isDirectory = true;
+			console.log(result);
+			this.mimeType = result.mimeType;
+			this.contentType = result.type;
+			this.files = [];
+			this.directories = [];
+			if (result.type == "directory"){
+				this.files = result.content.files;
+				this.directories = result.content.directories;
+			}
+			if (result.type == "text" || result.type == "image"){
+				this.content = result.content;
 			}
 			this.fetched = true;
 		}
@@ -66,7 +91,8 @@ export default Vue.extend({
 	},
 	components:{
 		AppExplorer,
-		AppEditor
+		AppEditor,
+		AppImageViewer
 	}
 })
 </script>
