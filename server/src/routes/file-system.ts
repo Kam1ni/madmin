@@ -17,7 +17,6 @@ fileSystemRouter.use(function(req, res, next){
 
 fileSystemRouter.get("/*", async function(req, res, next){
 	let requestPath = decodeURI(req.path);
-	console.log(requestPath)
 	try{
 		let exists = await fs.exists(requestPath);
 		if (!exists){
@@ -58,6 +57,52 @@ fileSystemRouter.get("/*", async function(req, res, next){
 		
 		//let content = await fs.readfile(requestPath);
 		res.status(210).sendFile(requestPath);
+	}catch(err){
+		next(new HttpError(err, 500));
+	}
+});
+
+
+fileSystemRouter.post("/mkdir/*", Router().post("/mkdir/*", async function(req, res, next){
+	let requestPath = decodeURI(req.path);
+	console.log(requestPath);
+
+	try{
+		let exists = await fs.exists(requestPath);
+		if (exists){
+			return next(new HttpError("Path already exists", 400));
+		}
+		
+		let pathParts = requestPath.split("/");
+		pathParts.pop();
+		let parentPath = pathParts.join("/")
+		exists = await fs.exists(parentPath);
+		if (!exists){
+			return next(new HttpError("Parent directory does not exist", 404))
+		}
+
+		let parentDirStats = await fs.stat(parentPath);
+		if (!parentDirStats.isDirectory()){
+			return next(new HttpError("Path is not a directory"));
+		}
+
+		fs.mkdir(requestPath);
+		res.json({path:requestPath});
+	}catch(err){
+		next(new HttpError(err, 500));
+	}
+}));
+
+fileSystemRouter.delete("/*", async function(req, res, next){
+	let requestPath = decodeURI(req.path);
+	try{
+		let exists = await fs.exists(requestPath);
+		if (!exists){
+			return next(new HttpError("Path does not exist", 404));
+		}
+
+		await fs.rm(requestPath);
+		res.json({});
 	}catch(err){
 		next(new HttpError(err, 500));
 	}
