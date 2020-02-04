@@ -54,7 +54,7 @@ mainRouter.all("/*", async (req,res,next)=>{
 		let subdomain = domains.join("."+req.baseUrl);
 		console.log(req.hostname);
 		if (req.hostname.match(mainDomainRegex)){
-			var app = await AppQuery.findOne({subdomain,enabled:true});
+			var app = await AppQuery.findBySubdomain(subdomain);
 		}else{
 			var app = await AppQuery.findOne({domainName:req.hostname});
 		}

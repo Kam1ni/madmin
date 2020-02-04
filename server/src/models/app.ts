@@ -72,12 +72,26 @@ export class App extends BaseModel<App>{
 		}
 		return null;
 	}
+
+
 }
 
 class AppQueryClass extends BaseQuery<App>{
 	protected type: new (data: any) => App = App;
 	protected db: Nedb = db;
 	static default = new AppQueryClass();
+	async findBySubdomain(subDomain:string):Promise<App> {
+		let apps = await this.find();
+		for (let app of apps){
+			let domain = app.subdomain.replace(".", "\\.");
+			domain = domain.replace("*", "[0-9a-zA-Z-_]*");
+			let regex = new RegExp(domain, "g");
+			if (regex.exec(subDomain)){
+				return app;
+			}
+		}
+		return null;
+	}
 }
 
 export const AppQuery = AppQueryClass.default;

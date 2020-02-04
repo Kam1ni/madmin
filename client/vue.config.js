@@ -1,4 +1,7 @@
 module.exports = {
   outputDir: '../server/public',
-  productionSourceMap: false
+  productionSourceMap: false,
+  devServer:{
+    disableHostCheck:true
+  }
 }
