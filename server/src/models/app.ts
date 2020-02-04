@@ -84,8 +84,8 @@ class AppQueryClass extends BaseQuery<App>{
 		let apps = await this.find({enabled:true});
 		for (let app of apps){
 			let domain = app.subdomain.replace(".", "\\.");
-			domain = domain.replace("*", "[0-9a-zA-Z-_]*");
-			let regex = new RegExp(domain, "g");
+			domain = domain.replace("*", "[0-9a-zA-Z-_\\.]*");
+			let regex = new RegExp(`^${domain}$`, "g");
 			if (regex.exec(subDomain)){
 				return app;
 			}
