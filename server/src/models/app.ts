@@ -81,7 +81,7 @@ class AppQueryClass extends BaseQuery<App>{
 	protected db: Nedb = db;
 	static default = new AppQueryClass();
 	async findBySubdomain(subDomain:string):Promise<App> {
-		let apps = await this.find();
+		let apps = await this.find({enabled:true});
 		for (let app of apps){
 			let domain = app.subdomain.replace(".", "\\.");
 			domain = domain.replace("*", "[0-9a-zA-Z-_]*");
