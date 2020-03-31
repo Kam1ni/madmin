@@ -19,7 +19,7 @@
 								<v-list-tile-title v-html="item.path"></v-list-tile-title>
 							</v-list-tile-content>
 							<v-list-tile-action>
-								<v-menu>
+								<v-menu left>
 									<v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
 									<v-list>
 										<v-list-tile :to="'/handlers/edit/' + item.id">

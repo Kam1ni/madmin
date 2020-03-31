@@ -1,0 +1,9 @@
+.vue-codemirror{
+	display:flex;
+	flex-direction: column;
+}
+
+.CodeMirror {
+	flex-grow:1;
+	flex-shrink: 1;
+}

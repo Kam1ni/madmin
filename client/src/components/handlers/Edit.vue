@@ -3,11 +3,9 @@
 		<v-layout align-center justify-center v-if="handler == null">
 			<v-progress-circular color="accent" :indeterminate="true"></v-progress-circular>
 		</v-layout>
-		<v-layout row wrap justify-center v-else>
-			<v-flex xs12>
-				<v-subheader>Edit Handler</v-subheader>
-				<app-editor :handler="handler"/>
-			</v-flex>
+		<v-layout column v-else>
+			<v-subheader>Edit Handler</v-subheader>
+			<app-editor :handler="handler"/>
 		</v-layout>
 	</v-container>
 </template>

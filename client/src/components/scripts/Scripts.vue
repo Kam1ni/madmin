@@ -23,7 +23,7 @@
 							</v-list-tile-action>
 
 							<v-list-tile-action>
-								<v-menu>
+								<v-menu left>
 									<v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
 									<v-list>
 										<v-list-tile :to="'/scripts/edit/' + item.id">

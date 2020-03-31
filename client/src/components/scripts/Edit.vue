@@ -3,11 +3,9 @@
 		<v-layout align-center justify-center v-if="script == null">
 			<v-progress-circular color="accent" :indeterminate="true"></v-progress-circular>
 		</v-layout>
-		<v-layout row wrap justify-center v-else>
-			<v-flex xs12>
-				<v-subheader>Edit Script</v-subheader>
-				<app-editor :script="script"/>
-			</v-flex>
+		<v-layout column v-else>
+			<v-subheader>Edit Script</v-subheader>
+			<app-editor :script="script" :style="{flexGrow:1}"/>
 		</v-layout>
 	</v-container>
 </template>

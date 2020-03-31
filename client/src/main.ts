@@ -7,7 +7,6 @@ Axios.get("/manifest").then(response=>{
 		scriptsRunAtMinutIntervals:boolean;
 	}
 	let data = <IManifest>response.data;
-	console.log(data.baseUrl)
 	AppConfig.baseUrl = location.protocol + "//" + data.baseUrl;
 	AppConfig.scriptsRunAtMinutIntervals = data.scriptsRunAtMinutIntervals;
 	require("./app-init").appInit();

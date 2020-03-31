@@ -1,6 +1,6 @@
 <template>
-	<v-card>
-		<v-form v-model="valid">
+	<v-card class="card">
+		<v-form class="form" v-model="valid">
 			<v-card-text>
 				<v-layout row wrap align-center>
 					<v-flex xs12 md6 xl8>
@@ -22,7 +22,7 @@
 				</v-layout>
 			</v-card-text>
 			async function(madmin, req, res, require){
-			<codemirror v-model="handler.code"></codemirror>
+			<codemirror v-model="handler.code" class="editor"></codemirror>
 			}
 			<v-card-actions>
 				<v-spacer/>
@@ -87,8 +87,17 @@ export default Vue.extend({
 })
 </script>
 
-<style>
-.CodeMirror-scroll{
-	z-index: 1;
+<style scoped>
+
+.card, .form{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.editor {
+	flex-grow:1;
+	flex-shrink: 1;
 }
 </style>

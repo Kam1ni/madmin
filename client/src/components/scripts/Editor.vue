@@ -1,6 +1,6 @@
 <template>
-	<v-card>
-		<v-form v-model="valid">
+	<v-card class="card">
+		<v-form v-model="valid" class="form">
 			<v-card-text>
 				<v-layout row>
 					<v-flex xs12 md6>
@@ -37,7 +37,7 @@
 				</v-layout>
 			</v-card-text>
 			async function(madmin, require, ...args){
-			<codemirror v-model="script.code"></codemirror>
+			<codemirror v-model="script.code" class="editor"></codemirror>
 			}
 			<v-card-actions>
 				<v-spacer/>
@@ -149,3 +149,18 @@ export default Vue.extend({
 	},
 })
 </script>
+
+
+<style scoped>
+.editor{
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
+.card, .form{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+</style>
