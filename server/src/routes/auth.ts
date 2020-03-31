@@ -8,7 +8,6 @@ import { authenticate } from "../functions/auth";
 export const authRouter = Router();
 
 authRouter.post("/login", async (req,res,next)=>{
-	console.log("LOGIN")
 	let foundUser = await UserQuery.findOne({username:req.body.username});
 	if (!foundUser){
 		return next(new HttpError("Invalid login", 400));

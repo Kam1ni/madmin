@@ -19,7 +19,6 @@ import { scriptRouter } from './script';
 import { madminScriptRefInstance } from '../classes/madmin-script-ref';
 import { fileSystemRouter } from './file-system';
 
-console.log("main router")
 
 const mainFilePath = dirname(require.main.filename)
 const clientPath = join(mainFilePath, "/public")
@@ -52,7 +51,6 @@ mainRouter.all("/*", async (req,res,next)=>{
 		let domains = req.hostname.split("."+config.baseUrl);
 		domains.splice(domains.length-1,1);
 		let subdomain = domains.join("."+req.baseUrl);
-		console.log(req.hostname);
 		if (req.hostname.match(mainDomainRegex)){
 			var app = await AppQuery.findBySubdomain(subdomain);
 		}else{

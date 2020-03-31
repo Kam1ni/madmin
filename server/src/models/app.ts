@@ -61,7 +61,6 @@ export class App extends BaseModel<App>{
 			}
 		}
 		let app = await AppQuery.findOne({subdomain:this.subdomain, _id:{$ne: this._id}});
-		console.log({app});
 		if (app != null){
 			return `subdomain "${this.subdomain}" already in use`
 		}
