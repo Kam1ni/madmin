@@ -3,7 +3,6 @@ import {BehaviorSubject} from "rxjs";
 import { User } from '@/classes/user';
 import Axios, { AxiosResponse, AxiosError } from "axios";
 import { HeaderBuilder } from '@/classes/header-builder';
-import ClientJs from "clientjs";
 import { Token } from '@/classes/token';
 import { setLocalStorage, getLocalStorage } from '@/functions/storage';
 import { BaseRoutes } from '@/classes/api';
@@ -74,8 +73,7 @@ export const authService = new Vue({
 			}
 		},
 		getDiveceName():string{
-			let client = new ClientJs();
-			return `${(<any>client.getBrowser()).name} @${(<any>client.getOS()).name}`;
+			return `${getBrowserName()} @${getClientOS()}`;
 		},
 		async removeAllTokens(){
 			let message = await Axios.delete(API_URL + "/remove-all-tokens", {headers:HeaderBuilder.getDefaultHeaders()});
