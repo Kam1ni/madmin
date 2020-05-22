@@ -11,7 +11,8 @@
 		"migrate": "node dist/migration.js",
 		"copy-assets": "node copy-assets",
 		"pkg": "pkg . --targets node8-linux-x64,node8-linux-x86,node8-win-x64,node8-win-x86 --out-path pkg",
-		"pkg-arm": "pkg . --targets node8-linux-armv7 --out-path pkg"
+		"pkg-arm": "pkg . --targets node8-linux-armv7 --out-path pkg",
+		"pkg-arm64": "pkg . --targets node8-linux-arm64 --out-path pkg"
 	},
 	"author": "",
 	"license": "MIT",
@@ -42,7 +43,7 @@
 		"@types/node": "^10.3.5",
 		"@types/randomstring": "^1.1.6",
 		"fs-extra": "^7.0.1",
-		"pkg": "^4.3.4",
+		"pkg": "^4.4.8",
 		"tsc-watch": "^2.2.1",
 		"typescript": "^3.5.2"
 	}
