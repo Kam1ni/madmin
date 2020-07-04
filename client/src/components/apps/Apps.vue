@@ -47,7 +47,7 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-		<v-btn fixed fab bottom right color="accent" to="/apps/new"><v-icon class="fix-fab-icon">add</v-icon></v-btn>
+		<v-btn fixed fab bottom right color="accent" to="/apps/new"><v-icon>add</v-icon></v-btn>
 		<v-dialog :value="true" max-width="400" v-if="toDeleteApp != null" persistent>
 			<v-card>
 				<v-card-title class="headline">Warning</v-card-title>
@@ -105,11 +105,5 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-.fix-fab-icon{
-	height: auto;
-	width: auto;
-}
-</style>
 
 

@@ -42,7 +42,7 @@
 				</v-card>
 			</v-flex>
 		</v-layout>
-		<v-btn fixed fab bottom right color="accent" to="/scripts/new"><v-icon class="fix-fab-icon">add</v-icon></v-btn>
+		<v-btn fixed fab bottom right color="accent" to="/scripts/new"><v-icon>add</v-icon></v-btn>
 
 		<v-dialog :value="true" v-if="toExecuteScript != null" persistent>
 			<v-card>
@@ -122,10 +122,3 @@ export default Vue.extend({
 	}
 })
 </script>
-
-<style scoped>
-.fix-fab-icon{
-	height: auto;
-	width: auto;
-}
-</style>

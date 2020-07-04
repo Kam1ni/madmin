@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import {BehaviorSubject} from "rxjs";
 import { User } from '@/classes/user';
 import Axios, { AxiosResponse, AxiosError } from "axios";
 import { HeaderBuilder } from '@/classes/header-builder';
@@ -7,6 +6,8 @@ import { Token } from '@/classes/token';
 import { setLocalStorage, getLocalStorage } from '@/functions/storage';
 import { BaseRoutes } from '@/classes/api';
 import { ConfigService } from './config-service';
+import {getBrowserName, getClientOS} from "@/functions/client"
+
 
 const API_URL:string = BaseRoutes.AUTH;
 const LOCAL_STORAGE_TOKEN = "auth_token";

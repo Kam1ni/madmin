@@ -1,4 +1,4 @@
-function getBrowserName():string{
+export function getBrowserName():string{
 	if (window.navigator.vendor == "Google Inc."){
 		return "Google Chrome";
 	}
@@ -8,7 +8,7 @@ function getBrowserName():string{
 	return window.navigator.appName;
 }
 
-function getClientOS():string{
+export function getClientOS():string{
 	if (window.navigator.platform.indexOf("Windows") != -1){
 		return "Windows";
 	}
