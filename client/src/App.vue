@@ -1,5 +1,5 @@
 <template>
-	<v-app>
+	<v-app :dark="darkModeEnabled">
 		<v-navigation-drawer persistent v-model="drawer" enable-resize-watcher fixed app>
 			<v-list>
 				<v-list-tile v-for="(item, i) in items" :key="i" :to="{name: item.title}" :exact="item.title == 'Home'">
@@ -9,6 +9,18 @@
 					<v-list-tile-content>
 						<v-list-tile-title v-text="item.title"></v-list-tile-title>
 					</v-list-tile-content>
+				</v-list-tile>
+				<v-divider/>
+				<v-list-tile>
+					<v-list-tile-action>
+						<v-icon>nights_stay</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>Dark mode</v-list-tile-title>
+					</v-list-tile-content>
+					<v-list-tile-action>
+						<v-switch v-model="darkModeEnabled"></v-switch>
+					</v-list-tile-action>
 				</v-list-tile>
 			</v-list>
 		</v-navigation-drawer>
@@ -34,6 +46,12 @@ export default Vue.extend({
 		return {
 			title: 'Madmin',
 			drawer: true,
+			darkModeEnabled:false
+		}
+	},
+	watch:{
+		darkModeEnabled(){
+			localStorage.setItem("dark-mode-enabled", this.darkModeEnabled ? "true" : "false");
 		}
 	},
 	computed:{
@@ -69,6 +87,9 @@ export default Vue.extend({
 			return res;
 		}
 	},
+	created(){
+		this.darkModeEnabled = localStorage.getItem("dark-mode-enabled") == "true"
+	}
 });
 </script>
 
