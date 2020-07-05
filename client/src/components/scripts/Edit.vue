@@ -1,11 +1,11 @@
 <template>
-	<v-container grid-list-md fill-height>
+	<v-container fluid fill-height>
 		<v-layout align-center justify-center v-if="script == null">
 			<v-progress-circular color="accent" :indeterminate="true"></v-progress-circular>
 		</v-layout>
-		<v-layout column v-else>
+		<v-layout column fill-height v-else>
 			<v-subheader>Edit Script</v-subheader>
-			<app-editor :script="script" :style="{flexGrow:1}"/>
+			<app-editor class="editor" :script="script" :style="{flexGrow:1}"/>
 		</v-layout>
 	</v-container>
 </template>
@@ -29,3 +29,10 @@ export default Vue.extend({
 	}
 })
 </script>
+
+
+<style scoped>
+.editor{
+	flex-grow: 1;
+}
+</style>

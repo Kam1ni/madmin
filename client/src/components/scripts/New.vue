@@ -1,10 +1,8 @@
 <template>
-	<v-container fluid grid-list-md>
-		<v-layout row wrap justify-center>
-			<v-flex xs12>
-				<v-subheader>New Script</v-subheader>
-				<app-editor :script="script"/>
-			</v-flex>
+	<v-container fluid fill-height>
+		<v-layout column>
+			<v-subheader>New Script</v-subheader>
+			<app-editor class="editor" :script="script"/>
 		</v-layout>
 	</v-container>
 </template>
@@ -24,3 +22,9 @@ export default Vue.extend({
 	}
 })
 </script>
+
+<style scoped>
+.editor{
+	flex-grow: 1;
+}
+</style>
