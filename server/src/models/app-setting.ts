@@ -2,6 +2,7 @@ import { BaseModel, BaseQuery } from "./base-model";
 import * as Nedb from "nedb";
 import * as path from "path";
 import { getConfig, IConfig } from "../config";
+import { DB_VERSION } from "../migrations/migration";
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "app-setting.db"), autoload:true})
 
@@ -39,7 +40,6 @@ export async function getSettings(){
 }
 
 export async function initializeSettings(){
-	let settings = require("../assets/settings.json");
 	async function createSettingIfNotExists(name:string, defaultValue:any, readonly:boolean = false){
 		let setting = await AppSettingQuery.findOne({name});
 		if (!setting){
@@ -49,11 +49,4 @@ export async function initializeSettings(){
 	}
 
 	await createSettingIfNotExists(SETTINGS.DefaultRedirect, "madmin");
-
-	await createSettingIfNotExists(SETTINGS.DbVersion, settings.DbVersion);
-	let versionSetting = await AppSettingQuery.findOne({name:SETTINGS.DbVersion});
-	if (settings.version != versionSetting.value){
-		// TODO: CREATE MIGRATION SERVICE
-		console.warn("Migration required");
-	}
 }
