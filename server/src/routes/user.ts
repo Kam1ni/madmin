@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { User, UserQuery } from "../models/user";
-import { HttpError } from "../classes/HttpError";
+import { HttpError } from "../utils/HttpError";
 
 export const userRouter = Router();
 

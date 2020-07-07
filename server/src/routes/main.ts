@@ -1,13 +1,14 @@
 import {Router} from "express";
+import {Request, Response, NextFunction} from "express";
 import * as express from "express";
-import { getConfig, getClientConfig } from "../config";
+import { getConfig, getClientConfig } from "../utils/config";
 import { authRouter } from "./auth";
-import { authenticate } from "../functions/auth";
+import { authenticate } from "../utils/auth";
 import { appRouter } from "./app";
 import { App, AppQuery } from "../models/app";
-import { HttpError } from "../classes/HttpError";
-import { server } from "../functions/server";
-import { proxy } from "../functions/proxy";
+import { HttpError } from "../utils/HttpError";
+import { server } from "../utils/server";
+import { proxy } from "../utils/proxy";
 import { handlerRouter } from "./handler";
 import { Handler, HandlerQuery } from "../models/handler";
 import { configRouter } from "./config";
@@ -16,9 +17,12 @@ import { userRouter } from "./user";
 import * as serveStatic from "serve-static"
 import { resolve, join, dirname } from "path";
 import { scriptRouter } from './script';
-import { madminScriptRefInstance } from '../classes/madmin-script-ref';
+import { madminScriptRefInstance } from '../utils/madmin-script-ref';
 import { fileSystemRouter } from './file-system';
 
+if (!require.main) {
+	throw new Error("This shouldn't happen. require.main is undefined");
+}
 
 const mainFilePath = dirname(require.main.filename)
 const clientPath = join(mainFilePath, "/public")
@@ -82,7 +86,11 @@ mainRouter.use("/exec-handler/*", async function(req,res,next){
 	}
 });
 
-mainRouter.use("/*", async (req,res,next)=>{
+mainRouter.use("/*", async (req:Request,res:Response ,next:NextFunction)=>{
+	if (!req.headers.authorization) {
+		next(new HttpError("Missing authorization token", 400));
+		return;
+	}
 	try{
 		res.locals.user = await authenticate(req.headers.authorization);
 		next();
@@ -100,11 +108,10 @@ mainRouter.use("/fs", fileSystemRouter);
 
 mainRouter.use("/*", async (req,res,next)=>{
 	let result = await AppSettingQuery.findOne({name:SETTINGS.DefaultRedirect});
+	if (!result) return next(new HttpError("No default redirect.", 500));
 	res.redirect(result.value);
 });
 
-mainRouter.use("/*", (err, req, res, next)=>{
-	let error = <HttpError> err;
-	let response = <express.Response>res;
-	response.status(error.code || 500).json({message:error.message, data: error.data});
+mainRouter.use("/*", (err:HttpError, req:Request, res:Response, next:NextFunction)=>{
+	res.status(err.code || 500).json({message:err.message, data: err.data});
 });

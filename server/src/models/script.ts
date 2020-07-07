@@ -1,9 +1,9 @@
 import { BaseModel, BaseQuery } from './base-model';
 import * as Nedb from "nedb";
 import * as path from "path";
-import { getConfig } from "../config";
-import { AsyncFunction } from "../functions/async-function"
-import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../functions/string';
+import { getConfig } from "../utils/config";
+import { AsyncFunction } from "../utils/async-function"
+import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../utils/string';
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "script.db"), autoload:true})
 
@@ -27,16 +27,16 @@ function isTimeValueValid(value:string, arr:string[]):boolean{
 export class Script extends BaseModel<Script> {
 	protected db: Nedb = db;
 
-	name:string;
-	code:string;
+	name:string = "";
+	code:string = "";
 	
-	runAtStartUp:boolean;
-	runAtInterval:boolean;
-	dayOfTheWeek:string;
-	dayOfTheMonth:string;
-	month:string;
-	hour:string;
-	minut:string;
+	runAtStartUp:boolean = false;
+	runAtInterval:boolean = false;
+	dayOfTheWeek:string = "*";
+	dayOfTheMonth:string = "*";
+	month:string = "*";
+	hour:string = "*";
+	minut:string = "*";
 
 	constructor(data:any = null){
 		super(data);
@@ -55,7 +55,7 @@ export class Script extends BaseModel<Script> {
 		return new AsyncFunction("madmin", "require", "args", this.code);
 	}
 
-	async validate():Promise<string>{
+	async validate():Promise<string | null>{
 		if (isStringNullOrWhiteSpace(this.name)){
 			return "Name is required and cannot contain spaces."
 		}

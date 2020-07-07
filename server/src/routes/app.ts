@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { App, AppQuery } from "../models/app";
-import { HttpError } from "../classes/HttpError";
+import { HttpError } from "../utils/HttpError";
 
 export const appRouter = Router();
 

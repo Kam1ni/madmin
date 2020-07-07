@@ -5,14 +5,14 @@ import * as http from "http";
 import * as https from "https";
 
 import {init} from "./init/index";
-import {getConfig} from "./config";
-import { server } from "./functions/server";
+import {getConfig} from "./utils/config";
+import { server } from "./utils/server";
 import * as fs from "fs";
 
 async function main(){
 	await init();
 	const config = getConfig();
-	const {startScriptScheduler} = require("./script-scheduler");
+	const {startScriptScheduler} = require("./utils/script-scheduler");
 	const app = express();
 	app.use(cors());
 	app.use(bodyParser.json({limit:"50mb", type:"application/json"}));
@@ -21,7 +21,7 @@ async function main(){
 	const mainRouter = require("./routes/main").mainRouter;
 	app.use(mainRouter);
 	
-	if (!config.sslKey){
+	if (!config.sslKey || !config.sslCert){
 		const server = http.createServer(app);
 		server.listen(config.port, config.host, function(){
 			console.log(`server started at ${config.host}:${config.port}`);

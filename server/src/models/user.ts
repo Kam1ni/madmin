@@ -1,9 +1,9 @@
-import { getConfig } from "../config";
+import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as path from 'path';
 
 import * as Nedb from "nedb";
-import { hashCompare, hash } from "../functions/hash";
+import { hashCompare, hash } from "../utils/hash";
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "user.db"), autoload:true})
 
@@ -24,10 +24,10 @@ export interface IPrivateUser extends IPublicUser{
 
 export class User extends BaseModel<User> {
 	protected db = db;
-	username:string;
-	password:string;
-	isAdmin:boolean;
-	tokens:IToken[];
+	username:string = "";
+	password:string = "";
+	isAdmin:boolean = false;
+	tokens:IToken[] = [];
 
 	constructor(doc:any = null){
 		super(doc);
@@ -42,7 +42,8 @@ export class User extends BaseModel<User> {
 
 	async setPassword(newPassword:string):Promise<void> {
 		if (newPassword == null){
-			return this.password = null;
+			this.password = "";
+			return;
 		}
 		let generatedHash = await hash(newPassword, getConfig().saltRounds);
 		this.password = generatedHash;

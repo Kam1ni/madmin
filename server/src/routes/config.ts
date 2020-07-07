@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AppSetting, getSettings, AppSettingQuery } from "../models/app-setting";
-import { HttpError } from "../classes/HttpError";
+import { HttpError } from "../utils/HttpError";
 import { User } from "../models/user";
 
 export const configRouter = Router();

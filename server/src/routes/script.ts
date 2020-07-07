@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ScriptQuery, Script } from "../models/script";
-import { HttpError } from '../classes/HttpError';
-import { madminScriptRefInstance } from '../classes/madmin-script-ref';
+import { HttpError } from '../utils/HttpError';
+import { madminScriptRefInstance } from '../utils/madmin-script-ref';
 
 export const scriptRouter = Router();
 

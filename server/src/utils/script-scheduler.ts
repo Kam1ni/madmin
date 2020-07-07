@@ -1,6 +1,6 @@
 import { getConfig } from './config';
-import { ScriptQuery } from './models/script';
-import { madminScriptRefInstance } from './classes/madmin-script-ref';
+import { ScriptQuery } from '../models/script';
+import { madminScriptRefInstance } from './madmin-script-ref';
 
 function getNextIntervalTime():number{
 	let config = getConfig();

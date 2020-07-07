@@ -51,7 +51,7 @@ export async function server(app:App, req:Request,res:Response){
 			return return404();
 		}
 		let pathStats = await lstatAsync(fullPath);
-		if (pathStats.isDirectory){
+		if (pathStats.isDirectory()){
 			if (!config.listFiles){
 				return return404();
 			}

@@ -8,9 +8,9 @@ export interface IConfig {
 	saltRounds:number;
 	tokenSecret:string;
 	clientDomain:string;
-	sslKey:string;
-	sslCert:string;
-	redirectHttpToHttpsPort:number;
+	sslKey:string | null;
+	sslCert:string | null;
+	redirectHttpToHttpsPort:number | null;
 	runScriptsAtMinutIntervals:boolean;
 }
 

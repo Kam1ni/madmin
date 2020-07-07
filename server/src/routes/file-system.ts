@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { User } from "../models/user";
-import { HttpError } from "../classes/HttpError";
-import * as fs from "../functions/fs";
+import { HttpError } from "../utils/HttpError";
+import * as fs from "../utils/fs";
 import * as path from "path"
-import { File } from "../classes/fs-file";
-import { Directory } from "../classes/fs-directory";
+import { File } from "../utils/fs-file";
+import { Directory } from "../utils/fs-directory";
 export const fileSystemRouter = Router();
 import * as os from "os";
 

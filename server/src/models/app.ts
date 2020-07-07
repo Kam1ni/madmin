@@ -1,4 +1,4 @@
-import { getConfig } from "../config";
+import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
 import * as path from 'path';
 
@@ -28,13 +28,16 @@ export class App extends BaseModel<App>{
 		{property:"enabled",value:true}
 	]
 	
-	subdomain:string;
-	domainName?:string;
-	type:AppTypes;
-	config:IProxyApp|IStaticApp;
-	enabled:boolean;
+	subdomain:string = "";
+	domainName:string | null = null;
+	type:AppTypes = AppTypes.static;
+	config:IProxyApp|IStaticApp = {
+		path:"",
+		listFiles:true,
+	};
+	enabled:boolean = true;
 
-	async validate():Promise<string>{
+	async validate():Promise<string | null>{
 		this.subdomain = this.subdomain.toLowerCase();
 		if (this.enabled === undefined){
 			this.enabled = true;
@@ -51,7 +54,7 @@ export class App extends BaseModel<App>{
 			}
 			if (conf.error404File){
 				if (conf.error404File.match(/^\s*$/)){
-					conf.error404File = null;
+					conf.error404File = undefined;
 				}
 			}
 		}
@@ -64,7 +67,7 @@ export class App extends BaseModel<App>{
 		if (app != null){
 			return `subdomain "${this.subdomain}" already in use`
 		}
-		if (/^\s*$/.exec(this.domainName)){
+		if (this.domainName && /^\s*$/.exec(this.domainName)){
 			this.domainName = null;
 		}else{
 			app = await AppQuery.findOne({domainName:this.domainName, _id:{$ne:this._id}});
@@ -79,7 +82,7 @@ class AppQueryClass extends BaseQuery<App>{
 	protected type: new (data: any) => App = App;
 	protected db: Nedb = db;
 	static default = new AppQueryClass();
-	async findBySubdomain(subDomain:string):Promise<App> {
+	async findBySubdomain(subDomain:string):Promise<App | null> {
 		let apps = await this.find({enabled:true});
 		for (let app of apps){
 			let domain = app.subdomain.replace(".", "\\.");

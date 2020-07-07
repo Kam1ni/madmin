@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Handler, HandlerQuery } from "../models/handler";
-import { HttpError } from "../classes/HttpError";
+import { HttpError } from "../utils/HttpError";
 
 
 export const handlerRouter = Router();

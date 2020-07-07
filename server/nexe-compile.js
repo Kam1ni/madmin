@@ -10,9 +10,7 @@ compile({
 	build:true,
 	targets:[
 		{
-			platform: "linux",
-			arch: "arm64",
-			version: "12.14.0"
+			version: "12.18.2"
 		}
 	]
 }).then(()=>{

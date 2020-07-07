@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { IConfig, setConfig } from "../config";
+import { IConfig, setConfig } from "../utils/config";
 import * as randomstring from "randomstring";
 import md5 = require("md5");
 

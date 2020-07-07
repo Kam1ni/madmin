@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
 import * as Nedb from "nedb";
 import * as path from "path";
-import { getConfig } from "../config";
+import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
 import { exec } from "child_process";
-import { AsyncFunction } from "../functions/async-function"
+import { AsyncFunction } from "../utils/async-function"
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "handler.db"), autoload:true})
 const ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
@@ -15,10 +15,10 @@ export class Handler extends BaseModel<Handler>{
 		{property:"enabled", value:true}
 	]
 
-	path:string;
-	code:string;
-	enabled:boolean;
-	methods:string[];
+	path:string = "";
+	code:string = "";
+	enabled:boolean = true;
+	methods:string[] = [];
 	
 
 	constructor(data:any = null){
@@ -45,7 +45,7 @@ export class Handler extends BaseModel<Handler>{
 		return new AsyncFunction("madmin", "req", "res", "require", this.code);
 	}
 
-	async validate():Promise<string>{
+	async validate():Promise<string | null>{
 		this.path = (<string>this.path).toLowerCase();
 		if (this.path[0] != "/"){
 			this.path = "/" + this.path;

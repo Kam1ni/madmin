@@ -1,8 +1,7 @@
 import { BaseModel, BaseQuery } from "./base-model";
 import * as Nedb from "nedb";
 import * as path from "path";
-import { getConfig, IConfig } from "../config";
-import { DB_VERSION } from "../migrations/migration";
+import { getConfig, IConfig } from "../utils/config";
 
 const db = new Nedb({filename:path.join(getConfig().dataPath, "app-setting.db"), autoload:true})
 
@@ -13,7 +12,7 @@ export enum SETTINGS{
 
 export class AppSetting extends BaseModel<AppSetting>{
 	protected db: Nedb = db;
-	name:string;
+	name:string = "";
 	value:any;
 	readonly:boolean = false;
 
@@ -30,9 +29,9 @@ class AppSettingQueryClass extends BaseQuery<AppSetting>{
 
 export const AppSettingQuery = AppSettingQueryClass.default
 
-export async function getSettings(){
+export async function getSettings():Promise<{[key:string]:any}>{
 	let configs = await AppSettingQuery.find();
-	let result = {};
+	let result:{[key:string]:any} = {};
 	for (let config of configs){
 		result[config.name] = config.value;
 	}

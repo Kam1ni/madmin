@@ -6,7 +6,7 @@ interface IDefaultValue {
 }
 
 export abstract class BaseModel<T extends BaseModel<T>>{
-	_id:string;
+	_id:string = "";
 	protected static db:Nedb;
 	protected abstract db:Nedb;
 	protected readonly _ignoredFields:string[] = [];
@@ -15,7 +15,7 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 	constructor(doc:any=null){
 		if (!doc) return;
 		for (let key of Object.keys(doc)){
-			this[key] = doc[key];
+			(this as any)[key] = doc[key];
 		}
 	}
 
@@ -23,22 +23,22 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 		return this.getSaveableObject();
 	}
 
-	async validate():Promise<string>{
+	async validate():Promise<string | null>{
 		return null;
 	}
 
 	private getSaveableObject():any{
 		let object:any = {}
 		for (let val of this._defaultValues){
-			if (this[val.property] === undefined){
-				this[val.property] = val.value;
+			if ((this as any)[val.property] === undefined){
+				(this as any)[val.property] = val.value;
 			}
 		}
 		for (let key of Object.keys(this)){
 			if (key == "_ignoredFields" || this._ignoredFields.indexOf(key) != -1 || key == "_defaultValues"){
 				continue;
 			}
-			let value = this[key];
+			let value = (this as any)[key];
 			if (key == "db")continue;
 			if (typeof(key) == "function")continue;
 			object[key] = value;
@@ -79,7 +79,7 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 
 	protected parse(doc:any, fields:string[]){
 		for (let field of fields){
-			this[field] = doc[field];
+			(this as any)[field] = doc[field];
 		}
 	}
 
@@ -99,15 +99,15 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 
 export abstract class BaseQuery<T extends BaseModel<T>>{
 	protected abstract db:Nedb;
-	protected abstract type:(new (data) => T);
+	protected abstract type:(new (data?:any) => T);
 
-	async findById(id:string):Promise<T>{
+	async findById(id:string):Promise<T|null>{
 		return this.findOne({_id:id});
 	}
 
 	async find(query:any = null):Promise<T[]> {
 		let promise = <Promise<T[]>>new Promise((resolve, reject)=>{
-			this.db.find(query, (err, docs)=>{
+			this.db.find(query, (err:Error, docs:any[])=>{
 				if (err){
 					return reject(err);
 				}
@@ -117,8 +117,8 @@ export abstract class BaseQuery<T extends BaseModel<T>>{
 		return await promise;
 	}
 
-	async findOne(query:any):Promise<T>{
-		let promise = <Promise<T>>new Promise((resolve, reject)=>{
+	async findOne(query:any):Promise<T | null>{
+		let promise = <Promise<T | null>>new Promise((resolve, reject)=>{
 			this.db.findOne(query, (err, doc)=>{
 				if (err){
 					return reject(err);

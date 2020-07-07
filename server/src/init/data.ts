@@ -1,4 +1,4 @@
-import { IConfig, getConfig } from "../config";
+import { IConfig, getConfig } from "../utils/config";
 import * as path from "path";
 import * as fs from "fs";
 

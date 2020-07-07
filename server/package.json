@@ -5,12 +5,10 @@
 	"description": "Server for madmin server management platform",
 	"main": "index.js",
 	"scripts": {
-		"start": "node dist/index.js",
+		"start": "node --enable-source-maps dist/index.js",
 		"build": "tsc",
 		"dev": "tsc-watch --onSuccess \"node dev-run.js\"",
 		"migrate": "node dist/migration.js",
-		"pkg": "pkg . --targets node8-linux-x64,node8-linux-x86,node8-win-x64,node8-win-x86 --out-path pkg",
-		"pkg-arm": "pkg . --targets node8-linux-arm64 --out-path pkg",
 		"nexe": "node nexe-compile.js"
 	},
 	"author": "",
@@ -25,15 +23,10 @@
 		"nedb": "^1.8.0",
 		"randomstring": "^1.1.5"
 	},
-	"pkg": {
-		"scripts": "dist/**/*.js",
-		"assets": [
-			"dist/public/**/*"
-		]
-	},
 	"devDependencies": {
 		"@types/bcrypt": "^2.0.0",
 		"@types/body-parser": "^1.17.0",
+		"@types/cors": "^2.8.6",
 		"@types/express": "^4.16.0",
 		"@types/jsonwebtoken": "^7.2.7",
 		"@types/md5": "^2.1.33",
@@ -41,7 +34,6 @@
 		"@types/node": "^10.3.5",
 		"@types/randomstring": "^1.1.6",
 		"nexe": "^3.3.7",
-		"pkg": "^4.4.8",
 		"tsc-watch": "^2.2.1",
 		"typescript": "^3.5.2"
 	}
