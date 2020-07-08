@@ -26,7 +26,7 @@
 			<codemirror v-model="handler.code" class="editor"></codemirror>
 			<v-card-actions>
 				<v-spacer/>
-				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn depressed color="accent" to="/handlers">Back to handlers</v-btn>
 				<v-btn depressed color="primary" @click="save">Save</v-btn>
 			</v-card-actions>
 			<v-dialog max-width="900" v-model="showInfo">
@@ -44,6 +44,7 @@ import { handlerService } from '@/services/handler-service';
 import { Handler } from '@/classes/handler';
 import { BaseRoutes } from '@/classes/api';
 import AppEditorInfo from "./EditorInfo.vue";
+import { constants } from 'fs';
 const {codemirror} = require('vue-codemirror')
 
 export default Vue.extend({
@@ -78,17 +79,28 @@ export default Vue.extend({
 		}
 	},
 	methods:{
-		cancel(){
-			this.$router.go(-1);
-		},
 		async save(){
 			await this.handler.save();
-			this.$router.go(-1);
+		},
+		onKeyPress(event:KeyboardEvent){
+			if (!event.ctrlKey) return;
+			if (event.shiftKey) return;
+			if (event.altKey) return;
+			if (event.key.toLowerCase() != "s") return;
+			event.preventDefault();
+			this.save();
+			return false;
 		}
 	},
 	components:{
 		codemirror,
 		AppEditorInfo
+	},
+	created(){
+		window.addEventListener("keydown", this.onKeyPress);
+	},
+	destroyed(){
+		window.removeEventListener("keydown", this.onKeyPress)
 	}
 })
 </script>

@@ -46,7 +46,7 @@
 
 			<v-card-actions>
 				<v-spacer/>
-				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
+				<v-btn depressed color="accent" to="/scripts">Back to scripts</v-btn>
 				<v-btn depressed color="primary" @click="save">Save</v-btn>
 			</v-card-actions>
 
@@ -142,12 +142,8 @@ export default Vue.extend({
 		}
 	},
 	methods:{
-		cancel(){
-			this.$router.go(-1);
-		},
 		async save(){
 			await this.script.save();
-			this.$router.go(-1);
 		},
 		createValidityArray(start:number, end:number):string[]{
 			let arr = ["*"] as string[];
@@ -155,10 +151,25 @@ export default Vue.extend({
 				arr.push(`${i}`);
 			}
 			return arr;
+		},
+		onKeyPress(event:KeyboardEvent){
+			if (!event.ctrlKey) return;
+			if (event.shiftKey) return;
+			if (event.altKey) return;
+			if (event.key.toLowerCase() != "s") return;
+			event.preventDefault();
+			this.save();
+			return false;
 		}
 	},
 	components:{
 		AppEditorInfo
+	},
+	created(){
+		window.addEventListener("keydown", this.onKeyPress);
+	},
+	destroyed(){
+		window.removeEventListener("keydown", this.onKeyPress)
 	}
 })
 </script>
