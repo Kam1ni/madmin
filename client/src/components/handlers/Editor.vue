@@ -27,7 +27,7 @@
 			<v-card-actions>
 				<v-spacer/>
 				<v-btn depressed color="accent" to="/handlers">Back to handlers</v-btn>
-				<v-btn depressed color="primary" @click="save">Save</v-btn>
+				<v-btn depressed color="primary" @click="save" :disabled="!hasChanges">{{saveText}}</v-btn>
 			</v-card-actions>
 			<v-dialog max-width="900" v-model="showInfo">
 				<app-editor-info @close="showInfo = false"/>
@@ -58,13 +58,22 @@ export default Vue.extend({
 				(v:string) => !handlerService.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
 			],
 			allowedMethods:Handler.ALLOWED_METHODS,
-			showInfo:false
+			showInfo:false,
+			hasChanges:false
 		}
 	},
 	props:{
 		handler:{
 			type:Object as ()=>Handler,
 			required:true
+		}
+	},
+	watch:{
+		handler:{
+			deep:true,
+			handler(){
+				this.hasChanges = true;
+			}
 		}
 	},
 	computed:{
@@ -76,11 +85,15 @@ export default Vue.extend({
 				return this.apiUrl + "/" + this.handler.path
 			}
 			return this.apiUrl + this.handler.path;
+		},
+		saveText():string{
+			return this.hasChanges ? "Save" : "Saved";
 		}
 	},
 	methods:{
 		async save(){
 			await this.handler.save();
+			this.hasChanges = false;
 		},
 		onKeyPress(event:KeyboardEvent){
 			if (!event.ctrlKey) return;

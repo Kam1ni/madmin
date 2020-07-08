@@ -47,7 +47,7 @@
 			<v-card-actions>
 				<v-spacer/>
 				<v-btn depressed color="accent" to="/scripts">Back to scripts</v-btn>
-				<v-btn depressed color="primary" @click="save">Save</v-btn>
+				<v-btn depressed color="primary" @click="save" :disabled="!hasChanges">{{saveText}}</v-btn>
 			</v-card-actions>
 
 			<v-dialog v-model="showInfo" max-width="900">
@@ -81,7 +81,8 @@ export default Vue.extend({
 				(v:string) => !scriptService.scriptNameInUse(this.script.name, this.script.id) || "Path must be unique"
 			],
 			usesMinutesInterval: AppConfig.scriptsRunAtMinutIntervals,
-			showInfo: false
+			showInfo: false,
+			hasChanges: false
 		}
 	},
 	props:{
@@ -90,7 +91,18 @@ export default Vue.extend({
 			required:true
 		}
 	},
+	watch:{
+		script:{
+			deep:true,
+			handler(){
+				this.hasChanges = true;
+			}
+		}
+	},
 	computed:{
+		saveText():string{
+			return this.hasChanges ? "save" : "saved";
+		},
 		daysOfTheWeek():ISelectItem[]{
 			return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Any"].map((day, i)=>{
 				return {
@@ -144,6 +156,7 @@ export default Vue.extend({
 	methods:{
 		async save(){
 			await this.script.save();
+			this.hasChanges = false;
 		},
 		createValidityArray(start:number, end:number):string[]{
 			let arr = ["*"] as string[];

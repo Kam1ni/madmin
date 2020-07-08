@@ -18,6 +18,11 @@ export class Script extends BaseResource{
 	constructor(data:any = null){
 		super(data);
 		if(!data)return;
+		this.parse(data);
+	}
+
+	parse(data:any){
+		this._id = data._id;
 		this.name = data.name;
 		this.code = data.code;
 		this.runAtStartUp = data.runAtStartUp;
@@ -32,15 +37,17 @@ export class Script extends BaseResource{
 	async save(){
 		if (!this.created){
 			let result = await Axios.post(ScriptService.API_URL, this, {headers:HeaderBuilder.getDefaultHeaders()});
+			this.parse(result.data as any);
 			scriptService.scripts.push(new Script(result.data));
 			this._created = true;
 		}else{
-			await Axios.put(`${ScriptService.API_URL}/${this.id}`, this, {headers:HeaderBuilder.getDefaultHeaders()});
+			let result = await Axios.put(`${ScriptService.API_URL}/${this.id}`, this, {headers:HeaderBuilder.getDefaultHeaders()});
+			this.parse(result.data);
 			let index = scriptService.scripts.findIndex((item)=>{return item.id == this.id});
 			if (index != -1){
-				scriptService.scripts[index] = this;
+				scriptService.scripts[index] = new Script(result.data);
 			}else{
-				scriptService.scripts.push(this);
+				scriptService.scripts.push(new Script(result.data));
 			}
 		}
 	}

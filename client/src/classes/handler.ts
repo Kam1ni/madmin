@@ -13,6 +13,11 @@ export class Handler extends BaseResource{
 	constructor(data:any = null){
 		super(data);
 		if (!data) return;
+		this.parse(data);
+	}
+
+	parse(data:any){
+		this._id = data._id;
 		this.path = data.path;
 		this.code = data.code;
 		this.methods = data.methods;
@@ -22,10 +27,12 @@ export class Handler extends BaseResource{
 	async save(){
 		if (!this.created){
 			let result = await Axios.post(HandlerService.API_URL, this, {headers:HeaderBuilder.getDefaultHeaders()});
-			handlerService.handlers.push(new Handler(result.data));
+			this.parse(result.data);
+			handlerService.handlers.push(this);
 			this._created = true;
 		}else{
 			let result = await Axios.put(HandlerService.API_URL + "/" + this.id,  this, {headers:HeaderBuilder.getDefaultHeaders()});
+			this.parse(result.data);
 			let index = handlerService.handlers.findIndex(i=>{return i.id == this.id});
 			if (index != -1){
 				handlerService.handlers[index] = new Handler(result.data);

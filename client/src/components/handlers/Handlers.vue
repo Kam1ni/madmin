@@ -47,7 +47,7 @@
 			</v-flex>
 		</v-layout>
 		<v-btn fixed fab bottom right color="accent" to="/handlers/new"><v-icon>add</v-icon></v-btn>
-		<v-dialog :value="true" max-width="250" v-if="toDeleteHandler != null" persistent>
+		<v-dialog :value="true" max-width="400" v-if="toDeleteHandler != null" persistent>
 			<v-card>
 				<v-card-title class="headline">Warning</v-card-title>
 				<v-card-text>

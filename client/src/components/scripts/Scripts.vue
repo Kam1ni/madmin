@@ -61,7 +61,7 @@
 			</v-card>
 		</v-dialog>
 
-		<v-dialog :value="true" max-width="250" v-if="toDeleteScript != null" persistent>
+		<v-dialog :value="true" max-width="400" v-if="toDeleteScript != null" persistent>
 			<v-card>
 				<v-card-title class="headline">Warning</v-card-title>
 				<v-card-text>
@@ -110,6 +110,9 @@ export default Vue.extend({
 		},
 		cancelExecute(){
 			this.toExecuteScript = null;
+		},
+		cancelDelete(){
+			this.toDeleteScript = null;
 		},
 		async executeScript(){
 			let args = this.executeArgs.split(" ");
