@@ -6,7 +6,8 @@
 					<v-flex xs12 md6>
 						<v-text-field v-model="script.name" label="Name" :rules="nameRules"></v-text-field>
 					</v-flex>
-				
+					<v-spacer/>
+					<v-btn icon @click="showInfo = true"><v-icon color="accent">info</v-icon></v-btn>
 				</v-layout>
 
 				<v-layout row>
@@ -35,15 +36,23 @@
 						<v-select :items="minutes" label="Minut" v-model="script.minut"/>
 					</v-flex>
 				</v-layout>
+
+				<v-layout row>
+					<v-spacer/>
+				</v-layout>
 			</v-card-text>
-			async function(madmin, require, ...args){
+
 			<codemirror v-model="script.code" class="editor"></codemirror>
-			}
+
 			<v-card-actions>
 				<v-spacer/>
 				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
 				<v-btn depressed color="primary" @click="save">Save</v-btn>
 			</v-card-actions>
+
+			<v-dialog v-model="showInfo" max-width="900">
+				<app-editor-info @close="showInfo = false"/>
+			</v-dialog>
 		</v-form>
 	</v-card>
 </template>
@@ -55,6 +64,7 @@ import { isNullOrUndefined } from 'util';
 import { stringHasWhiteSpace } from '@/functions/string';
 import { scriptService } from '../../services/script-service';
 import { AppConfig } from '../../conifg';
+import AppEditorInfo from "./EditorInfo.vue";
 
 interface ISelectItem {
 	text:string;
@@ -70,7 +80,8 @@ export default Vue.extend({
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
 				(v:string) => !scriptService.scriptNameInUse(this.script.name, this.script.id) || "Path must be unique"
 			],
-			usesMinutesInterval: AppConfig.scriptsRunAtMinutIntervals
+			usesMinutesInterval: AppConfig.scriptsRunAtMinutIntervals,
+			showInfo: false
 		}
 	},
 	props:{
@@ -145,8 +156,10 @@ export default Vue.extend({
 			}
 			return arr;
 		}
-
 	},
+	components:{
+		AppEditorInfo
+	}
 })
 </script>
 
