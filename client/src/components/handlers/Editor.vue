@@ -6,9 +6,11 @@
 					<v-flex xs12 md6 xl8>
 						{{fullUrl}}
 					</v-flex>
+					<v-spacer/>
+					<v-btn icon @click="showInfo = true"><v-icon color="accent">info</v-icon></v-btn>
 				</v-layout>
-				<v-layout row wrap align-center>
-					<v-flex xs12 sm6 d-flex>
+				<v-layout row>
+					<v-flex xs12 sm6>
 						<v-select
 						:items="allowedMethods"
 						label="Methods"
@@ -21,14 +23,15 @@
 					</v-flex>
 				</v-layout>
 			</v-card-text>
-			async function(madmin, req, res, require){
 			<codemirror v-model="handler.code" class="editor"></codemirror>
-			}
 			<v-card-actions>
 				<v-spacer/>
 				<v-btn depressed color="accent" @click="cancel">Cancel</v-btn>
 				<v-btn depressed color="primary" @click="save">Save</v-btn>
 			</v-card-actions>
+			<v-dialog max-width="900" v-model="showInfo">
+				<app-editor-info @close="showInfo = false"/>
+			</v-dialog>
 		</v-form>
 	</v-card>
 </template>
@@ -40,6 +43,7 @@ import { stringHasWhiteSpace } from '@/functions/string';
 import { handlerService } from '@/services/handler-service';
 import { Handler } from '@/classes/handler';
 import { BaseRoutes } from '@/classes/api';
+import AppEditorInfo from "./EditorInfo.vue";
 const {codemirror} = require('vue-codemirror')
 
 export default Vue.extend({
@@ -52,7 +56,8 @@ export default Vue.extend({
 				(v:string) => !stringHasWhiteSpace(v) || "Path may not have spaces",
 				(v:string) => !handlerService.isPathInUse(this.handler.path, this.handler.id) || "Path must be unique"
 			],
-			allowedMethods:Handler.ALLOWED_METHODS
+			allowedMethods:Handler.ALLOWED_METHODS,
+			showInfo:false
 		}
 	},
 	props:{
@@ -82,7 +87,8 @@ export default Vue.extend({
 		}
 	},
 	components:{
-		codemirror
+		codemirror,
+		AppEditorInfo
 	}
 })
 </script>

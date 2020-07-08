@@ -14,7 +14,7 @@
 		</v-card-text>
 		<v-card-actions>
 			<v-spacer/>
-			<v-btn flat color="accent" @click="close">Close</v-btn>
+			<v-btn flat color="accent" @click="close()">Close</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
