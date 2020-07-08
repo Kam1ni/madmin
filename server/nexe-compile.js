@@ -10,7 +10,7 @@ compile({
 	build:true,
 	targets:[
 		{
-			version: "12.18.2"
+			version: "12.14.0"
 		}
 	]
 }).then(()=>{
