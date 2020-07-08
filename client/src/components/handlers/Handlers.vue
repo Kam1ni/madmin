@@ -88,6 +88,7 @@ export default Vue.extend({
 		},
 		async deleteHandler(){
 			await this.toDeleteHandler.remove();
+			this.toDeleteHandler = null;
 		},
 		getPowerColor(item:Handler){
 			if (item.enabled){
