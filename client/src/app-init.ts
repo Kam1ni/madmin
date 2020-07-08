@@ -20,7 +20,9 @@ export function appInit(){
 			mode: 'text/javascript',
 			theme: 'base16-dark',
 			lineNumbers: true,
-			line:true
+			line:true,
+			indentWithTabs: true,
+			indentUnit:4
 		}
 	})
 	
