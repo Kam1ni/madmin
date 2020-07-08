@@ -16,8 +16,10 @@ export class AppSetting extends BaseModel<AppSetting>{
 	value:any;
 	readonly:boolean = false;
 
-	constructor(data:any = null){
-		super(data);
+	constructor(doc:any = null){
+		super();
+		if (!doc) return;
+		this.parse(doc);
 	}
 }
 

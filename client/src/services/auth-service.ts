@@ -16,8 +16,8 @@ const LOCAL_STORAGE_USER = "auth_user";
 export const authService = new Vue({
 	data(){
 		return {
-			user:<User> null,
-			token:<string> null
+			user: null as User | null, 
+			token:null as string | null
 		}
 	},
 	computed:{
@@ -42,7 +42,7 @@ export const authService = new Vue({
 		},
 		async login(username:string, password:string):Promise<any>{
 			try{
-				let result = await Axios.post(API_URL + "/login", {username, password, deviceName:this.getDiveceName()});
+				let result = await Axios.post(API_URL + "/login", {username, password});
 				this.user = new User(result.data);
 				this.token = result.data.token;
 			}catch(err){
@@ -54,32 +54,16 @@ export const authService = new Vue({
 				throw err;
 			}
 		},
+		logout(){
+			this.token = null;
+			this.user = null;
+		},
 		async setNewPassword(password:string):Promise<any>{
 			let result = await Axios.post(API_URL + "/set-new-password", {password}, {headers:HeaderBuilder.getDefaultHeaders()});
 		},
 		async changePassword(oldPassword:string, newPassword:string):Promise<any>{
 			let result = await Axios.post(`${API_URL}/change-password`, {oldPassword, newPassword}, {headers:HeaderBuilder.getDefaultHeaders()});
 		},
-		async logout(){
-			await Axios.post(API_URL + "/logout", null, {headers:HeaderBuilder.getDefaultHeaders()});
-			this.user = null;
-			this.token = null;
-		},
-		async removeToken(token:Token){
-			await Axios.post(API_URL + "/logout", null, {headers:new HeaderBuilder().setAuthorization(false).setHeader("Authorization", token.token).build()});
-			let userTokens = this.user.tokens;
-			let index = userTokens.findIndex((t)=>{return t.token == token.token});
-			if (index != -1){
-				userTokens.splice(index, 1);
-			}
-		},
-		getDiveceName():string{
-			return `${getBrowserName()} @${getClientOS()}`;
-		},
-		async removeAllTokens(){
-			let message = await Axios.delete(API_URL + "/remove-all-tokens", {headers:HeaderBuilder.getDefaultHeaders()});
-			this.user.tokens = message.data.tokens.map((t:any) => new Token(t));
-		}
 	},
 	async created(){
 		console.log("ADDING INTERCEPTORS");

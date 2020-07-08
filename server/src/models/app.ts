@@ -37,6 +37,12 @@ export class App extends BaseModel<App>{
 	};
 	enabled:boolean = true;
 
+	public constructor(doc:any = null){
+		super();
+		if (!doc) return;
+		this.parse(doc);
+	}
+
 	async validate():Promise<string | null>{
 		this.subdomain = this.subdomain.toLowerCase();
 		if (this.enabled === undefined){

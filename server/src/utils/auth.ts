@@ -12,11 +12,6 @@ export async function authenticate(token:string):Promise<User>{
 	}
 	let user = await UserQuery.findOne({_id:data.userId});
 	if (!user) throw new HttpError("Invalid token", 400);
-	let foundToken = user.tokens.find(t=>{
-		return t.token == token;
-	});
-
-	if (!foundToken) throw new HttpError("Invalid token", 400);
 	return user;
 }
 

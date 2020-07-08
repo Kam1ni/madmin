@@ -19,7 +19,6 @@ export interface IPublicUser {
 }
 
 export interface IPrivateUser extends IPublicUser{
-	tokens:IToken[];
 }
 
 export class User extends BaseModel<User> {
@@ -27,13 +26,11 @@ export class User extends BaseModel<User> {
 	username:string = "";
 	password:string = "";
 	isAdmin:boolean = false;
-	tokens:IToken[] = [];
 
-	constructor(doc:any = null){
-		super(doc);
-		if (!this.tokens) {
-			this.tokens = []
-		}
+	public constructor(doc:any = null){
+		super();
+		if (!doc) return;
+		this.parse(doc);
 	}
 
 	async comparePassword(password:string):Promise<boolean> {
@@ -41,10 +38,6 @@ export class User extends BaseModel<User> {
 	}
 
 	async setPassword(newPassword:string):Promise<void> {
-		if (newPassword == null){
-			this.password = "";
-			return;
-		}
 		let generatedHash = await hash(newPassword, getConfig().saltRounds);
 		this.password = generatedHash;
 	}
@@ -52,39 +45,15 @@ export class User extends BaseModel<User> {
 	getPublicJson():IPublicUser {
 		let id = this._id;
 		return {
-			identifier: id,
+			identifier: id || "<ID ERROR>",
 			username: this.username,
 			isAdmin: this.isAdmin,
 		}
 	}
 
 	getPrivateJson():IPrivateUser{
-		let privateUser = <IPrivateUser>this.getPublicJson();
-		privateUser.tokens = this.tokens;
+		let privateUser = this.getPublicJson();
 		return privateUser;
-	}
-
-	addToken(token:string, name?:string){
-		if (name == null){
-			name = new Date().toUTCString();
-		}
-		this.tokens.push({token:token, deviceName:name});
-	}
-
-	removeToken(token:string){
-		this.tokens.reverse().forEach((t)=>{
-			if (t.token == token) {
-				this.tokens.splice(this.tokens.indexOf(t), 1);
-			}
-		});
-	}
-
-	removeAllTokens(currentToken:string){
-		this.tokens.reverse().forEach((token)=>{
-			if (token.token != currentToken) {
-				this.tokens.splice(this.tokens.indexOf(token), 1);
-			}
-		});
 	}
 }
 

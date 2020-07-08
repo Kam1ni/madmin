@@ -38,8 +38,10 @@ export class Script extends BaseModel<Script> {
 	hour:string = "*";
 	minut:string = "*";
 
-	constructor(data:any = null){
-		super(data);
+	constructor(doc:any = null){
+		super();
+		if (!doc) return;
+		this.parse(doc);
 	}
 
 	async execute(madmin:any, args:any[]):Promise<number>{

@@ -6,17 +6,20 @@ interface IDefaultValue {
 }
 
 export abstract class BaseModel<T extends BaseModel<T>>{
-	_id:string = "";
+	_id:string | undefined = undefined;
 	protected static db:Nedb;
 	protected abstract db:Nedb;
 	protected readonly _ignoredFields:string[] = [];
 	protected _defaultValues:IDefaultValue[] = [];
 
-	constructor(doc:any=null){
-		if (!doc) return;
-		for (let key of Object.keys(doc)){
-			(this as any)[key] = doc[key];
-		}
+	private setProperty(key:string, val:any){
+		let t = this as any;
+		t[key] = val;
+	}
+
+	private getProperty(key:string):any{
+		let t = this as any;
+		return t[key];
 	}
 
 	toJSON():any{
@@ -30,7 +33,7 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 	private getSaveableObject():any{
 		let object:any = {}
 		for (let val of this._defaultValues){
-			if ((this as any)[val.property] === undefined){
+			if (this.getProperty(val.property) === undefined){
 				(this as any)[val.property] = val.value;
 			}
 		}
@@ -38,7 +41,7 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 			if (key == "_ignoredFields" || this._ignoredFields.indexOf(key) != -1 || key == "_defaultValues"){
 				continue;
 			}
-			let value = (this as any)[key];
+			let value = this.getProperty(key);
 			if (key == "db")continue;
 			if (typeof(key) == "function")continue;
 			object[key] = value;
@@ -77,9 +80,9 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 		}
 	}
 
-	protected parse(doc:any, fields:string[]){
-		for (let field of fields){
-			(this as any)[field] = doc[field];
+	protected parse(doc:any){
+		for (let key of Object.keys(doc)){
+			this.setProperty(key, doc[key])
 		}
 	}
 

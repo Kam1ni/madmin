@@ -1,16 +1,6 @@
 <template>
     <v-card>
         <v-list two-line class="no-padding">
-            <v-list-tile>
-                <v-list-tile-content>
-                    <v-list-tile-title>Tokens</v-list-tile-title>
-                    <v-list-tile-sub-title>Manage your login tokens</v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon to="/settings/tokens"><v-icon>keyboard_arrow_right</v-icon></v-btn>
-                </v-list-tile-action>
-            </v-list-tile>
-            <v-divider></v-divider>
             <v-list-tile @click="changePassword">
                 <v-list-tile-content>
                     <v-list-tile-title>Change password</v-list-tile-title>

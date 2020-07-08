@@ -21,8 +21,10 @@ export class Handler extends BaseModel<Handler>{
 	methods:string[] = [];
 	
 
-	constructor(data:any = null){
-		super(data);
+	constructor(doc:any = null){
+		super();
+		if (!doc) return;
+		this.parse(doc)
 	}
 
 	async execute(madmin:any, request:Request, response:Response){
