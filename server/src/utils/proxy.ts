@@ -10,24 +10,24 @@ export async function proxy(app:App, req:Request, res:Response){
 		let parsedUrl = url.parse(config.url + req.path);
 		let options:AxiosRequestConfig = {
 			url: parsedUrl.href,
-			method:req.method as Method,
-			data:req.body,
-			headers:req.headers,
-			responseType:"arraybuffer"
-		}
+			method: req.method as Method,
+			data: req.body,
+			headers: req.headers,
+			responseType: "arraybuffer"
+		};
 		let response = await Axios(options);
 		res.set(response.headers);
 		res.status(response.status);
-		res.send(new Buffer(response.data, 'binary'));
+		res.send(new Buffer(response.data, "binary"));
 	}catch(err){
 		let axiosError = <AxiosError>err;
 		console.log(err);
 		if (axiosError.response){
-			res.set(axiosError.response.headers)
+			res.set(axiosError.response.headers);
 			res.status(axiosError.response.status);
 			res.send(axiosError.response.data);
 		}else{
-			res.status(500).json({message:"Proxy error"});
+			res.status(500).json({message: "Proxy error"});
 		}
 	}
 }

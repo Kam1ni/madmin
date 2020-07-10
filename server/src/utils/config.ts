@@ -1,4 +1,4 @@
-import * as fs from "fs"
+import * as fs from "fs";
 
 export interface IConfig {
 	dataPath:string;
@@ -31,7 +31,7 @@ export function getConfig():IConfig{
 
 export function getClientConfig():IClientConfig{
 	return {
-		baseUrl:`${config.baseUrl}:${config.port}`,
-		scriptsRunAtMinutIntervals:config.runScriptsAtMinutIntervals,
-	}
+		baseUrl: `${config.baseUrl}:${config.port}`,
+		scriptsRunAtMinutIntervals: config.runScriptsAtMinutIntervals,
+	};
 }

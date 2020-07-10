@@ -3,7 +3,7 @@ import * as Nedb from "nedb";
 import * as path from "path";
 import { getConfig, IConfig } from "../utils/config";
 
-const db = new Nedb({filename:path.join(getConfig().dataPath, "app-setting.db"), autoload:true})
+const db = new Nedb({filename: path.join(getConfig().dataPath, "app-setting.db"), autoload: true});
 
 export enum SETTINGS{
 	DefaultRedirect = "defaultRedirect",
@@ -29,7 +29,7 @@ class AppSettingQueryClass extends BaseQuery<AppSetting>{
 	static default = new AppSettingQueryClass();
 }
 
-export const AppSettingQuery = AppSettingQueryClass.default
+export const AppSettingQuery = AppSettingQueryClass.default;
 
 export async function getSettings():Promise<{[key:string]:any}>{
 	let configs = await AppSettingQuery.find();
@@ -44,7 +44,7 @@ export async function initializeSettings(){
 	async function createSettingIfNotExists(name:string, defaultValue:any, readonly:boolean = false){
 		let setting = await AppSettingQuery.findOne({name});
 		if (!setting){
-			setting = new AppSetting({name, value:defaultValue, readonly});
+			setting = new AppSetting({name, value: defaultValue, readonly});
 			await setting.save();
 		}
 	}

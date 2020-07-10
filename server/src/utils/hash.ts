@@ -1,4 +1,4 @@
-import * as md5 from "md5"
+import * as md5 from "md5";
 
 export async function hash(input:string, rounds:number):Promise<string>{
 	if (!input){
@@ -8,9 +8,9 @@ export async function hash(input:string, rounds:number):Promise<string>{
 		for (let i = 0; i < rounds; i++){
 			input = md5(input);
 		}
-		resolve(input)
-	})
-	
+		resolve(input);
+	});
+
 }
 
 export async function hashCompare(input:string, hash:string, maxRounds:number = 50):Promise<boolean>{
@@ -24,6 +24,6 @@ export async function hashCompare(input:string, hash:string, maxRounds:number = 
 				resolve(true);
 			}
 		}
-		resolve(false)
-	})
+		resolve(false);
+	});
 }

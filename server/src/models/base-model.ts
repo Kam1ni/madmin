@@ -31,7 +31,7 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 	}
 
 	private getSaveableObject():any{
-		let object:any = {}
+		let object:any = {};
 		for (let val of this._defaultValues){
 			if (this.getProperty(val.property) === undefined){
 				(this as any)[val.property] = val.value;
@@ -58,46 +58,46 @@ export abstract class BaseModel<T extends BaseModel<T>>{
 			let promise = new Promise((resolve, reject)=>{
 				this.db.insert(this.getSaveableObject(), (err, doc)=>{
 					if (err){
-						console.error(err)
+						console.error(err);
 						reject(err);
 					}
 					this._id = doc._id;
 					resolve();
-				})
-			})
-			return promise;
-		}else{
-			let promise = new Promise((resolve, reject)=>{
-				this.db.update({_id:this._id}, this.getSaveableObject(), {multi:false}, (err)=>{
-					if (err){
-						console.error(err)
-						reject(err);
-					}
-					resolve();
-				})
-			})
+				});
+			});
 			return promise;
 		}
+		let promise = new Promise((resolve, reject)=>{
+			this.db.update({_id: this._id}, this.getSaveableObject(), {multi: false}, (err)=>{
+				if (err){
+					console.error(err);
+					reject(err);
+				}
+				resolve();
+			});
+		});
+		return promise;
+
 	}
 
 	protected parse(doc:any){
 		for (let key of Object.keys(doc)){
-			this.setProperty(key, doc[key])
+			this.setProperty(key, doc[key]);
 		}
 	}
 
 	async remove():Promise<any>{
 		return new Promise((resolve, reject)=>{
-			this.db.remove({_id:this._id}, {multi:false}, (err)=>{
+			this.db.remove({_id: this._id}, {multi: false}, (err)=>{
 				if(err){
 					return reject(err);
 				}
 				resolve();
-			})
-		})
+			});
+		});
 	}
 
-	
+
 }
 
 export abstract class BaseQuery<T extends BaseModel<T>>{
@@ -105,19 +105,18 @@ export abstract class BaseQuery<T extends BaseModel<T>>{
 	protected abstract type:(new (data?:any) => T);
 
 	async findById(id:string):Promise<T|null>{
-		return this.findOne({_id:id});
+		return this.findOne({_id: id});
 	}
 
 	async find(query:any = null):Promise<T[]> {
-		let promise = <Promise<T[]>>new Promise((resolve, reject)=>{
+		return new Promise((resolve:(res:T[])=>void, reject)=>{
 			this.db.find(query, (err:Error, docs:any[])=>{
 				if (err){
 					return reject(err);
 				}
 				resolve(docs.map(doc=>new this.type(doc)));
-			})
-		})
-		return await promise;
+			});
+		});
 	}
 
 	async findOne(query:any):Promise<T | null>{
@@ -127,7 +126,7 @@ export abstract class BaseQuery<T extends BaseModel<T>>{
 					return reject(err);
 				}
 				if (!doc){
-					resolve(null)
+					resolve(null);
 				}
 				resolve(new this.type(doc));
 			});

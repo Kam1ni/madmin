@@ -1,6 +1,6 @@
-import { AppQuery } from '../models/app';
-import { HandlerQuery } from '../models/handler';
-import { ScriptQuery } from '../models/script';
+import { AppQuery } from "../models/app";
+import { HandlerQuery } from "../models/handler";
+import { ScriptQuery } from "../models/script";
 
 class MadminScriptRef {
 	vars:any = {};

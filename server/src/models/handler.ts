@@ -4,27 +4,27 @@ import * as path from "path";
 import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
 import { exec } from "child_process";
-import { AsyncFunction } from "../utils/async-function"
+import { AsyncFunction } from "../utils/async-function";
 
-const db = new Nedb({filename:path.join(getConfig().dataPath, "handler.db"), autoload:true})
-const ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+const db = new Nedb({filename: path.join(getConfig().dataPath, "handler.db"), autoload: true});
+const ALLOWED_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"];
 
 export class Handler extends BaseModel<Handler>{
 	protected db: Nedb = db;
 	_defaultValues = [
-		{property:"enabled", value:true}
+		{property: "enabled", value: true}
 	]
 
 	path:string = "";
 	code:string = "";
 	enabled:boolean = true;
 	methods:string[] = [];
-	
+
 
 	constructor(doc:any = null){
 		super();
 		if (!doc) return;
-		this.parse(doc)
+		this.parse(doc);
 	}
 
 	async execute(madmin:any, request:Request, response:Response){
@@ -53,7 +53,7 @@ export class Handler extends BaseModel<Handler>{
 			this.path = "/" + this.path;
 		}
 		if (this.methods.length == 0){
-			return "Handler should have at least 1 method"
+			return "Handler should have at least 1 method";
 		}
 		for (let method of this.methods){
 			if (ALLOWED_METHODS.indexOf(method) == -1){

@@ -8,7 +8,7 @@ import { authenticate, authenticateMiddleware, getAuthenticatedUser } from "../u
 export const authRouter = Router();
 
 authRouter.post("/login", async (req,res,next)=>{
-	let foundUser = await UserQuery.findOne({username:req.body.username});
+	let foundUser = await UserQuery.findOne({username: req.body.username});
 	if (!foundUser){
 		return next(new HttpError("Invalid login", 400));
 	}
@@ -16,7 +16,7 @@ authRouter.post("/login", async (req,res,next)=>{
 	if (!await foundUser.comparePassword(req.body.password)){
 		return next(new HttpError("Invalid login", 400));
 	}
-	let token = jwt.sign({userId:foundUser._id, date:new Date().toJSON()}, getConfig().tokenSecret);
+	let token = jwt.sign({userId: foundUser._id, date: new Date().toJSON()}, getConfig().tokenSecret);
 	let user:any = foundUser.getPrivateJson();
 	user.token = token;
 	res.json(user);
@@ -40,5 +40,5 @@ authRouter.post("/change-password", async (req,res,next)=>{
 
 	await user.setPassword(req.body.newPassword);
 	await user.save();
-	res.json({message:"Success"});
+	res.json({message: "Success"});
 });

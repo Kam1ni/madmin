@@ -1,11 +1,11 @@
 import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
-import * as path from 'path';
+import * as path from "path";
 
 import * as Nedb from "nedb";
 import { hashCompare, hash } from "../utils/hash";
 
-const db = new Nedb({filename:path.join(getConfig().dataPath, "user.db"), autoload:true})
+const db = new Nedb({filename: path.join(getConfig().dataPath, "user.db"), autoload: true});
 
 interface IToken{
 	token:string;
@@ -34,7 +34,7 @@ export class User extends BaseModel<User> {
 	}
 
 	async comparePassword(password:string):Promise<boolean> {
-		return await hashCompare(password, this.password);
+		return hashCompare(password, this.password);
 	}
 
 	async setPassword(newPassword:string):Promise<void> {
@@ -48,7 +48,7 @@ export class User extends BaseModel<User> {
 			identifier: id || "<ID ERROR>",
 			username: this.username,
 			isAdmin: this.isAdmin,
-		}
+		};
 	}
 
 	getPrivateJson():IPrivateUser{

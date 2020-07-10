@@ -1,6 +1,6 @@
-import { getConfig } from './config';
-import { ScriptQuery } from '../models/script';
-import { madminScriptRefInstance } from './madmin-script-ref';
+import { getConfig } from "./config";
+import { ScriptQuery } from "../models/script";
+import { madminScriptRefInstance } from "./madmin-script-ref";
 
 function getNextIntervalTime():number{
 	let config = getConfig();
@@ -31,7 +31,7 @@ function runTick(){
 	let interval = getNextIntervalTime();
 	setTimeout(async ()=>{
 		let date = new Date();
-		let scripts = await ScriptQuery.find({runAtInterval:true});
+		let scripts = await ScriptQuery.find({runAtInterval: true});
 		let dayOfTheWeek = date.getDay();
 		let dayOfTheMonth = date.getDate();
 		let month = date.getMonth();
@@ -63,18 +63,18 @@ function runTick(){
 		}
 
 		runTick();
-	}, interval)
+	}, interval);
 }
 
 export async function startScriptScheduler(){
-	let scripts = await ScriptQuery.find({runAtStartUp:true});
-	
+	let scripts = await ScriptQuery.find({runAtStartUp: true});
+
 	for (let script of scripts){
 		script.execute(madminScriptRefInstance, []).catch(e=>{
 			console.error(`${script.name} crashed`);
 			console.error(e);
 		});
 	}
-	
+
 	runTick();
 }

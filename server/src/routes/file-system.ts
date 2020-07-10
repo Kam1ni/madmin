@@ -2,7 +2,7 @@ import { Router } from "express";
 import { User } from "../models/user";
 import { HttpError } from "../utils/HttpError";
 import * as fs from "../utils/fs";
-import * as path from "path"
+import * as path from "path";
 import { File } from "../utils/fs-file";
 import { Directory } from "../utils/fs-directory";
 export const fileSystemRouter = Router();
@@ -22,20 +22,20 @@ fileSystemRouter.get("/*", async function(req, res, next){
 		if (!exists){
 			return next(new HttpError("Path does not exist", 404));
 		}
-		
+
 		let stats = await fs.stat(requestPath);
 		if (stats.isDirectory()){
 			let items = await fs.readdir(requestPath);
 			let result = {
-				files:[] as File[],
-				directories:[] as Directory[]
-			}
+				files: [] as File[],
+				directories: [] as Directory[]
+			};
 			for (let item of items){
 				try{
 					let filePath = path.join(requestPath, item);
 					let stat = await fs.stat(filePath);
 					if (os.platform() == "win32"){
-						filePath = filePath.replace(/\\/g, "/")
+						filePath = filePath.replace(/\\/g, "/");
 					}
 					if (stat.isDirectory()){
 						let dir = new Directory();
@@ -54,7 +54,7 @@ fileSystemRouter.get("/*", async function(req, res, next){
 			}
 			return res.json(result);
 		}
-		
+
 		//let content = await fs.readfile(requestPath);
 		res.status(210).sendFile(requestPath);
 	}catch(err){
@@ -72,13 +72,13 @@ fileSystemRouter.post("/mkdir/*", Router().post("/mkdir/*", async function(req, 
 		if (exists){
 			return next(new HttpError("Path already exists", 400));
 		}
-		
+
 		let pathParts = requestPath.split("/");
 		pathParts.pop();
-		let parentPath = pathParts.join("/")
+		let parentPath = pathParts.join("/");
 		exists = await fs.exists(parentPath);
 		if (!exists){
-			return next(new HttpError("Parent directory does not exist", 404))
+			return next(new HttpError("Parent directory does not exist", 404));
 		}
 
 		let parentDirStats = await fs.stat(parentPath);
@@ -87,7 +87,7 @@ fileSystemRouter.post("/mkdir/*", Router().post("/mkdir/*", async function(req, 
 		}
 
 		fs.mkdir(requestPath);
-		res.json({path:requestPath});
+		res.json({path: requestPath});
 	}catch(err){
 		next(new HttpError(err, 500));
 	}

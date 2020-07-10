@@ -10,7 +10,7 @@ export async function authenticate(token:string):Promise<User>{
 	}catch(err){
 		throw new HttpError("Invalid token", 400);
 	}
-	let user = await UserQuery.findOne({_id:data.userId});
+	let user = await UserQuery.findOne({_id: data.userId});
 	if (!user) throw new HttpError("Invalid token", 400);
 	return user;
 }

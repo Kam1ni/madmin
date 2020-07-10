@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ScriptQuery, Script } from "../models/script";
-import { HttpError } from '../utils/HttpError';
-import { madminScriptRefInstance } from '../utils/madmin-script-ref';
+import { HttpError } from "../utils/HttpError";
+import { madminScriptRefInstance } from "../utils/madmin-script-ref";
 
 export const scriptRouter = Router();
 
@@ -67,7 +67,7 @@ scriptRouter.delete("/:id", async (req,res,next)=>{
 		return next(new HttpError("Script does not exist", 404));
 	}
 	await script.remove();
-	res.json({message:"Success"});
+	res.json({message: "Success"});
 });
 
 scriptRouter.post("/:id/execute", async (req,res,next)=>{
@@ -76,5 +76,5 @@ scriptRouter.post("/:id/execute", async (req,res,next)=>{
 		return next(new HttpError("Script does not exist", 404));
 	}
 	script.execute(madminScriptRefInstance, req.body.args);
-	res.json({message:"Script is beign executed"});
+	res.json({message: "Script is beign executed"});
 });

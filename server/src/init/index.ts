@@ -1,7 +1,7 @@
 import { configInit } from "./config";
 
 export async function init(){
-	console.log("INIT")
+	console.log("INIT");
 	configInit();
 	const data = await require("./data");
 	await data.dataInit();

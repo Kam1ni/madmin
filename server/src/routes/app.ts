@@ -14,7 +14,7 @@ appRouter.get("/:id", async(req,res,next)=>{
 		return next(new HttpError("App does not exist!", 404));
 	}
 	res.json(app);
-})
+});
 
 appRouter.post("/", async (req,res,next)=>{
 	let app = new App();
@@ -27,11 +27,11 @@ appRouter.post("/", async (req,res,next)=>{
 			path: req.body.config.path,
 			listFiles: req.body.config.listFiles,
 			error404File: req.body.config.error404File
-		}
+		};
 	}else if (app.type == "proxy"){
 		app.config = {
 			url: req.body.config.url
-		}
+		};
 	}else{
 		return next(new HttpError('"type" is a required field and can only be equal to "static" or "proxy"', 500));
 	}
@@ -80,11 +80,11 @@ appRouter.put("/:id", async (req,res,next)=>{
 			path: req.body.config.path,
 			listFiles: req.body.config.listFiles,
 			error404File: req.body.config.error404File
-		}
+		};
 	}else if (app.type == "proxy"){
 		app.config = {
 			url: req.body.config.url
-		}
+		};
 	}else{
 		return next(new HttpError('"type" is a required field and can only be equal to "static" or "proxy"', 500));
 	}
@@ -100,5 +100,5 @@ appRouter.delete("/:id", async (req,res,next)=>{
 	}
 
 	await app.remove();
-	res.json({message:"Success"});
+	res.json({message: "Success"});
 });

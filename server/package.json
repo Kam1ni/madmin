@@ -1,15 +1,25 @@
 {
 	"name": "madmin-server",
 	"version": "0.1.0",
-	"bin": "dist/index.js",
 	"description": "Server for madmin server management platform",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"start": "node --enable-source-maps dist/index.js",
 		"build": "tsc",
 		"dev": "tsc-watch --onSuccess \"node dev-run.js\"",
 		"migrate": "node dist/migration.js",
-		"nexe": "node nexe-compile.js"
+		"nexe": "node nexe-compile.js",
+		"lint": "eslint . --fix --ext ts"
+	},
+	"lint-staged": {
+		"./src/*": [
+			"eslint . --fix --ext ts"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
 	},
 	"author": "",
 	"license": "MIT",
@@ -31,10 +41,15 @@
 		"@types/jsonwebtoken": "^7.2.7",
 		"@types/md5": "^2.1.33",
 		"@types/nedb": "^1.8.6",
-		"@types/node": "^10.3.5",
+		"@types/node": "^14.0.22",
 		"@types/randomstring": "^1.1.6",
+		"@typescript-eslint/eslint-plugin": "^2.18.0",
+		"@typescript-eslint/parser": "^3.6.0",
+		"eslint": "^6.8.0",
+		"husky": "^4.2.5",
+		"lint-staged": "^10.2.11",
 		"nexe": "^3.3.7",
 		"tsc-watch": "^2.2.1",
-		"typescript": "^3.5.2"
+		"typescript": "^3.7.2"
 	}
 }

@@ -36,11 +36,11 @@ userRouter.use("/:id", async function(req,res,next){
 	}
 	res.locals.foundUser = user;
 	next();
-})
+});
 
 userRouter.get("/:id/", async function(req,res,next){
 	res.json((<User>res.locals.foundUser).getPublicJson());
-})
+});
 
 userRouter.put("/:id/edit", async function(req,res,next){
 	let user:User = res.locals.foundUser;
@@ -74,5 +74,5 @@ userRouter.delete("/:id", async function(req,res,next){
 		return next(new HttpError("You cannot delete your own account.", 403));
 	}
 	await user.remove();
-	res.json({message:"success"});
+	res.json({message: "success"});
 });

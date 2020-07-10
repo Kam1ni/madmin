@@ -1,10 +1,10 @@
 import { getConfig } from "../utils/config";
 import { BaseModel, BaseQuery } from "./base-model";
-import * as path from 'path';
+import * as path from "path";
 
 import * as Nedb from "nedb";
 
-const db = new Nedb({filename:path.join(getConfig().dataPath, "app.db"), autoload:true})
+const db = new Nedb({filename: path.join(getConfig().dataPath, "app.db"), autoload: true});
 
 export interface IProxyApp {
 	url:string;
@@ -25,15 +25,15 @@ enum AppTypes{
 export class App extends BaseModel<App>{
 	protected db: Nedb = db;
 	_defaultValues = [
-		{property:"enabled",value:true}
+		{property: "enabled",value: true}
 	]
-	
+
 	subdomain:string = "";
 	domainName:string | null = null;
 	type:AppTypes = AppTypes.static;
 	config:IProxyApp|IStaticApp = {
-		path:"",
-		listFiles:true,
+		path: "",
+		listFiles: true,
 	};
 	enabled:boolean = true;
 
@@ -63,20 +63,19 @@ export class App extends BaseModel<App>{
 					conf.error404File = undefined;
 				}
 			}
-		}
-		else if (this.type == "proxy"){
+		} else if (this.type == "proxy"){
 			if ((<IProxyApp>this.config).url == null){
 				return "Invalid configuration";
 			}
 		}
-		let app = await AppQuery.findOne({subdomain:this.subdomain, _id:{$ne: this._id}});
+		let app = await AppQuery.findOne({subdomain: this.subdomain, _id: {$ne: this._id}});
 		if (app != null){
-			return `subdomain "${this.subdomain}" already in use`
+			return `subdomain "${this.subdomain}" already in use`;
 		}
 		if (this.domainName && /^\s*$/.exec(this.domainName)){
 			this.domainName = null;
 		}else{
-			app = await AppQuery.findOne({domainName:this.domainName, _id:{$ne:this._id}});
+			app = await AppQuery.findOne({domainName: this.domainName, _id: {$ne: this._id}});
 		}
 		return null;
 	}
@@ -89,7 +88,7 @@ class AppQueryClass extends BaseQuery<App>{
 	protected db: Nedb = db;
 	static default = new AppQueryClass();
 	async findBySubdomain(subDomain:string):Promise<App | null> {
-		let apps = await this.find({enabled:true});
+		let apps = await this.find({enabled: true});
 		for (let app of apps){
 			let domain = app.subdomain.replace(".", "\\.");
 			domain = domain.replace("*", "[0-9a-zA-Z-_\\.]*");

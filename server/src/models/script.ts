@@ -1,11 +1,11 @@
-import { BaseModel, BaseQuery } from './base-model';
+import { BaseModel, BaseQuery } from "./base-model";
 import * as Nedb from "nedb";
 import * as path from "path";
 import { getConfig } from "../utils/config";
-import { AsyncFunction } from "../utils/async-function"
-import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from '../utils/string';
+import { AsyncFunction } from "../utils/async-function";
+import { isStringNullOrWhiteSpace, stringHasWhiteSpace } from "../utils/string";
 
-const db = new Nedb({filename:path.join(getConfig().dataPath, "script.db"), autoload:true})
+const db = new Nedb({filename: path.join(getConfig().dataPath, "script.db"), autoload: true});
 
 function createValidityArray(start:number, end:number):string[]{
 	let arr = ["*"] as string[];
@@ -29,7 +29,7 @@ export class Script extends BaseModel<Script> {
 
 	name:string = "";
 	code:string = "";
-	
+
 	runAtStartUp:boolean = false;
 	runAtInterval:boolean = false;
 	dayOfTheWeek:string = "*";
@@ -59,20 +59,20 @@ export class Script extends BaseModel<Script> {
 
 	async validate():Promise<string | null>{
 		if (isStringNullOrWhiteSpace(this.name)){
-			return "Name is required and cannot contain spaces."
+			return "Name is required and cannot contain spaces.";
 		}
 		if (stringHasWhiteSpace(this.name)){
-			return "Name may not contain whitespace characters."
+			return "Name may not contain whitespace characters.";
 		}
 
-		let foundScript = await ScriptQuery.findOne({_id:{$ne:this._id}, name:this.name});
+		let foundScript = await ScriptQuery.findOne({_id: {$ne: this._id}, name: this.name});
 		if (foundScript != null){
-			return `Name must be unique. ${this.name} is already in use.`
+			return `Name must be unique. ${this.name} is already in use.`;
 		}
 		try{
 			this.getFunction();
 		}catch(err){
-			return `Error in your code.\n${err}`
+			return `Error in your code.\n${err}`;
 		}
 		if (this.runAtInterval){
 			let valid = isTimeValueValid(this.dayOfTheWeek, validDaysOfTheWeek);

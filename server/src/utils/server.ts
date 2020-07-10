@@ -11,7 +11,7 @@ const existsAsync = promisify(fs.exists);
 
 async function listFiles(host:string, urlPath:string, path:string, res:Response){
 	let dirContent = await readDirAsync(path);
-	let response = "<!DOCTYPE html><html><body><ul>"
+	let response = "<!DOCTYPE html><html><body><ul>";
 	for(let item of dirContent){
 		response+=`<li><a href="${host}${urlPath}${item}">${item}</a></li>`;
 	}
@@ -19,10 +19,9 @@ async function listFiles(host:string, urlPath:string, path:string, res:Response)
 	res.send(response);
 }
 
-
 export async function server(app:App, req:Request,res:Response){
 	let config = (<IStaticApp>app.config);
-	let serve = serveStatic(config.path, {fallthrough:false});
+	let serve = serveStatic(config.path, {fallthrough: false});
 	let basePath = config.path;
 
 	async function return404(){
@@ -36,16 +35,15 @@ export async function server(app:App, req:Request,res:Response){
 	}
 
 	serve(req, res, async (err)=>{
-		console.log(err);
 		if (!err) return;
 		let path = req.path;
 		if (path == ""){
-			path = "/"
+			path = "/";
 		}
 		if (!path.match(/^\//)){
 			path = "/" + path;
 		}
-		path = decodeURIComponent(path)
+		path = decodeURIComponent(path);
 		let fullPath = join(basePath, path);
 		if (!await existsAsync(fullPath)){
 			return return404();
@@ -59,5 +57,5 @@ export async function server(app:App, req:Request,res:Response){
 			return listFiles(host, path, fullPath, res);
 		}
 		return return404();
-	})
+	});
 }

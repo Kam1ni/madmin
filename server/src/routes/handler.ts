@@ -39,7 +39,7 @@ handlerRouter.put("/:id/enable", async (req,res,next)=>{
 	handler.enabled = true;
 	await handler.save();
 	res.json(handler);
-})
+});
 
 handlerRouter.put("/:id/disable", async (req,res,next)=>{
 	let handler =  await HandlerQuery.findById(req.params.id);
@@ -50,7 +50,7 @@ handlerRouter.put("/:id/disable", async (req,res,next)=>{
 	handler.enabled = false;
 	await handler.save();
 	res.json(handler);
-})
+});
 
 handlerRouter.put("/:id", async (req,res,next)=>{
 	let handler =  await HandlerQuery.findById(req.params.id);
@@ -79,5 +79,5 @@ handlerRouter.delete("/:id", async (req,res,next)=>{
 	}
 
 	await handler.remove();
-	res.json({message:"Success"});
+	res.json({message: "Success"});
 });
