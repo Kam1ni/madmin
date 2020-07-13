@@ -31,7 +31,7 @@ export async function server(app:App, req:Request,res:Response){
 					return res.sendFile(path404);
 				}
 			}catch(err){
-				console.error("Static file 404 error");
+				console.error("Static file 404 error", path404);
 				console.error(err);
 			}
 		}
