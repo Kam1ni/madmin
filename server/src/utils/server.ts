@@ -23,12 +23,16 @@ export async function server(app:App, req:Request,res:Response){
 	let config = (<IStaticApp>app.config);
 	let serve = serveStatic(config.path, {fallthrough: false});
 	let basePath = config.path;
-
 	async function return404(){
 		if (config.error404File) {
 			let path404 = join(basePath, config.error404File);
-			if (await existsAsync(path404)) {
-				return res.sendFile(path404);
+			try{
+				if (await existsAsync(path404)) {
+					return res.sendFile(path404);
+				}
+			}catch(err){
+				console.error("Static file 404 error");
+				console.error(err);
 			}
 		}
 		return res.status(404).send("FILE DOES NOT EXIST");
