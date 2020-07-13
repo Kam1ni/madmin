@@ -1,16 +1,12 @@
 import { App, IStaticApp } from "../models/app";
 import { Request, Response } from "express";
-import { resolve, join } from "path";
-import * as fs from "fs";
-import { promisify } from "util";
+import { join } from "path";
 import * as serveStatic from "serve-static";
+import { exists, lstat, readdir } from "./fs";
 
-const lstatAsync = promisify(fs.lstat);
-const readDirAsync = promisify(fs.readdir);
-const existsAsync = promisify(fs.exists);
 
 async function listFiles(host:string, urlPath:string, path:string, res:Response){
-	let dirContent = await readDirAsync(path);
+	let dirContent = await readdir(path);
 	let response = "<!DOCTYPE html><html><body><ul>";
 	for(let item of dirContent){
 		response+=`<li><a href="${host}${urlPath}${item}">${item}</a></li>`;
@@ -27,7 +23,7 @@ export async function server(app:App, req:Request,res:Response){
 		if (config.error404File) {
 			let path404 = join(basePath, config.error404File);
 			try{
-				if (await existsAsync(path404)) {
+				if (await exists(path404)) {
 					return res.sendFile(path404);
 				}
 			}catch(err){
@@ -38,7 +34,7 @@ export async function server(app:App, req:Request,res:Response){
 		return res.status(404).send("FILE DOES NOT EXIST");
 	}
 
-	serve(req, res, async (err)=>{
+	serve(req, res, async (err:any)=>{
 		if (!err) return;
 		let path = req.path;
 		if (path == ""){
@@ -50,10 +46,10 @@ export async function server(app:App, req:Request,res:Response){
 		path = decodeURIComponent(path);
 		let fullPath = join(basePath, path);
 		try{
-			if (!await existsAsync(fullPath)){
+			if (!await exists(fullPath)){
 				return return404();
 			}
-			let pathStats = await lstatAsync(fullPath);
+			let pathStats = await lstat(fullPath);
 			if (pathStats.isDirectory()){
 				if (!config.listFiles){
 					return return404();

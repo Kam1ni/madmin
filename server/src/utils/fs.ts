@@ -16,6 +16,18 @@ export function stat(path:string):Promise<fs.Stats> {
 	});
 }
 
+export function lstat(path:string):Promise<fs.Stats>{
+	return new Promise((resolve, reject)=>{
+		fs.lstat(path, (err, stats)=>{
+			if(err){
+				reject(err);
+			}else{
+				resolve(stats);
+			}
+		});
+	});
+}
+
 export function readdir(path:string):Promise<string[]>{
 	return new Promise((resolve, reject)=>{
 		fs.readdir(path, function(err, files){

@@ -9,6 +9,7 @@ import {getConfig} from "./utils/config";
 import { server } from "./utils/server";
 import * as fs from "fs";
 
+
 async function main(){
 	await init();
 	const config = getConfig();
