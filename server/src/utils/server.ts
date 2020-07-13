@@ -45,17 +45,23 @@ export async function server(app:App, req:Request,res:Response){
 		}
 		path = decodeURIComponent(path);
 		let fullPath = join(basePath, path);
-		if (!await existsAsync(fullPath)){
-			return return404();
-		}
-		let pathStats = await lstatAsync(fullPath);
-		if (pathStats.isDirectory()){
-			if (!config.listFiles){
+		try{
+			if (!await existsAsync(fullPath)){
 				return return404();
 			}
-			let host = req.protocol + "://" + req.get("host");
-			return listFiles(host, path, fullPath, res);
+			let pathStats = await lstatAsync(fullPath);
+			if (pathStats.isDirectory()){
+				if (!config.listFiles){
+					return return404();
+				}
+				let host = req.protocol + "://" + req.get("host");
+				return listFiles(host, path, fullPath, res);
+			}
+			return return404();
+		}catch(err){
+			console.error("Static file server error");
+			console.error(err);
+			return return404();
 		}
-		return return404();
 	});
 }
