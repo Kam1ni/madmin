@@ -3,6 +3,7 @@ import * as fs from "fs";
 export interface IConfig {
 	dataPath:string;
 	port:number;
+    serverPort?:number;
 	host:string;
 	baseUrl:string;
 	saltRounds:number;

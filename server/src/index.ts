@@ -47,7 +47,8 @@ async function main(){
 		} as https.ServerOptions;
 
 		const server = https.createServer(options, app);
-		server.listen(config.port, config.host, function(){
+		console.log(config.serverPort, config.port);
+		server.listen(config.serverPort || config.port, config.host, function(){
 			console.log(`server started at ${config.host}:${config.port}`);
 			startScriptScheduler();
 		});
