@@ -11,6 +11,7 @@ const defaultConfig:IConfig = {
 	port: 3000,
 	baseUrl: "yourdomain",
 	saltRounds: 10,
+    apiUrl:"yourdomain",
 	tokenSecret: md5(randomstring.generate()),
 	clientDomain: "madmin",
 	dataPath: "./data/",

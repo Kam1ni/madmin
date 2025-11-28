@@ -6,6 +6,7 @@ export interface IConfig {
     serverPort?:number;
 	host:string;
 	baseUrl:string;
+    apiUrl:string;
 	saltRounds:number;
 	tokenSecret:string;
 	clientDomain:string;
@@ -17,6 +18,7 @@ export interface IConfig {
 
 export interface IClientConfig {
 	baseUrl:string;
+    apiUrl:string;
 	scriptsRunAtMinutIntervals:boolean;
 }
 
@@ -33,6 +35,7 @@ export function getConfig():IConfig{
 export function getClientConfig():IClientConfig{
 	return {
 		baseUrl: `${config.baseUrl}:${config.port}`,
+        apiUrl: `${config.apiUrl}:${config.port}`,
 		scriptsRunAtMinutIntervals: config.runScriptsAtMinutIntervals,
 	};
 }

@@ -1,5 +1,6 @@
 class AppConfigClass {
 	baseUrl:string = "/";
+    apiUrl:string = "/";
 	scriptsRunAtMinutIntervals:boolean = false;
 }
 

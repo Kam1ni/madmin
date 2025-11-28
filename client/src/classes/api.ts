@@ -2,34 +2,34 @@ import { AppConfig } from '@/conifg';
 
 export class BaseRoutes {
 	static get USER():string {
-		return `${AppConfig.baseUrl}/user`
+		return `${AppConfig.apiUrl}/user`
 	}
 
 	static get HANDLER():string{
-		return `${AppConfig.baseUrl}/handler`
+		return `${AppConfig.apiUrl}/handler`
 	}
 
 	static get HANDLER_EXEC():string{
-		return `${AppConfig.baseUrl}/exec-handler`
+		return `${AppConfig.apiUrl}/exec-handler`
 	}
 
 	static get AUTH():string{
-		return `${AppConfig.baseUrl}/auth`
+		return `${AppConfig.apiUrl}/auth`
 	}
 
 	static get CONFIG():string{
-		return `${AppConfig.baseUrl}/config`
+		return `${AppConfig.apiUrl}/config`
 	}
 
 	static get APP():string{
-		return `${AppConfig.baseUrl}/app`
+		return `${AppConfig.apiUrl}/app`
 	}
 
 	static get SCRIPT():string{
-		return `${AppConfig.baseUrl}/script`
+		return `${AppConfig.apiUrl}/script`
 	}
 
 	static get FS():string{
-		return `${AppConfig.baseUrl}/fs`
+		return `${AppConfig.apiUrl}/fs`
 	}
 }

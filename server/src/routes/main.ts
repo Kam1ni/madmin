@@ -41,7 +41,7 @@ mainRouter.all("/*", async (req,res,next)=>{
 		return ClientInterfaceServe(req, res, ()=>{
 			res.sendFile(join(clientPath, "/index.html"));
 		});
-	} else if(req.hostname == config.baseUrl){
+	} else if(req.hostname == config.baseUrl || req.hostname == config.apiUrl){
 		if (/^\/?$/.exec(req.path)){
 			let defaultRedirect = await AppSettingQuery.findOne({name: SETTINGS.DefaultRedirect});
 			if (defaultRedirect){
